@@ -125,11 +125,10 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FriendNav.Core\FriendNav.Core.csproj">
-      <Project>{31d7792c-8339-4c32-8c91-123c9b248b83}</Project>
+      <Project>{8f745ac3-662f-417f-af22-d554bb1499cd}</Project>
       <Name>FriendNav.Core</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="Views\FirstView.xaml">
       <SubType>Designer</SubType>
