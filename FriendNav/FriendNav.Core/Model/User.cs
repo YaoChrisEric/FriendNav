@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace FriendNav.Core.Model
@@ -13,5 +14,7 @@ namespace FriendNav.Core.Model
         public string CurrentChatFriend { get; set; }
 
         public string FirebaseKey => EmailAddress.Replace('.', ',');
+
+        public ObservableCollection<User> FriendList { get; set; }
     }
 }
