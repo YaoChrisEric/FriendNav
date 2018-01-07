@@ -6,6 +6,7 @@ using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories
 {
@@ -18,17 +19,25 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void CreateUser(User user)
+        public Task CreateUser(User user)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
             user.IsReceivingMapRequest = false;
             user.CurrentChatFriend = string.Empty;
 
-            client.Child("Users")
+            return client.Child("Users")
                 .Child(user.EmailAddress)
-                .PostAsync(user)
-                .Wait();
+                .PostAsync(user);
+        }
+
+        public Task<User> GetUser(string emailAddress)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            return client.Child("Users")
+                .Child(emailAddress)
+                .OnceSingleAsync<User>();
         }
     }
 }

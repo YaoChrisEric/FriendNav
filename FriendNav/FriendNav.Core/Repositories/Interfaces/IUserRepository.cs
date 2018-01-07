@@ -2,11 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        void CreateUser(User user);
+        Task CreateUser(User user);
+        Task<User> GetUser(string emailAddress);
     }
 }

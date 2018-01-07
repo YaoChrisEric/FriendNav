@@ -11,10 +11,10 @@ namespace FriendNav.Core.ViewModels
 {
     public class RegisterViewModel : MvxViewModel
     {
-        private IMvxNavigationService _mvxNavigationService;
-        private INotificationService _notificationService;
-        private IFirebaseAuthService _firebaseAuthService;
-        private IUserRepository _userRepository;
+        private readonly IMvxNavigationService _mvxNavigationService;
+        private readonly INotificationService _notificationService;
+        private readonly IFirebaseAuthService _firebaseAuthService;
+        private readonly IUserRepository _userRepository;
 
         public RegisterViewModel(
             IMvxNavigationService mvxNavigationService,
@@ -35,7 +35,7 @@ namespace FriendNav.Core.ViewModels
 
         public string UserPassword { get; set; }
 
-        private void RegisterUser()
+        private async void RegisterUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -51,9 +51,9 @@ namespace FriendNav.Core.ViewModels
                     EmailAddress = EmailAddress
                 };
 
-                _userRepository.CreateUser(newUser);
+                await _userRepository.CreateUser(newUser);
 
-                _mvxNavigationService.Navigate<FriendListViewModel, User>(newUser);
+                await _mvxNavigationService.Navigate<FriendListViewModel, User>(newUser);
 
                 return;
             }

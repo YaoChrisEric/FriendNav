@@ -1,4 +1,7 @@
-﻿using FriendNav.Core.Services.Interfaces;
+﻿using FriendNav.Core.Model;
+using FriendNav.Core.Repositories.Interfaces;
+using FriendNav.Core.Services.Interfaces;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -8,11 +11,20 @@ namespace FriendNav.Core.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        private INotificationService _notificationService;
-        private IFirebaseAuthService _firebaseAuthService;
+        private readonly IMvxNavigationService _mvxNavigationService;
+        private readonly INotificationService _notificationService;
+        private readonly IFirebaseAuthService _firebaseAuthService;
+        private readonly IUserRepository _userRepository;
 
-        public LoginViewModel(INotificationService notificationService, IFirebaseAuthService firebaseAuthService)
+
+        public LoginViewModel(
+            IMvxNavigationService mvxNavigationService,
+            IUserRepository userRepository,
+            INotificationService notificationService,           
+            IFirebaseAuthService firebaseAuthService)
         {
+            _mvxNavigationService = mvxNavigationService;
+            _userRepository = userRepository;
             _firebaseAuthService = firebaseAuthService;
             _notificationService = notificationService;
             LoginUserCommand = new MvxCommand(LoginUser);
@@ -24,7 +36,7 @@ namespace FriendNav.Core.ViewModels
 
         public string UserPassword { get; set; }
 
-        private void LoginUser()
+        private async void LoginUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -35,7 +47,9 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null)
             {
-                ShowViewModel<FriendListViewModel>();
+                var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
+
+                await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);
                 return;
             }
 
