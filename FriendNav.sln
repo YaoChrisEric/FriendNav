@@ -13,9 +13,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.WPF", "FriendNav\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendNav.Core", "FriendNav\FriendNav.Core\FriendNav.Core.csproj", "{8F745AC3-662F-417F-AF22-D554BB1499CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.Tests", "FriendNav.Core.Tests\FriendNav.Core.Tests.csproj", "{1557A9AF-730E-4FA9-A40F-95E1BBDCD3D0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.Tests", "FriendNav\FriendNav.Core.Tests\FriendNav.Core.Tests.csproj", "{1557A9AF-730E-4FA9-A40F-95E1BBDCD3D0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.IntegrationTests", "FriendNav.Core.IntegrationTests\FriendNav.Core.IntegrationTests.csproj", "{73508136-4029-44A7-AC38-97A49AFD0EC9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.IntegrationTests", "FriendNav\FriendNav.Core.IntegrationTests\FriendNav.Core.IntegrationTests.csproj", "{73508136-4029-44A7-AC38-97A49AFD0EC9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
