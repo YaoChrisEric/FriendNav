@@ -1,6 +1,9 @@
 using Android.OS;
 using Android.Support.V7.Widget;
+using FriendNav.Core.Services.Interfaces;
+using FriendNav.Droid.Services;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platform;
 
 namespace FriendNav.Droid.Views
 {
