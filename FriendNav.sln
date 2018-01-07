@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.Tests", "Fri
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendNav.Core.IntegrationTests", "FriendNav\FriendNav.Core.IntegrationTests\FriendNav.Core.IntegrationTests.csproj", "{73508136-4029-44A7-AC38-97A49AFD0EC9}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{BEFEEB38-2378-4DC4-A0EC-D878BD2B93D9}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Ad-Hoc|Any CPU = Ad-Hoc|Any CPU
@@ -404,6 +406,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{1557A9AF-730E-4FA9-A40F-95E1BBDCD3D0} = {BEFEEB38-2378-4DC4-A0EC-D878BD2B93D9}
+		{73508136-4029-44A7-AC38-97A49AFD0EC9} = {BEFEEB38-2378-4DC4-A0EC-D878BD2B93D9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0AF64602-9696-45A4-BA0E-060603D525A9}
