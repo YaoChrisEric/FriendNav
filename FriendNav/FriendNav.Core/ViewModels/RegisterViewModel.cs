@@ -1,6 +1,7 @@
 ﻿using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,18 @@ namespace FriendNav.Core.ViewModels
 {
     public class RegisterViewModel : MvxViewModel
     {
+        private IMvxNavigationService _mvxNavigationService;
         private INotificationService _notificationService;
         private IFirebaseAuthService _firebaseAuthService;
         private IUserRepository _userRepository;
 
-        public RegisterViewModel(INotificationService notificationService, 
+        public RegisterViewModel(
+            IMvxNavigationService mvxNavigationService,
+            INotificationService notificationService, 
             IFirebaseAuthService firebaseAuthService,
             IUserRepository userRepository)
         {
+            _mvxNavigationService = mvxNavigationService;
             _firebaseAuthService = firebaseAuthService;
             _notificationService = notificationService;
             _userRepository = userRepository;
@@ -48,7 +53,7 @@ namespace FriendNav.Core.ViewModels
 
                 _userRepository.CreateUser(newUser);
 
-                ShowViewModel<FriendListViewModel>();
+                _mvxNavigationService.Navigate<FriendListViewModel, User>(newUser);
 
                 return;
             }
