@@ -23,7 +23,7 @@ namespace FriendNav.Core.ViewModels
         {
             await base.Initialize();
 
-            if (_firebaseAuthService.FireBaseAuth != null && !_firebaseAuthService.FireBaseAuth.IsExpired())
+            if (_firebaseAuthService.FirebaseAuth != null && !_firebaseAuthService.FirebaseAuth.IsExpired())
             {
                 ShowViewModel<FriendListViewModel>();
                 return;

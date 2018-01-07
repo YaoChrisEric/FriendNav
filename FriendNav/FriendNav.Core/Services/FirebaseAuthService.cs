@@ -16,18 +16,18 @@ namespace FriendNav.Core.Services
             _firebaseAuthProvider = firebaseAuthProvider;
         }
 
-        public FirebaseAuth FireBaseAuth { get; private set; }
+        public FirebaseAuth FirebaseAuth { get; private set; }
 
         public bool CreateNewUser(string email, string password)
         {
-            FireBaseAuth = _firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(email, password).Result;
+            FirebaseAuth = _firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(email, password).Result;
 
             return true;
         }
 
         public void LoginUser(string email, string password)
         {
-            FireBaseAuth = _firebaseAuthProvider.SignInWithEmailAndPasswordAsync(email, password).Result;
+            FirebaseAuth = _firebaseAuthProvider.SignInWithEmailAndPasswordAsync(email, password).Result;
         }
     }
 }

@@ -10,6 +10,6 @@ namespace FriendNav.Core.Services.Interfaces
     {
         void LoginUser(string email, string password);
         bool CreateNewUser(string email, string password);
-        FirebaseAuth FireBaseAuth { get; }
+        FirebaseAuth FirebaseAuth { get; }
     }
 }

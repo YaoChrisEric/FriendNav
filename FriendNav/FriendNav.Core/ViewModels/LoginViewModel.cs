@@ -25,6 +25,11 @@ namespace FriendNav.Core.ViewModels
         private void LoginUser()
         {
             _firebaseAuthService.LoginUser(EmailAddress, UserPassword);
+
+            if (_firebaseAuthService.FirebaseAuth != null)
+            {
+
+            }
         }
     }
 }

@@ -148,7 +148,12 @@
     <AndroidResource Include="Resources\mipmap-xhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\ic_launcher.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\ic_launcher.png" />
-    <AndroidResource Include="Resources\layout\FirstView.axml" />
+    <AndroidResource Include="Resources\layout\MainView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\FirstView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
     <AndroidResource Include="Resources\layout\SplashScreen.axml" />
     <AndroidResource Include="Resources\layout\toolbar.axml" />
     <AndroidResource Include="Resources\values\arrays.xml" />
@@ -164,6 +169,12 @@
     <None Include="packages.config" />
     <None Include="Properties\AndroidManifest.xml" />
     <None Include="Resources\AboutResources.txt" />
+    <AndroidResource Include="Resources\layout\LoginView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\RegisterView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugTrace.cs" />
@@ -174,6 +185,7 @@
     <Compile Include="Views\FirstView.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Views\MainView.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\AboutAssets.txt" />
