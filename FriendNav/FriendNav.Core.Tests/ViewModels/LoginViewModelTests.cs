@@ -1,10 +1,10 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace FriendNav.Core.IntegrationTests
+namespace FriendNav.Core.Tests.ViewModels
 {
     [TestClass]
-    public class UnitTest1
+    public class LoginViewModelTests
     {
         [TestMethod]
         public void TestMethod1()

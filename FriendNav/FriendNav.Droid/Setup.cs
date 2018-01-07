@@ -1,6 +1,9 @@
 using Android.Content;
+using FriendNav.Core.Services.Interfaces;
+using FriendNav.Droid.Services;
 using MvvmCross.Core.ViewModels;
 using MvvmCross.Droid.Support.V7.AppCompat;
+using MvvmCross.Platform;
 using MvvmCross.Platform.Platform;
 
 namespace FriendNav.Droid
@@ -11,10 +14,14 @@ namespace FriendNav.Droid
         {
         }
 
+        protected override void InitializeIoC()
+        {
+            base.InitializeIoC();
+            Mvx.RegisterSingleton<INotificationService>(new NotificationService());
+        }
+
         protected override IMvxApplication CreateApp()
         {
-
-
             return new Core.App();
         }
 
