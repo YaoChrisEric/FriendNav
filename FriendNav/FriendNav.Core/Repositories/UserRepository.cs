@@ -50,7 +50,15 @@ namespace FriendNav.Core.Repositories
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
                 .OnceAsync<User>()
-                .ContinueWith(ObservableCollection<User> _beginLambda => );
+                .ContinueWith(a =>
+                {
+                    var collection = a.Result;
+
+                    foreach(var friend in collection)
+                    {
+                        user.FriendList.Add(friend.Object);
+                    }
+                });
         }
     }
 }
