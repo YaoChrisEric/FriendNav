@@ -5,6 +5,7 @@ using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -38,6 +39,18 @@ namespace FriendNav.Core.Repositories
             return client.Child("Users")
                 .Child(emailAddress)
                 .OnceSingleAsync<User>();
+        }
+
+
+        public Task GetFriendList(User user)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            return client.Child("FriendMap")
+                .Child(user.FirebaseKey)
+                .Child("FriendList")
+                .OnceAsync<User>()
+                .ContinueWith(ObservableCollection<User> _beginLambda => );
         }
     }
 }
