@@ -7,6 +7,10 @@ using MvvmCross.Platform;
 using MvvmCross.Core.Navigation;
 using Moq;
 using Autofac;
+using FriendNav.Core.Repositories;
+using FriendNav.Core.Repositories.Interfaces;
+using FriendNav.Core.Services.Interfaces;
+using FriendNav.Core.Services;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -16,6 +20,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
     [TestClass]
     public class LoginViewModelTests
     {
+        private Mock<IMvxNavigationService> mockNavigationService;
         private IContainer _container;
 
         public LoginViewModelTests()
@@ -27,7 +32,16 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         {
             var builder = new ContainerBuilder();
 
-            builder.RegisterInstance(new Mock<IMvxNavigationService>().Object);
+            var mockNavigationService = new Mock<IMvxNavigationService>();
+
+            builder.RegisterInstance(mockNavigationService.Object);
+            builder.RegisterInstance(new Mock<INotificationService>().Object);
+
+            builder.RegisterType<UserRepository>()
+                .As<IUserRepository>();
+
+            builder.RegisterType<FirebaseAuthService>()
+                .As<IFirebaseAuthService>();
 
             builder.RegisterType<LoginViewModel>();
 
@@ -39,6 +53,14 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         [TestMethod]
         public void TestMethod1()
         {
+            var loginViewModel = _container.Resolve<LoginViewModel>();
+
+            loginViewModel.EmailAddress = "c@test.com";
+
+            loginViewModel.UserPassword = "theday";
+
+            loginViewModel.LoginUserCommand.Execute();
+
             
         }
     }

@@ -10,6 +10,6 @@ namespace FriendNav.Core.Repositories.Interfaces
     {
         Task CreateUser(User user);
         Task<User> GetUser(string emailAddress);
-        Task<List<User>> GetFriendList(User user);
+        Task GetFriendList(User user);
     }
 }
