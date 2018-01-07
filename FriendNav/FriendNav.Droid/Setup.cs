@@ -13,6 +13,8 @@ namespace FriendNav.Droid
 
         protected override IMvxApplication CreateApp()
         {
+
+
             return new Core.App();
         }
 
