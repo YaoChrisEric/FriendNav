@@ -23,7 +23,7 @@ namespace FriendNav.Core.ViewModels
             user = parameter;
         }
 
-         private void DisplayFriendList()
+        private void DisplayFriendList()
         {
             // List<User> friendList = ;
         }

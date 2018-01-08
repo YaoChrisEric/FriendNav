@@ -11,6 +11,8 @@ using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Services;
+using FriendNav.Core.IntegrationTests.TestModel;
+using FriendNav.Core.Model;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -20,15 +22,29 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
     [TestClass]
     public class LoginViewModelTests
     {
-        private Mock<IMvxNavigationService> mockNavigationService;
-        private IContainer _container;
-
         public LoginViewModelTests()
         {
         }
 
-        [ClassInitialize]
-        public void ClassInitialize(TestContext context)
+        public TestContext TestContext { get; set; }
+
+        [TestMethod]
+        public void User_login_and_navigate_to_FriendList()
+        {
+            var context = ConstructTestAppContext();
+
+            var loginViewModel = context.TestContainer.Resolve<LoginViewModel>();
+
+            loginViewModel.EmailAddress = "c@test.com";
+
+            loginViewModel.UserPassword = "theday";
+
+            loginViewModel.LoginUserCommand.Execute();
+
+            context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
+        }
+
+        private TestAppContext ConstructTestAppContext()
         {
             var builder = new ContainerBuilder();
 
@@ -45,23 +61,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             builder.RegisterType<LoginViewModel>();
 
-            _container = builder.Build();
-        }
-
-        public TestContext TestContext { get; set; }
-
-        [TestMethod]
-        public void TestMethod1()
-        {
-            var loginViewModel = _container.Resolve<LoginViewModel>();
-
-            loginViewModel.EmailAddress = "c@test.com";
-
-            loginViewModel.UserPassword = "theday";
-
-            loginViewModel.LoginUserCommand.Execute();
-
-            
+            return new TestAppContext
+            {
+                TestContainer = builder.Build(),
+                MockNavigationService = mockNavigationService
+            };
         }
     }
 }

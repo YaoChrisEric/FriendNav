@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TestModel\TestAppContext.cs" />
     <Compile Include="ViewModels\LoginViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
