@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MvvmCross.Core.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Text;
@@ -15,6 +16,6 @@ namespace FriendNav.Core.Model
 
         public string FirebaseKey => EmailAddress.Replace('.', ',');
 
-        public ObservableCollection<User> FriendList { get; set; }
+        public List<User> FriendList { get; set; }
     }
 }
