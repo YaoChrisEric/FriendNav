@@ -29,14 +29,6 @@ namespace FriendNav.Core.Model
             return firebasekey.Replace('.', ',');
         }
 
-        public void UpdateFriendList(IEnumerable<Friend> friends)
-        {
-            foreach (var friend in friends.Where(w => FriendList.All(a => a.FirebaseKey != w.FirebaseKey)).ToArray())
-            {
-                FriendList.Add(friend);
-            }
-        }
-
         public void UpdateFriendList(FirebaseEvent<Friend> observer)
         {
             var friend = FriendList.FirstOrDefault(f => f.FirebaseKey == observer.Key);

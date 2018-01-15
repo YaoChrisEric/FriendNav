@@ -18,17 +18,20 @@ namespace FriendNav.Core.ViewModels
     {
         private readonly ITask _task;
         private readonly IUserRepository _userRepository;
+        private readonly IChatRepository _chatRepository;
         private User _user;
         private readonly IMvxNavigationService _mvxNavigationService;
 
         public FriendListViewModel(ITask task,
             IUserRepository userRepository,
+            IChatRepository chatRepository,
             IMvxNavigationService navagtionService
             )
         {
             _mvxNavigationService = navagtionService;
             _task = task;
             _userRepository = userRepository;
+            _chatRepository = chatRepository;
             SearchForUserCommand = new MvxCommand(SearchForUserAsync);
             AddUserToFriendListCommand = new MvxCommand(AddUserToFriendListAsync);
             NavigateToChatCommand = new MvxCommand(NavigateToSelectedFriendChatAsync);
@@ -126,7 +129,9 @@ namespace FriendNav.Core.ViewModels
 
             var chatFriend = _userRepository.GetUser(SelectedFriend.EmailAddress);
 
-            _mvxNavigationService.Navigate<ChatViewModel, User>(chatFriend).Wait();
+            var chat = _chatRepository.GetChat(_user, chatFriend);
+
+            _mvxNavigationService.Navigate<ChatViewModel, Chat>(chat).Wait();
         }
 
         private void UpdateSearchUsers(List<User> newList)

@@ -179,6 +179,7 @@
     <Compile Include="TestModel\FriendListViewModelHook.cs" />
     <Compile Include="TestModel\TestAppContext.cs" />
     <Compile Include="Utilities\TestTask.cs" />
+    <Compile Include="ViewModels\ChatViewModelTests.cs" />
     <Compile Include="ViewModels\FriendListViewModelTests.cs" />
     <Compile Include="ViewModels\LoginViewModelTests.cs" />
     <Compile Include="ViewModels\RegisterViewModelTests.cs" />
