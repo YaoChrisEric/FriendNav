@@ -3,6 +3,7 @@ using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Utilities;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -15,16 +16,22 @@ namespace FriendNav.Core.ViewModels
 {
     public class FriendListViewModel : MvxViewModel<User>
     {
-        private ITask _task;
-        private IUserRepository _userRepository;
+        private readonly ITask _task;
+        private readonly IUserRepository _userRepository;
         private User _user;
+        private readonly IMvxNavigationService _mvxNavigationService;
 
-        public FriendListViewModel(ITask task, IUserRepository userRepository)
+        public FriendListViewModel(ITask task,
+            IUserRepository userRepository,
+            IMvxNavigationService navagtionService
+            )
         {
+            _mvxNavigationService = navagtionService;
             _task = task;
             _userRepository = userRepository;
             SearchForUserCommand = new MvxCommand(SearchForUserAsync);
             AddUserToFriendListCommand = new MvxCommand(AddUserToFriendListAsync);
+            NavigateToChatCommand = new MvxCommand(NavigateToSelectedFriendChatAsync);
         }
 
         public override void Prepare(User parameter)
@@ -38,6 +45,8 @@ namespace FriendNav.Core.ViewModels
         public MvxCommand SearchForUserCommand { get; }
 
         public MvxCommand AddUserToFriendListCommand { get; }
+
+        public MvxCommand NavigateToChatCommand { get; }
 
         public MvxObservableCollection<UserViewModel> SearchedUsers { get; set; } = new MvxObservableCollection<UserViewModel>();
 
@@ -55,7 +64,9 @@ namespace FriendNav.Core.ViewModels
             }
         }
 
-        public User SelectedNewFriend { get; set; }
+        public UserViewModel SelectedNewFriend { get; set; }
+
+        public FriendViewModel SelectedFriend { get; set; }
 
         private void LoadUserFriendsAsync()
         {
@@ -99,6 +110,23 @@ namespace FriendNav.Core.ViewModels
             _userRepository.AddUserToFriendList(_user, friend);
 
             SelectedNewFriend = null;
+        }
+
+        private void NavigateToSelectedFriendChatAsync()
+        {
+            _task.Run(NavigateToSelectedFriendChat);
+        }
+
+        private void NavigateToSelectedFriendChat()
+        {
+            if (SelectedFriend == null)
+            {
+                return;
+            }
+
+            var chatFriend = _userRepository.GetUser(SelectedFriend.EmailAddress);
+
+            _mvxNavigationService.Navigate<ChatViewModel, User>(chatFriend).Wait();
         }
 
         private void UpdateSearchUsers(List<User> newList)

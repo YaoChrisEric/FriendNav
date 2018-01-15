@@ -1,9 +1,11 @@
 ﻿using Autofac;
 using FriendNav.Core.IntegrationTests.TestModel;
+using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,6 +40,8 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             Assert.AreNotEqual(0, friendListViewModel.FriendList.Count);
             Assert.IsTrue(friendListViewModel.FriendList.Any(a => a.EmailAddress == "c1@test.com"));
+
+            userRepository.Dispose();
         }
 
         [TestMethod]
@@ -60,6 +64,8 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             friendListViewModel.SearchForUserCommand.Execute();
 
             Assert.AreNotEqual(0, friendListViewModel.SearchedUsers.Count);
+
+            userRepository.Dispose();
         }
 
         [TestMethod]
@@ -79,9 +85,17 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var newFriend = userRepository.GetUser("christest10@test.com");
 
-            friendListViewModel.SelectedNewFriend = newFriend;
+            friendListViewModel.SelectedNewFriend = new UserViewModel(newFriend);
+
+            var testHook = new FriendListViewModelHook();
+
+            friendListViewModel.TestHook = testHook;
+            testHook.EmailAddress = newFriend.EmailAddress;
+            testHook.ViewModel = friendListViewModel;
 
             friendListViewModel.AddUserToFriendListCommand.Execute();
+
+            testHook.ResetEvent.WaitOne();
 
             Assert.IsTrue(friendListViewModel.FriendList.Any(a => a.EmailAddress == newFriend.EmailAddress));
 
@@ -89,6 +103,32 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             {
                 userRepository.RemoveUserFromFriendList(user, friend);
             }
+
+            userRepository.Dispose();
+        }
+
+        [TestMethod]
+        public void Navigate_to_chat_viewmodel()
+        {
+            var context = TestAppContext.ConstructTestAppContext();
+
+            var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
+            var userRepository = context.TestContainer.Resolve<IUserRepository>();
+            var friendListViewModel = context.TestContainer.Resolve<FriendListViewModel>();
+
+            firebaseAuthService.LoginUser("c@test.com", "theday");
+
+            var user = userRepository.GetUser("c@test.com");
+
+            friendListViewModel.Prepare(user);
+
+            friendListViewModel.SelectedFriend = friendListViewModel.FriendList.First();
+
+            friendListViewModel.NavigateToChatCommand.Execute();
+
+            context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, User>(It.IsAny<User>(), null));
+
+            userRepository.Dispose();
         }
     }
 }

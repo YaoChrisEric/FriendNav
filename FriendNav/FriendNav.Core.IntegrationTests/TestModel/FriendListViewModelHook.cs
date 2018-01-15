@@ -5,25 +5,41 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace FriendNav.Core.IntegrationTests.TestModel
 {
     class FriendListViewModelHook : IAsyncHook
     {
+        private readonly object _testLock = new object();
+
+        public ManualResetEvent ResetEvent { get; set; } = new ManualResetEvent(false);
+
         public string EmailAddress { get; set; }
 
         public FriendListViewModel ViewModel { get; set; }
 
+        public bool IsCheckComplete { get; set; }
+
         public void NotifyOtherThreads()
         {
-            if (ViewModel.FriendList.Any(a => a.EmailAddress == EmailAddress))
+            lock (_testLock)
             {
+                if (IsCheckComplete)
+                {
+                    return;
+                }
 
-            }
-            else
-            {
-                Assert.Fail();
+                if (ViewModel.FriendList.Any(a => a.EmailAddress == EmailAddress))
+                {
+                    IsCheckComplete = true;
+                    ResetEvent.Set();
+                }
+                else
+                {
+                    Assert.Fail();
+                }
             }
         }
     }
