@@ -1,6 +1,7 @@
 ﻿using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
+using FriendNav.Core.Utilities;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
@@ -11,6 +12,7 @@ namespace FriendNav.Core.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
+        private readonly ITask _task;
         private readonly IMvxNavigationService _mvxNavigationService;
         private readonly INotificationService _notificationService;
         private readonly IFirebaseAuthService _firebaseAuthService;
@@ -18,11 +20,13 @@ namespace FriendNav.Core.ViewModels
 
 
         public LoginViewModel(
+            ITask task,
             IMvxNavigationService mvxNavigationService,
             IUserRepository userRepository,
             INotificationService notificationService,           
             IFirebaseAuthService firebaseAuthService)
         {
+            _task = task;
             _mvxNavigationService = mvxNavigationService;
             _userRepository = userRepository;
             _firebaseAuthService = firebaseAuthService;
@@ -36,7 +40,12 @@ namespace FriendNav.Core.ViewModels
 
         public string UserPassword { get; set; }
 
-        private async void LoginUser()
+        private void LoginUserAsync()
+        {
+            _task.Run(LoginUser);
+        }
+
+        private void LoginUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -47,9 +56,9 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null)
             {
-                var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
+                var user = _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
 
-                await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);
+                _mvxNavigationService.Navigate<FriendListViewModel, User>(user).Wait();
                 return;
             }
 

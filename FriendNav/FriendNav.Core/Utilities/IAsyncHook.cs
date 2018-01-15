@@ -4,7 +4,8 @@ using System.Text;
 
 namespace FriendNav.Core.Utilities
 {
-    public class Task
+    public interface IAsyncHook
     {
+        void NotifyOtherThreads();
     }
 }

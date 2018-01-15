@@ -13,12 +13,12 @@ using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Services;
 using FriendNav.Core.IntegrationTests.TestModel;
 using FriendNav.Core.Model;
+using Firebase.Auth;
+using User = FriendNav.Core.Model.User;
+using FriendNav.Core.Utilities;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
-    /// <summary>
-    /// Summary description for UnitTest1
-    /// </summary>
     [TestClass]
     public class LoginViewModelTests
     {
@@ -31,7 +31,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         [TestMethod]
         public void User_login_and_navigate_to_FriendList()
         {
-            var context = ConstructTestAppContext();
+            var context = TestAppContext.ConstructTestAppContext();
 
             var loginViewModel = context.TestContainer.Resolve<LoginViewModel>();
 
@@ -42,30 +42,6 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             loginViewModel.LoginUserCommand.Execute();
 
             context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
-        }
-
-        private TestAppContext ConstructTestAppContext()
-        {
-            var builder = new ContainerBuilder();
-
-            var mockNavigationService = new Mock<IMvxNavigationService>();
-
-            builder.RegisterInstance(mockNavigationService.Object);
-            builder.RegisterInstance(new Mock<INotificationService>().Object);
-
-            builder.RegisterType<UserRepository>()
-                .As<IUserRepository>();
-
-            builder.RegisterType<FirebaseAuthService>()
-                .As<IFirebaseAuthService>();
-
-            builder.RegisterType<LoginViewModel>();
-
-            return new TestAppContext
-            {
-                TestContainer = builder.Build(),
-                MockNavigationService = mockNavigationService
-            };
         }
     }
 }
