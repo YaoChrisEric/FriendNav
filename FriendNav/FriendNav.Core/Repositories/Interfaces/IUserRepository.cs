@@ -8,8 +8,11 @@ namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface IUserRepository
     {
-        Task CreateUser(User user);
-        Task<User> GetUser(string emailAddress);
-        Task GetFriendList(User user);
+        void CreateUser(User user);
+        User GetUser(string emailAddress);
+        List<User> FindUsers(string emailPart);
+        void GetFriendList(User user);
+        void AddUserToFriendList(User user, Friend newFriend);
+        void RemoveUserFromFriendList(User user, Friend removeFriend);
     }
 }

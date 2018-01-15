@@ -11,49 +11,29 @@ using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Services;
+using FriendNav.Core.IntegrationTests.TestModel;
+using FriendNav.Core.Model;
+using Firebase.Auth;
+using User = FriendNav.Core.Model.User;
+using FriendNav.Core.Utilities;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
-    /// <summary>
-    /// Summary description for UnitTest1
-    /// </summary>
     [TestClass]
     public class LoginViewModelTests
     {
-        private Mock<IMvxNavigationService> mockNavigationService;
-        private IContainer _container;
-
         public LoginViewModelTests()
         {
-        }
-
-        [ClassInitialize]
-        public void ClassInitialize(TestContext context)
-        {
-            var builder = new ContainerBuilder();
-
-            var mockNavigationService = new Mock<IMvxNavigationService>();
-
-            builder.RegisterInstance(mockNavigationService.Object);
-            builder.RegisterInstance(new Mock<INotificationService>().Object);
-
-            builder.RegisterType<UserRepository>()
-                .As<IUserRepository>();
-
-            builder.RegisterType<FirebaseAuthService>()
-                .As<IFirebaseAuthService>();
-
-            builder.RegisterType<LoginViewModel>();
-
-            _container = builder.Build();
         }
 
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void TestMethod1()
+        public void User_login_and_navigate_to_FriendList()
         {
-            var loginViewModel = _container.Resolve<LoginViewModel>();
+            var context = TestAppContext.ConstructTestAppContext();
+
+            var loginViewModel = context.TestContainer.Resolve<LoginViewModel>();
 
             loginViewModel.EmailAddress = "c@test.com";
 
@@ -61,7 +41,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             loginViewModel.LoginUserCommand.Execute();
 
-            
+            context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
         }
     }
 }

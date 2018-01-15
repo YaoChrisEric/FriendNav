@@ -20,45 +20,99 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public Task CreateUser(User user)
+        public void CreateUser(User user)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
             user.IsReceivingMapRequest = false;
             user.CurrentChatFriend = string.Empty;
 
-            return client.Child("Users")
-                .Child(user.EmailAddress)
-                .PostAsync(user);
+            client.Child("Users")
+                .Child(user.FirebaseKey)
+                .PostAsync(user)
+                .RunSynchronously();
         }
 
-        public Task<User> GetUser(string emailAddress)
+        public User GetUser(string emailAddress)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            return client.Child("Users")
-                .Child(emailAddress)
-                .OnceSingleAsync<User>();
+           return client.Child("Users")
+                .Child(User.CreateFirebaseKey(emailAddress))
+                .OnceSingleAsync<User>()
+                .Result;
         }
 
-
-        public Task GetFriendList(User user)
+        public List<User> FindUsers(string emailPart)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            return client.Child("FriendMap")
+            var searchUsers = client.Child("Users")                
+                .OnceAsync<User>()
+                .Result;
+
+            var users = new List<User>();
+
+            //TechDebt: This in memory filtering will not scale but should be fine until a server side
+            // approach can be worked out.
+            foreach(var user in searchUsers)
+            {
+                if (user.Object.EmailAddress != null && user.Object.EmailAddress.Contains(emailPart))
+                {
+                    users.Add(user.Object);
+                }
+            }
+
+            return users;
+        }
+
+        public void GetFriendList(User user)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            var friends = client.Child("FriendMap")
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
-                .OnceAsync<User>()
-                .ContinueWith(a =>
-                {
-                    var collection = a.Result;
+                .OnceAsync<Friend>()
+                .Result;
 
-                    foreach(var friend in collection)
-                    {
-                        user.FriendList.Add(friend.Object);
-                    }
-                });
+            foreach (var friend in friends)
+            {
+                friend.Object.FirebaseKey = friend.Key;
+                user.FriendList.Add(friend.Object);
+            }
+
+            //TechDebt: This application is simple enough at this point to not need to handle disposing of this directly
+            var disposable = client.Child("FriendMap")
+                .Child(user.FirebaseKey)
+                .Child("FriendList")
+                .AsObservable<Friend>()
+                .Subscribe(user.UpdateFriendList);
+        }
+
+        public void AddUserToFriendList(User user, Friend newFriend)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            client
+                .Child("FriendMap")
+                .Child(user.FirebaseKey)
+                .Child("FriendList")
+                .PostAsync(newFriend)
+                .Wait();
+        }
+
+        public void RemoveUserFromFriendList(User user, Friend removeFriend)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            client
+                .Child("FriendMap")
+                .Child(user.FirebaseKey)
+                .Child("FriendList")
+                .Child(removeFriend.FirebaseKey)
+                .DeleteAsync()
+                .Wait();
         }
     }
 }

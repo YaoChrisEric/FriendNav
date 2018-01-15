@@ -5,8 +5,11 @@ using System.Threading.Tasks;
 
 namespace FriendNav.Core.Utilities
 {
-    public interface ITask
+    public class TaskWrapper : ITask
     {
-        Task Run(Action action);
+        public Task Run(Action action)
+        {
+            return Task.Run(action);
+        }
     }
 }

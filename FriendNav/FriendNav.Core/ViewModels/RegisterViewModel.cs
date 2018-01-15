@@ -51,7 +51,7 @@ namespace FriendNav.Core.ViewModels
                     EmailAddress = EmailAddress
                 };
 
-                await _userRepository.CreateUser(newUser);
+                _userRepository.CreateUser(newUser);
 
                 await _mvxNavigationService.Navigate<FriendListViewModel, User>(newUser);
 
