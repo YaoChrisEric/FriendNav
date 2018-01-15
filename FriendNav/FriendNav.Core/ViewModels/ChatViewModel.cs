@@ -22,6 +22,8 @@ namespace FriendNav.Core.ViewModels
         {
             _task = task;
             _messageRepository = messageRepository;
+
+            AddNewMessageCommand = new MvxCommand(CreateNewMessageAsync);
         }
 
         public override void Prepare(Chat parameter)
@@ -30,7 +32,11 @@ namespace FriendNav.Core.ViewModels
             LoadMessagesAsync();
         }
 
+        public MvxCommand AddNewMessageCommand { get; }
+
         public IAsyncHook TestHook { get; set; }
+
+        public string ActiveMessage { get; set; }
 
         public MvxObservableCollection<MessageViewModel> Messages = new MvxObservableCollection<MessageViewModel>();
 
@@ -43,6 +49,18 @@ namespace FriendNav.Core.ViewModels
         {
             _chat.Messages.CollectionChanged += Messages_CollectionChanged;
             _messageRepository.GetMessages(_chat);            
+        }
+
+        private void CreateNewMessageAsync()
+        {
+            _task.Run(CreateNewMessage);
+        }
+
+        private void CreateNewMessage()
+        {
+            var message = _chat.CreateNewMessage(ActiveMessage);
+            _messageRepository.CreateMessage(_chat, message);
+            ActiveMessage = string.Empty;
         }
 
         private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

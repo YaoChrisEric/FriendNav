@@ -9,5 +9,6 @@ namespace FriendNav.Core.Repositories.Interfaces
     {
         void GetMessages(Chat chat);
         void CreateMessage(Chat chat, Message message);
+        void DeleteMessage(Chat chat, Message message);
     }
 }

@@ -38,7 +38,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var responder = userRepository.GetUser("c1@test.com");
 
-            var chat = chatRepository.GetChat(initiator, responder);
+            var chat = chatRepository.GetChat(initiator, responder, true);
 
             chatViewModel.Prepare(chat);
 
@@ -65,13 +65,30 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var responder = userRepository.GetUser("c1@test.com");
 
-            var chat = chatRepository.GetChat(initiator, responder);
+            var chat = chatRepository.GetChat(initiator, responder, true);
 
             chatViewModel.Prepare(chat);
 
-            
+            var testMessage = Guid.NewGuid().ToString();
 
+            chatViewModel.ActiveMessage = testMessage;
 
+            var testHook = new ChatViewModelHook
+            {
+                ViewModel = chatViewModel,
+                TestMessage = testMessage,
+                ActiveTestUser = initiator
+            };
+
+            chatViewModel.TestHook = testHook;
+            chatViewModel.AddNewMessageCommand.Execute();
+
+            testHook.ResetEvent.WaitOne();
+
+            messageRepository.DeleteMessage(chat, 
+                chat.Messages.First(f => f.FirebaseKey == testHook
+                    .CapturedTestMessage
+                    .FirebaseKey));
 
             userRepository.Dispose();
             messageRepository.Dispose();

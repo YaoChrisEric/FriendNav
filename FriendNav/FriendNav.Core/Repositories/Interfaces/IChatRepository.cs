@@ -7,6 +7,6 @@ namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface IChatRepository
     {
-        Chat GetChat(User Intiator, User Responder);
+        Chat GetChat(User Intiator, User Responder, bool isInitator);
     }
 }

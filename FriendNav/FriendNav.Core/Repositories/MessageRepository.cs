@@ -21,7 +21,27 @@ namespace FriendNav.Core.Repositories
 
         public void CreateMessage(Chat chat, Message message)
         {
+            var client = _firebaseClientService.CreateFirebaseClient();
 
+            client
+                .Child("BasicChat")
+                .Child(chat.FirebaseKey)
+                .Child("MessageIds")
+                .PostAsync(message)
+                .Wait();
+        }
+
+        public void DeleteMessage(Chat chat, Message message)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            client
+                .Child("BasicChat")
+                .Child(chat.FirebaseKey)
+                .Child("MessageIds")
+                .Child(message.FirebaseKey)
+                .DeleteAsync()
+                .Wait();
         }
 
         public void GetMessages(Chat chat)

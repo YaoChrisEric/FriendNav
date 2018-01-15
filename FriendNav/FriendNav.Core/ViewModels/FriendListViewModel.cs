@@ -129,7 +129,7 @@ namespace FriendNav.Core.ViewModels
 
             var chatFriend = _userRepository.GetUser(SelectedFriend.EmailAddress);
 
-            var chat = _chatRepository.GetChat(_user, chatFriend);
+            var chat = _chatRepository.GetChat(_user, chatFriend, true);
 
             _mvxNavigationService.Navigate<ChatViewModel, Chat>(chat).Wait();
         }

@@ -10,6 +10,10 @@ namespace FriendNav.Core.Model
 {
     public class Chat
     {
+        public bool IsInitiator { get; set; }
+
+        public User ActiveUser { get; set; }
+
         public User Initiator { get; set; }
 
         public User Responder { get; set; }
@@ -43,6 +47,21 @@ namespace FriendNav.Core.Model
             observer.Object.FirebaseKey = observer.Key;
 
             Messages.Add(observer.Object);
+        }
+
+        public Message CreateNewMessage(string text)
+        {
+            var message = new Message
+            {
+                SenderEmail = ActiveUser.EmailAddress,
+                Text = text,
+                TimeStamp = DateTime
+                    .Now
+                    .TimeOfDay
+                    .ToString()
+            };
+
+            return message;
         }
 
         public static string GenerateChatFirebaseKey(User initiator, User responder)

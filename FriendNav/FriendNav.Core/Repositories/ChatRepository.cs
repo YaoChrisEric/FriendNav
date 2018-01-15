@@ -12,18 +12,19 @@ namespace FriendNav.Core.Repositories
     {
         private readonly IFirebaseClientService _firebaseClientService;
 
-        public ChatRepository(IFirebaseClientService firebaseClientService
-            )
+        public ChatRepository(IFirebaseClientService firebaseClientService)
         {
             _firebaseClientService = firebaseClientService;
         }
 
-        public Chat GetChat(User Intiator, User Responder)
+        public Chat GetChat(User intiator, User responder, bool isInitator)
         {
             var chat = new Chat
             {
-                Initiator = Intiator,
-                Responder = Responder
+                IsInitiator = isInitator,
+                ActiveUser = isInitator ? intiator : responder,
+                Initiator = intiator,
+                Responder = responder
             };
 
             return chat;
