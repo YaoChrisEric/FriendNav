@@ -49,9 +49,19 @@ namespace FriendNav.Core.IntegrationTests.TestModel
                 .As<IUserRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<ChatRepository>()
+                .As<IChatRepository>()
+                .InstancePerLifetimeScope();
+
+            builder.RegisterType<MessageRepository>()
+                .As<IMessageRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<LoginViewModel>();
 
             builder.RegisterType<FriendListViewModel>();
+
+            builder.RegisterType<ChatViewModel>();
 
             return new TestAppContext
             {

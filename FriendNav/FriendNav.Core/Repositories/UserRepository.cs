@@ -13,6 +13,8 @@ namespace FriendNav.Core.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private readonly List<IDisposable> _disposable = new List<IDisposable>();
+
         private readonly IFirebaseClientService _firebaseClientService;
 
         public UserRepository(IFirebaseClientService firebaseClientService)
@@ -82,12 +84,13 @@ namespace FriendNav.Core.Repositories
                 user.FriendList.Add(friend.Object);
             }
 
-            //TechDebt: This application is simple enough at this point to not need to handle disposing of this directly
             var disposable = client.Child("FriendMap")
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
                 .AsObservable<Friend>()
                 .Subscribe(user.UpdateFriendList);
+
+            _disposable.Add(disposable);
         }
 
         public void AddUserToFriendList(User user, Friend newFriend)
@@ -113,6 +116,14 @@ namespace FriendNav.Core.Repositories
                 .Child(removeFriend.FirebaseKey)
                 .DeleteAsync()
                 .Wait();
+        }
+
+        public void Dispose()
+        {
+            foreach(var dispose in _disposable)
+            {
+                dispose.Dispose();
+            }
         }
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
-    public interface IUserRepository
+    public interface IUserRepository : IDisposable
     {
         void CreateUser(User user);
         User GetUser(string emailAddress);
