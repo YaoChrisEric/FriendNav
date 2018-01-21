@@ -27,6 +27,7 @@ namespace FriendNav.Core.ViewModels
             _messageRepository = messageRepository;
 
             AddNewMessageCommand = new MvxCommand(CreateNewMessageAsync);
+            SendNavigationRequestCommand = new MvxCommand(SendNavigationRequestAsync);
         }
 
         public override void Prepare(Chat parameter)
@@ -36,6 +37,8 @@ namespace FriendNav.Core.ViewModels
         }
 
         public MvxCommand AddNewMessageCommand { get; }
+
+        public MvxCommand SendNavigationRequestCommand { get; }
 
         public IAsyncHook TestHook { get; set; }
 
@@ -68,6 +71,16 @@ namespace FriendNav.Core.ViewModels
             var message = _chat.CreateNewMessage(ActiveMessage);
             _messageRepository.CreateMessage(_chat, message);
             ActiveMessage = string.Empty;
+        }
+
+        private void SendNavigationRequestAsync()
+        {
+            _task.Run(SendNavigationRequest);
+        }
+
+        private void SendNavigationRequest()
+        {
+            _navigateRequestRepository.SendNavigationRequest(_chat.NavigateRequest);
         }
 
         private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

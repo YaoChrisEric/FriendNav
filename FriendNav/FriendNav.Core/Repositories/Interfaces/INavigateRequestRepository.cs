@@ -5,8 +5,10 @@ using System.Text;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
-    public interface INavigateRequestRepository
+    public interface INavigateRequestRepository : IDisposable
     {
         void GetNavigateRequest(Chat chat);
+
+        void SendNavigationRequest(NavigateRequest navigateRequest);
     }
 }

@@ -77,6 +77,43 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
+        public void Send_request_for_navigation()
+        {
+            var context = TestAppContext.ConstructTestAppContext();
+
+            var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
+            var userRepository = context.TestContainer.Resolve<IUserRepository>();
+            var chatRepository = context.TestContainer.Resolve<IChatRepository>();
+            var messageRepository = context.TestContainer.Resolve<IMessageRepository>();
+            var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
+
+            firebaseAuthService.LoginUser("c@test.com", "theday");
+
+            var initiator = userRepository.GetUser("c@test.com");
+
+            var responder = userRepository.GetUser("c1@test.com");
+
+            var chat = chatRepository.GetChat(initiator, responder);
+
+            chatViewModel.Prepare(chat);
+
+            var testHook = new NavigateRequestHook
+            {
+                IntiatorEmail = initiator.EmailAddress,
+                NavigateRequest = chat.NavigateRequest
+            };
+
+            chat.NavigateRequest.TestHook = testHook;
+
+            chatViewModel.SendNavigationRequestCommand.Execute();
+
+            testHook.ResetEvent.WaitOne();
+
+            userRepository.Dispose();
+            messageRepository.Dispose();
+        }
+
+        [TestMethod]
         public void Add_new_chat_message_to_chat()
         {
             var context = TestAppContext.ConstructTestAppContext();
