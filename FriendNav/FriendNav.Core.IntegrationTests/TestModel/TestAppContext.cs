@@ -57,6 +57,10 @@ namespace FriendNav.Core.IntegrationTests.TestModel
                 .As<IMessageRepository>()
                 .InstancePerLifetimeScope();
 
+            builder.RegisterType<NavigateRequestRepository>()
+                .As<INavigateRequestRepository>()
+                .InstancePerLifetimeScope();
+
             builder.RegisterType<LoginViewModel>();
 
             builder.RegisterType<FriendListViewModel>();

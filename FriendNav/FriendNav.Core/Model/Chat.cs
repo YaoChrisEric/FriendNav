@@ -10,15 +10,13 @@ namespace FriendNav.Core.Model
 {
     public class Chat
     {
-        public bool IsInitiator { get; set; }
-
         public User ActiveUser { get; set; }
 
-        public User Initiator { get; set; }
+        public User ChatUser { get; set; }
 
-        public User Responder { get; set; }
+        public NavigateRequest NavigateRequest { get; set; }
 
-        public string FirebaseKey => GenerateChatFirebaseKey(Initiator, Responder);
+        public string FirebaseKey => GenerateChatFirebaseKey(ActiveUser, ChatUser);
 
         public ObservableCollection<Message> Messages { get; set; } = new ObservableCollection<Message>();
 
