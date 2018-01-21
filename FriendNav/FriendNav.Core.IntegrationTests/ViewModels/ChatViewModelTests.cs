@@ -38,11 +38,39 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var responder = userRepository.GetUser("c1@test.com");
 
-            var chat = chatRepository.GetChat(initiator, responder, true);
+            var chat = chatRepository.GetChat(initiator, responder);
 
             chatViewModel.Prepare(chat);
 
             Assert.AreNotEqual(0, chatViewModel.Messages.Count);
+
+            userRepository.Dispose();
+            messageRepository.Dispose();
+        }
+
+        [TestMethod]
+        public void Upon_navigating_to_chat_setup_navigation_request()
+        {
+            var context = TestAppContext.ConstructTestAppContext();
+
+            var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
+            var userRepository = context.TestContainer.Resolve<IUserRepository>();
+            var chatRepository = context.TestContainer.Resolve<IChatRepository>();
+            var messageRepository = context.TestContainer.Resolve<IMessageRepository>();
+            var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
+
+            firebaseAuthService.LoginUser("c@test.com", "theday");
+
+            var initiator = userRepository.GetUser("c@test.com");
+
+            var responder = userRepository.GetUser("c1@test.com");
+
+            var chat = chatRepository.GetChat(initiator, responder);
+
+            chatViewModel.Prepare(chat);
+
+            Assert.IsNotNull(chat.NavigateRequest?.ActiveUser);
+            Assert.AreEqual(initiator, chat.NavigateRequest.ActiveUser);
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -65,7 +93,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var responder = userRepository.GetUser("c1@test.com");
 
-            var chat = chatRepository.GetChat(initiator, responder, true);
+            var chat = chatRepository.GetChat(initiator, responder);
 
             chatViewModel.Prepare(chat);
 

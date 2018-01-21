@@ -5,8 +5,8 @@ using System.Text;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
-    public interface IChatRepository
+    public interface INavigateRequestRepository
     {
-        Chat GetChat(User currentUser, User chatUser);
+        void GetNavigateRequest(Chat chat);
     }
 }
