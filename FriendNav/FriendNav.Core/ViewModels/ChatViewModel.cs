@@ -1,5 +1,6 @@
 ﻿using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
+using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Utilities;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
@@ -17,16 +18,19 @@ namespace FriendNav.Core.ViewModels
         private readonly ITask _task;
         private readonly IMessageRepository _messageRepository;
         private readonly INavigateRequestRepository _navigateRequestRepository;
+        private readonly INavigationRequestService _navigationRequestService;
         private readonly IMvxNavigationService _mvxNavigationService;
 
         public ChatViewModel(ITask task,
             INavigateRequestRepository navigateRequestRepository,
+            INavigationRequestService navigationRequestService,
             IMessageRepository messageRepository,
             IMvxNavigationService mvxNavigationService
             )
         {
             _task = task;
             _navigateRequestRepository = navigateRequestRepository;
+            _navigationRequestService = navigationRequestService;
             _messageRepository = messageRepository;
             _mvxNavigationService = mvxNavigationService;
 
@@ -62,7 +66,7 @@ namespace FriendNav.Core.ViewModels
             _chat.Messages.CollectionChanged += Messages_CollectionChanged;
             _messageRepository.GetMessages(_chat);
 
-            _navigateRequestRepository.GetNavigateRequest(_chat);
+            _navigateRequestRepository.GetNavigationRequest(_chat);
 
             _chat.NavigateRequest.NavigationReqest += NavigateRequest_NavigationReqest;
         }
@@ -75,7 +79,7 @@ namespace FriendNav.Core.ViewModels
         private void CreateNewMessage()
         {
             var message = _chat.CreateNewMessage(ActiveMessage);
-            _messageRepository.CreateMessage(_chat, message);
+            _messageRepository.CreateMessage(message);
             ActiveMessage = string.Empty;
         }
 
@@ -86,9 +90,9 @@ namespace FriendNav.Core.ViewModels
 
         private void SendNavigationRequest()
         {
-            _navigateRequestRepository.SendNavigationRequest(_chat.NavigateRequest);
+            _navigationRequestService.InitiatNavigationRequest(_chat.NavigateRequest);
 
-            _mvxNavigationService.Navigate<RequestViewModel, NavigateRequest>(_chat.NavigateRequest).Wait();
+            _mvxNavigationService.Navigate<RequestViewModel, Chat>(_chat).Wait();
         }
 
         private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -119,7 +123,7 @@ namespace FriendNav.Core.ViewModels
 
         private void NavigateRequest_NavigationReqest(object sender, EventArgs e)
         {
-            _mvxNavigationService.Navigate<RequestViewModel, NavigateRequest>(_chat.NavigateRequest).Wait();
+            _mvxNavigationService.Navigate<RequestViewModel, Chat>(_chat).Wait();
 
             TestNavigationHook?.NotifyOtherThreads();
         }

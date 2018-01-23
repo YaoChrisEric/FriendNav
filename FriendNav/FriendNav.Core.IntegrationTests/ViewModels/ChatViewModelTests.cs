@@ -121,7 +121,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             Assert.AreEqual(testHook.IntiatorEmail, testHook.NavigateRequest.InitiatorEmail);
 
-            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, NavigateRequest>(It.IsAny<NavigateRequest>(), null));
+            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -166,7 +166,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             Assert.AreEqual(testHook.IntiatorEmail, testHook.NavigateRequest.InitiatorEmail);
 
-            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, NavigateRequest>(It.IsAny<NavigateRequest>(), null));
+            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -214,7 +214,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             Assert.IsNotNull(testHook.CapturedTestMessage);
             Assert.AreEqual(testHook.ActiveTestUser.EmailAddress, testHook.CapturedTestMessage.SenderEmail);
 
-            messageRepository.DeleteMessage(chat, 
+            messageRepository.DeleteMessage( 
                 chat.Messages.First(f => f.FirebaseKey == testHook
                     .CapturedTestMessage
                     .FirebaseKey));

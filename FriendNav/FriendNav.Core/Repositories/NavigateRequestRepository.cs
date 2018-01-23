@@ -20,7 +20,7 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void GetNavigateRequest(Chat chat)
+        public void GetNavigationRequest(Chat chat)
         {
             var navigateRequest = new NavigateRequest
             {
@@ -68,7 +68,7 @@ namespace FriendNav.Core.Repositories
             _disposable.Add(disposable);
         }
 
-        public void SendNavigationRequest(NavigateRequest navigateRequest)
+        public void UpdateNavigationRequest(NavigateRequest navigateRequest)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
@@ -78,8 +78,8 @@ namespace FriendNav.Core.Repositories
                 .Child("meetRequest")
                 .PutAsync(new NavigateRequestDto
                 {
-                    InitiatorEmail = navigateRequest.ActiveUser.EmailAddress,
-                    CallActive = false
+                    InitiatorEmail = navigateRequest.InitiatorEmail,
+                    CallActive = navigateRequest.IsNavigationActive
                 })
                 .Wait();
         }
