@@ -16,6 +16,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
         public ManualResetEvent ResetEvent { get; set; } = new ManualResetEvent(false);
 
+        public bool IsIntiatorTest { get; set; }
+
         public bool IsCheckComplete { get; set; }
 
         public string IntiatorEmail { get; set; }
@@ -30,8 +32,6 @@ namespace FriendNav.Core.IntegrationTests.TestModel
                 {
                     return;
                 }
-
-                Assert.AreEqual(IntiatorEmail, NavigateRequest.InitiatorEmail);
 
                 IsCheckComplete = true;
                 ResetEvent.Set();

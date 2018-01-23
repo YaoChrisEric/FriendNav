@@ -1,5 +1,6 @@
 ﻿using Autofac;
 using Firebase.Auth;
+using FriendNav.Core.IntegrationTests.Services;
 using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services;
@@ -60,6 +61,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
             builder.RegisterType<NavigateRequestRepository>()
                 .As<INavigateRequestRepository>()
                 .InstancePerLifetimeScope();
+
+            builder.RegisterType<TestNavigationRequestService>();
 
             builder.RegisterType<LoginViewModel>();
 

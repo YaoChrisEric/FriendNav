@@ -62,7 +62,7 @@ namespace FriendNav.Core.Repositories
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
-                .AsObservable<NavigateRequestDto>()
+                .AsObservable<NavigateRequestDto>(elementRoot: "meetRequest")
                 .Subscribe(navigateRequest.IncomingNavigationRequest);
 
             _disposable.Add(disposable);
