@@ -51,6 +51,7 @@ namespace FriendNav.Core.Model
         {
             var message = new Message
             {
+                ChatFirebaseKey = FirebaseKey,
                 SenderEmail = ActiveUser.EmailAddress,
                 Text = text,
                 TimeStamp = DateTime

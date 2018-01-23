@@ -7,6 +7,8 @@ namespace FriendNav.Core.Model
 {
     public class Message
     {
+        public string ChatFirebaseKey { get; set; }
+
         public string FirebaseKey { get; set; }
 
         [JsonProperty("message")]
