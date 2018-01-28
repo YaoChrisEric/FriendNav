@@ -26,7 +26,7 @@ namespace FriendNav.Core.Services.Interfaces
         public void InitiatNavigationRequest(NavigateRequest navigateRequest)
         {
             navigateRequest.InitiatorEmail = navigateRequest.ActiveUser.EmailAddress;
-            navigateRequest.IsNavigationActive = false;
+            navigateRequest.IsNavigationActive = true;
 
             _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
         }
