@@ -138,6 +138,7 @@
     <Compile Include="UnitTest1.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Utilities\TestTask.cs" />
+    <Compile Include="ViewModels\FriendListViewModelTests.cs" />
     <Compile Include="ViewModels\LoginViewModelTests.cs" />
     <Compile Include="ViewModels\ChatViewModelTest.cs" />
   </ItemGroup>
