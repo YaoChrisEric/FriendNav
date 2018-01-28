@@ -141,6 +141,7 @@
     <Compile Include="ViewModels\FriendListViewModelTests.cs" />
     <Compile Include="ViewModels\LoginViewModelTests.cs" />
     <Compile Include="ViewModels\ChatViewModelTest.cs" />
+    <Compile Include="ViewModels\MainViewModelTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
