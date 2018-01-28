@@ -7,7 +7,9 @@ using FriendNav.Core.ViewModels;
 using Moq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-
+using FriendNav.Core.Model;
+using FriendNav.Core.Utilities;
+using FriendNav.Core.IntegrationTests.Utilities;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -26,13 +28,31 @@ namespace FriendNav.Core.Tests.ViewModels
         [TestMethod]
         public void Adding_new_message_to_chat_test()
         {
-            var chatViewModelTestRepository = _fixture.Freeze<Mock<IMessageRepository>>();
+            var chatViewModelTestRepository = new Mock<IMessageRepository>();
+            var chat = _fixture.Create<Chat>();
+            Message message = null;
 
-            var sut = _fixture.Create<ChatViewModel>();
+            chatViewModelTestRepository.Setup(s => s.CreateMessage(It.IsAny<Message>()))
+                .Callback<Message>(c => message = c);
 
+            var sut = new ChatViewModel(new TestTask(), 
+                new Mock<INavigateRequestRepository>().Object, 
+                null, 
+                chatViewModelTestRepository.Object, 
+                null);
+
+            sut.Prepare(chat);
+
+            var messageText = "Test";
+
+            sut.ActiveMessage = messageText;
+        
             sut.AddNewMessageCommand.Execute();
 
-            //chatViewModelTestRepository.Verify(v => v.CreateMessage(It.Is))
+            chatViewModelTestRepository.Verify(v => v.CreateMessage(It.Is<Message>(i => i == message)));
+            Assert.AreEqual(chat.FirebaseKey, message.ChatFirebaseKey);
+            Assert.AreEqual(chat.ActiveUser.EmailAddress, message.SenderEmail);
+            Assert.AreEqual(messageText, message.Text);
         }
     }
 }
