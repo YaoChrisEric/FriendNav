@@ -10,6 +10,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FriendNav.Core.Model;
 using FriendNav.Core.Utilities;
 using FriendNav.Core.IntegrationTests.Utilities;
+using MvvmCross.Core.Navigation;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -26,12 +27,38 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
+
+        public void Upon_navigating_to_chat_load_messages_unit_test()
+        {
+            var _navigateRequestRepository = new Mock<INavigateRequestRepository>();
+            var _navigationRequestService = new Mock<INavigationRequestService>();
+            var _mvxNavigationService = new Mock<IMvxNavigationService>();
+            var _messageRepository = new Mock<IMessageRepository>();
+
+            var chat = _fixture.Create<Chat>();
+
+
+            var sut = new ChatViewModel(new TestTask(),
+                _navigateRequestRepository.Object,
+                _navigationRequestService.Object,
+                _messageRepository.Object,
+                _mvxNavigationService.Object
+                );
+
+            sut.Prepare(chat);
+
+            _messageRepository.Verify(v => v.GetMessages(It.Is<Chat>(c => c == chat)));
+            _navigateRequestRepository.Verify(v => v.GetNavigationRequest(It.Is<Chat>(c => c == chat)));
+        }
+
+        [TestMethod]
         public void Adding_new_message_to_chat_test()
         {
             var chatViewModelTestRepository = new Mock<IMessageRepository>();
             var chat = _fixture.Create<Chat>();
             Message message = null;
 
+            // here the callback is taking the same parameter from CreateMessage
             chatViewModelTestRepository.Setup(s => s.CreateMessage(It.IsAny<Message>()))
                 .Callback<Message>(c => message = c);
 
@@ -53,6 +80,36 @@ namespace FriendNav.Core.Tests.ViewModels
             Assert.AreEqual(chat.FirebaseKey, message.ChatFirebaseKey);
             Assert.AreEqual(chat.ActiveUser.EmailAddress, message.SenderEmail);
             Assert.AreEqual(messageText, message.Text);
+            // TODO: verify that the timestamp is in correct date format, for now just make sure it is a string
+            Assert.IsInstanceOfType(message.TimeStamp,typeof(String));
         }
+
+        [TestMethod]
+        public void Send_request_for_navigation_unit_test()
+        {
+            var _navigateRequestRepository = new Mock<INavigateRequestRepository>();
+            var _navigationRequestService = new Mock<INavigationRequestService>();
+            var _mvxNavigationService = new Mock<IMvxNavigationService>();
+            var _messageRepository = new Mock<IMessageRepository>();
+
+            var chat = _fixture.Create<Chat>();
+
+
+            var sut = new ChatViewModel(new TestTask(),
+                _navigateRequestRepository.Object,
+                _navigationRequestService.Object,
+                _messageRepository.Object,
+                _mvxNavigationService.Object
+                );
+
+            sut.Prepare(chat);
+
+            sut.SendNavigationRequestCommand.Execute();
+
+            _navigationRequestService.Verify(v=>v.InitiatNavigationRequest(It.Is<NavigateRequest>(c=>c == chat.NavigateRequest)));
+            // TODO: figure out the parameter meaning of following line, why null?
+            _mvxNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.Is<Chat>(c => c == chat),null));
+        }
+
     }
 }
