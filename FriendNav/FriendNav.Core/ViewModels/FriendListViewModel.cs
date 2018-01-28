@@ -56,6 +56,7 @@ namespace FriendNav.Core.ViewModels
         public MvxObservableCollection<FriendViewModel> FriendList { get; set; } = new MvxObservableCollection<FriendViewModel>();
 
         private string _userSearchText;
+
         public string UserSearchText
         {
             get { return _userSearchText; }
