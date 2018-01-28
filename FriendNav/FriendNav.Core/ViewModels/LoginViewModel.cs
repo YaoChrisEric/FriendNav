@@ -31,7 +31,7 @@ namespace FriendNav.Core.ViewModels
             _userRepository = userRepository;
             _firebaseAuthService = firebaseAuthService;
             _notificationService = notificationService;
-            LoginUserCommand = new MvxCommand(LoginUser);
+            LoginUserCommand = new MvxCommand(LoginUserAsync);
         }
 
         public MvxCommand LoginUserCommand { get; }
