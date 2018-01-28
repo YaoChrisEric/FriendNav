@@ -9,6 +9,8 @@ namespace FriendNav.Core.Model
 {
     public class NavigateRequest
     {
+        private readonly object _updateLock = new object();
+
         public IAsyncHook TestHook { get; set; }
 
         public string ChatFirebaseKey { get; set; }
@@ -29,22 +31,31 @@ namespace FriendNav.Core.Model
 
         public void IncomingNavigationRequest(FirebaseEvent<NavigateRequestDto> observer)
         {
-            IsNavigationActive = observer.Object.CallActive;
-            InitiatorEmail = observer.Object.InitiatorEmail;
-
-            if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
+            lock (_updateLock)
             {
-                NavigationReqest?.Invoke(this, new EventArgs());
-            }
+                if(IsNavigationActive == observer.Object.CallActive &&
+                InitiatorEmail == observer.Object.InitiatorEmail)
+                {
+                    return;
+                }
 
-            if (observer.Object.InitiatorEmail == string.Empty)
-            {
-                NavigationDeclined?.Invoke(this, new EventArgs());
-            }
+                IsNavigationActive = observer.Object.CallActive;
+                InitiatorEmail = observer.Object.InitiatorEmail;
 
-            if (IsInitiator && IsNavigationActive)
-            {
-                NavigationAccepted?.Invoke(this, new EventArgs());
+                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
+                {
+                    NavigationReqest?.Invoke(this, new EventArgs());
+                }
+
+                if (observer.Object.InitiatorEmail == string.Empty)
+                {
+                    NavigationDeclined?.Invoke(this, new EventArgs());
+                }
+
+                if (!IsInitiator && IsNavigationActive)
+                {
+                    NavigationAccepted?.Invoke(this, new EventArgs());
+                }             
             }
 
             TestHook?.NotifyOtherThreads();
