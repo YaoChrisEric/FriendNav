@@ -18,13 +18,9 @@ namespace FriendNav.Core.Tests.ViewModels
     [TestClass]
     public class FriendListViewModelTests
     {
-        private IFixture _fixture = null;
-
         [TestInitialize]
         public void TestInitialize()
         {
-            _fixture = new Fixture()
-                .Customize(new AutoConfiguredMoqCustomization());
         }
 
         [TestMethod]
