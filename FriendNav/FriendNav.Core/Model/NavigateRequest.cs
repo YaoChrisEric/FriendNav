@@ -19,6 +19,10 @@ namespace FriendNav.Core.Model
 
         public event EventHandler NavigationDeclined;
 
+        public event EventHandler NavigationAccepted;
+
+        public bool IsInitiator => ActiveUser.EmailAddress == InitiatorEmail;
+
         public string InitiatorEmail { get; set; }
 
         public bool IsNavigationActive { get; set; }
@@ -28,7 +32,7 @@ namespace FriendNav.Core.Model
             IsNavigationActive = observer.Object.CallActive;
             InitiatorEmail = observer.Object.InitiatorEmail;
 
-            if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress)
+            if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
             {
                 NavigationReqest?.Invoke(this, new EventArgs());
             }
@@ -36,6 +40,11 @@ namespace FriendNav.Core.Model
             if (observer.Object.InitiatorEmail == string.Empty)
             {
                 NavigationDeclined?.Invoke(this, new EventArgs());
+            }
+
+            if (IsInitiator && IsNavigationActive)
+            {
+                NavigationAccepted?.Invoke(this, new EventArgs());
             }
 
             TestHook?.NotifyOtherThreads();
