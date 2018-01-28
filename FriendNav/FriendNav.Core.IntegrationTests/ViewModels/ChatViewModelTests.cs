@@ -106,12 +106,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             chatViewModel.Prepare(chat);
 
-            var testHook = new NavigateRequestHook
-            {
-                IntiatorEmail = initiator.EmailAddress,
-                NavigateRequest = chat.NavigateRequest,
-                IsIntiatorTest = true
-            };
+            var testHook = new NavigateRequestHook();
 
             chat.NavigateRequest.TestHook = testHook;
 
@@ -119,7 +114,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
-            Assert.AreEqual(testHook.IntiatorEmail, testHook.NavigateRequest.InitiatorEmail);
+            Assert.AreEqual(initiator.EmailAddress, chat.NavigateRequest.InitiatorEmail);
 
             context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
 
@@ -152,11 +147,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             chatViewModel.Prepare(chat);
 
-            var testHook = new NavigateRequestHook
-            {
-                IntiatorEmail = responder.EmailAddress,
-                NavigateRequest = chat.NavigateRequest,
-            };
+            var testHook = new NavigateRequestHook();
 
             chatViewModel.TestNavigationHook = testHook;
 
@@ -164,7 +155,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
-            Assert.AreEqual(testHook.IntiatorEmail, testHook.NavigateRequest.InitiatorEmail);
+            Assert.AreEqual(responder.EmailAddress, chat.NavigateRequest.InitiatorEmail);
 
             context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
 

@@ -74,6 +74,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
             builder.RegisterType<ChatViewModel>();
 
+            builder.RegisterType<RequestViewModel>();
+
             return new TestAppContext
             {
                 TestContainer = builder.Build(),

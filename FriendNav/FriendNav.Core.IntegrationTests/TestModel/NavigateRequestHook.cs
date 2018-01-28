@@ -16,13 +16,7 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
         public ManualResetEvent ResetEvent { get; set; } = new ManualResetEvent(false);
 
-        public bool IsIntiatorTest { get; set; }
-
         public bool IsCheckComplete { get; set; }
-
-        public string IntiatorEmail { get; set; }
-
-        public NavigateRequest NavigateRequest { get; set; }
 
         public void NotifyOtherThreads()
         {
