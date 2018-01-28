@@ -27,12 +27,22 @@ namespace FriendNav.Core.Tests.ViewModels
         public void Adding_new_message_to_chat_test()
         {
             var chatViewModelTestRepository = _fixture.Freeze<Mock<IMessageRepository>>();
+            var userRepository = _fixture.Freeze<Mock<IUserRepository>>();
+            var chatRepository = _fixture.Freeze<Mock<IChatRepository>>();
 
             var sut = _fixture.Create<ChatViewModel>();
 
-            sut.AddNewMessageCommand.Execute();
 
-            //chatViewModelTestRepository.Verify(v => v.CreateMessage(It.Is))
+
+
+            sut.Prepare(chat);
+
+            
+
+            sut.AddNewMessageCommand.Execute();
+            var message = chat.CreateNewMessage(sut.ActiveMessage);
+
+            chatViewModelTestRepository.Verify(v => v.CreateMessage(It.Is<Model.Message>(i=>i==message)));
         }
     }
 }
