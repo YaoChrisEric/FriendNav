@@ -23,8 +23,7 @@ namespace FriendNav.Core.Model
 
         public void IncomingNavigationRequest(FirebaseEvent<NavigateRequestDto> observer)
         {
-            if (observer.Object.CallActive && 
-                observer.Object.InitiatorEmail != ActiveUser.EmailAddress)
+            if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress)
             {
                 NavigationReqest(this, new EventArgs());
             }
@@ -32,7 +31,7 @@ namespace FriendNav.Core.Model
             IsNavigationActive = observer.Object.CallActive;
             InitiatorEmail = observer.Object.InitiatorEmail;
 
-            TestHook.NotifyOtherThreads();
+            TestHook?.NotifyOtherThreads();
         }
     }
 }
