@@ -27,6 +27,7 @@ namespace FriendNav.Core.ViewModels
             _navigationRequestService = navigationRequestService;
             _mvxNavigationService = mvxNavigationService;
             DeclineRequestCommand = new MvxCommand(DeclineRequestAsync);
+            AcceptRequestCommand = new MvxCommand(AcceptRequestAsync);
         }
 
         public IAsyncHook TestHook { get; set; }
@@ -40,6 +41,8 @@ namespace FriendNav.Core.ViewModels
 
         public MvxCommand DeclineRequestCommand { get; }
 
+        public MvxCommand AcceptRequestCommand { get; }
+
         private void DeclineRequestAsync()
         {
             _task.Run(DeclineRequest);
@@ -50,6 +53,18 @@ namespace FriendNav.Core.ViewModels
             _navigationRequestService.DeclineNavigationRequest(_chat.NavigateRequest);
 
             _mvxNavigationService.Navigate<ChatViewModel, Chat>(_chat);
+        }
+
+        private void AcceptRequestAsync()
+        {
+            _task.Run(AcceptRequest);
+        }
+
+        private void AcceptRequest()
+        {
+            _navigationRequestService.InitiatNavigationRequest(_chat.NavigateRequest);
+
+            _mvxNavigationService.Navigate<MapViewModel, Chat>(_chat);
         }
 
         private void NavigateRequest_NavigationDeclined(object sender, EventArgs e)
