@@ -8,6 +8,8 @@ namespace FriendNav.Core.Model
 {
     public class Map
     {
+        public string ChatFirebaseKey { get; set; }
+
         public string InitiatorLatitude { get; set; }
 
         public string InitiatorLongitude { get; set; }

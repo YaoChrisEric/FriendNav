@@ -30,6 +30,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
             var userRepository = context.TestContainer.Resolve<IUserRepository>();
             var chatRepository = context.TestContainer.Resolve<IChatRepository>();
+            var mapRepository = context.TestContainer.Resolve<IMapRepository>();
             var navigationRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
             var requestNavigationService = context.TestContainer.Resolve<INavigationRequestService>();
 
@@ -47,11 +48,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             sut.Prepare(chat);
 
-            //sut..Execute();
+            sut.AcceptRequestCommand.Execute();
 
-            context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
-            Assert.AreEqual(string.Empty, chat.NavigateRequest.InitiatorEmail);
-            Assert.AreEqual(false, chat.NavigateRequest.IsNavigationActive);
+            context.MockNavigationService.Verify(v => v.Navigate<MapViewModel, Map>(It.IsAny<Map>(), null));
+
+            userRepository.Dispose();
+            navigationRequestRepository.Dispose();
+            mapRepository.Dispose();
         }
 
         [TestMethod]
@@ -62,6 +65,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
             var userRepository = context.TestContainer.Resolve<IUserRepository>();
             var chatRepository = context.TestContainer.Resolve<IChatRepository>();
+            var mapRepository = context.TestContainer.Resolve<IMapRepository>();
             var navigationRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
             var requestNavigationService = context.TestContainer.Resolve<INavigationRequestService>();
 
@@ -82,7 +86,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var testHook = new NavigateRequestHook();
 
-            sut.TestHook = testHook;
+            sut.AcceptedHook = testHook;
 
             sut.Prepare(chat);
 
@@ -90,7 +94,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
+            context.MockNavigationService.Verify(v => v.Navigate<MapViewModel, Map>(It.IsAny<Map>(), null));
 
+            userRepository.Dispose();
+            navigationRequestRepository.Dispose();
+            mapRepository.Dispose();
         }
 
         [TestMethod]
@@ -132,6 +140,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
             Assert.AreEqual(string.Empty, chat.NavigateRequest.InitiatorEmail);
             Assert.AreEqual(false, chat.NavigateRequest.IsNavigationActive);
+
+            userRepository.Dispose();
+            navigationRequestRepository.Dispose();
         }
 
         [TestMethod]
@@ -164,6 +175,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
             Assert.AreEqual(string.Empty, chat.NavigateRequest.InitiatorEmail);
             Assert.AreEqual(false, chat.NavigateRequest.IsNavigationActive);
+
+            userRepository.Dispose();
+            navigationRequestRepository.Dispose();
         }
     }
 }
