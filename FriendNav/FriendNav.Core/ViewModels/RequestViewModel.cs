@@ -42,7 +42,7 @@ namespace FriendNav.Core.ViewModels
         public override void Prepare(NavigateRequestParameters parameter)
         {
             _chat = parameter.Chat;
-
+            _navigateRequest = parameter.NavigateRequest;
             _navigateRequest.NavigationDeclined += NavigateRequest_NavigationDeclined;
             _navigateRequest.NavigationAccepted += NavigateRequest_NavigationAccepted;
         }
