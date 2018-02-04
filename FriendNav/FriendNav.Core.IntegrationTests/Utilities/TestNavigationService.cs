@@ -44,7 +44,7 @@ namespace FriendNav.Core.IntegrationTests.Utilities
 
         public Task Navigate(IMvxViewModel viewModel, IMvxBundle presentationBundle = null)
         {
-            return new Task(() => _navigations.Add(new TestNavigation
+            return Task.Run(() => _navigations.Add(new TestNavigation
             {
                 ViewModel = viewModel
             }));
@@ -52,7 +52,7 @@ namespace FriendNav.Core.IntegrationTests.Utilities
 
         public Task Navigate<TParameter>(IMvxViewModel<TParameter> viewModel, TParameter param, IMvxBundle presentationBundle = null)
         {
-            return new Task (() => _navigations.Add(new TestNavigation
+            return Task.Run(() => _navigations.Add(new TestNavigation
             {
                 ViewModel = viewModel,
                 Parameter = param
@@ -116,7 +116,10 @@ namespace FriendNav.Core.IntegrationTests.Utilities
 
         public Task Navigate<TViewModel, TParameter>(TParameter param, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel<TParameter>
         {
-            throw new NotImplementedException();
+            return Task.Run(() => _navigations.Add(new TestNavigation
+            {
+                Parameter = param
+            }));
         }
 
         public Task<TResult> Navigate<TViewModel, TResult>(IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default(CancellationToken)) where TViewModel : IMvxViewModelResult<TResult>
