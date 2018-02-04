@@ -2,6 +2,7 @@
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Utilities;
+using FriendNav.Core.ViewModelParameters;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
@@ -10,7 +11,7 @@ using System.Text;
 
 namespace FriendNav.Core.ViewModels
 {
-    public class RequestViewModel : MvxViewModel<Chat>
+    public class RequestViewModel : MvxViewModel<NavigateRequestParameters>
     {
         private readonly ITask _task;
         private readonly INavigationRequestService _navigationRequestService;
@@ -18,6 +19,7 @@ namespace FriendNav.Core.ViewModels
         private readonly IMapRepository _mapRepository;
 
         private Chat _chat;
+        private NavigateRequest _navigateRequest;
 
         public RequestViewModel(ITask task,
             INavigationRequestService navigationRequestService,
@@ -37,12 +39,12 @@ namespace FriendNav.Core.ViewModels
 
         public IAsyncHook AcceptedHook { get; set; }
 
-        public override void Prepare(Chat parameter)
+        public override void Prepare(NavigateRequestParameters parameter)
         {
-            _chat = parameter;
+            _chat = parameter.Chat;
 
-            _chat.NavigateRequest.NavigationDeclined += NavigateRequest_NavigationDeclined;
-            _chat.NavigateRequest.NavigationAccepted += NavigateRequest_NavigationAccepted;
+            _navigateRequest.NavigationDeclined += NavigateRequest_NavigationDeclined;
+            _navigateRequest.NavigationAccepted += NavigateRequest_NavigationAccepted;
         }
 
         public MvxCommand DeclineRequestCommand { get; }
@@ -56,12 +58,16 @@ namespace FriendNav.Core.ViewModels
 
         private void DeclineRequest()
         {
-            _chat.NavigateRequest.NavigationDeclined -= NavigateRequest_NavigationDeclined;
-            _chat.NavigateRequest.NavigationAccepted -= NavigateRequest_NavigationAccepted;
+            _navigateRequest.NavigationDeclined -= NavigateRequest_NavigationDeclined;
+            _navigateRequest.NavigationAccepted -= NavigateRequest_NavigationAccepted;
 
-            _navigationRequestService.DeclineNavigationRequest(_chat.NavigateRequest);
+            _navigationRequestService.DeclineNavigationRequest(_navigateRequest);
 
-            _mvxNavigationService.Navigate<ChatViewModel, Chat>(_chat);
+            _mvxNavigationService.Navigate<ChatViewModel, ChatParameters>(new ChatParameters
+            {
+                Chat = _chat,
+                NavigateRequest = _navigateRequest
+            });
         }
 
         private void AcceptRequestAsync()
@@ -71,31 +77,35 @@ namespace FriendNav.Core.ViewModels
 
         private void AcceptRequest()
         {
-            _navigationRequestService.InitiatNavigationRequest(_chat.NavigateRequest);
+            _navigationRequestService.InitiatNavigationRequest(_navigateRequest);
 
-            var map = _mapRepository.GetMap(_chat.NavigateRequest.ChatFirebaseKey);
+            var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
         }
 
         private void NavigateRequest_NavigationDeclined(object sender, EventArgs e)
         {
-            _chat.NavigateRequest.NavigationDeclined -= NavigateRequest_NavigationDeclined;
-            _chat.NavigateRequest.NavigationAccepted -= NavigateRequest_NavigationAccepted;
+            _navigateRequest.NavigationDeclined -= NavigateRequest_NavigationDeclined;
+            _navigateRequest.NavigationAccepted -= NavigateRequest_NavigationAccepted;
 
-            _mvxNavigationService.Navigate<ChatViewModel, Chat>(_chat);
+            _mvxNavigationService.Navigate<ChatViewModel, ChatParameters>(new ChatParameters
+            {
+                Chat = _chat,
+                NavigateRequest = _navigateRequest
+            });
 
             TestHook?.NotifyOtherThreads();
         }
 
         private void NavigateRequest_NavigationAccepted(object sender, EventArgs e)
         {
-            if (_chat.NavigateRequest.IsInitiator)
+            if (_navigateRequest.IsInitiator)
             {
                 return;
             }
 
-            var map = _mapRepository.GetMap(_chat.NavigateRequest.ChatFirebaseKey);
+            var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
 

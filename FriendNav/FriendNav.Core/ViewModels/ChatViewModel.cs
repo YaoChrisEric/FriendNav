@@ -2,6 +2,7 @@
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Utilities;
+using FriendNav.Core.ViewModelParameters;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
@@ -11,9 +12,10 @@ using System.Text;
 
 namespace FriendNav.Core.ViewModels
 {
-    public class ChatViewModel : MvxViewModel<Chat>
+    public class ChatViewModel : MvxViewModel<ChatParameters>
     {
         private Chat _chat;
+        private NavigateRequest _navigateRequest;
 
         private readonly ITask _task;
         private readonly IMessageRepository _messageRepository;
@@ -38,9 +40,10 @@ namespace FriendNav.Core.ViewModels
             SendNavigationRequestCommand = new MvxCommand(SendNavigationRequestAsync);
         }
 
-        public override void Prepare(Chat parameter)
+        public override void Prepare(ChatParameters parameter)
         {
-            _chat = parameter;
+            _chat = parameter.Chat;
+            _navigateRequest = parameter.NavigateRequest;
             SetupModelAsync();
         }
 
@@ -66,9 +69,12 @@ namespace FriendNav.Core.ViewModels
             _chat.Messages.CollectionChanged += Messages_CollectionChanged;
             _messageRepository.GetMessages(_chat);
 
-            _navigateRequestRepository.GetNavigationRequest(_chat);
+            if (_navigateRequest == null)
+            {
+                _navigateRequest = _navigateRequestRepository.GetNavigationRequest(_chat);
+            }
 
-            _chat.NavigateRequest.NavigationReqest += NavigateRequest_NavigationReqest;
+            _navigateRequest.NavigationReqest += NavigateRequest_NavigationReqest;
         }
 
         private void CreateNewMessageAsync()
@@ -90,9 +96,13 @@ namespace FriendNav.Core.ViewModels
 
         private void SendNavigationRequest()
         {
-            _navigationRequestService.InitiatNavigationRequest(_chat.NavigateRequest);
+            _navigationRequestService.InitiatNavigationRequest(_navigateRequest);
 
-            _mvxNavigationService.Navigate<RequestViewModel, Chat>(_chat).Wait();
+            _mvxNavigationService.Navigate<RequestViewModel, NavigateRequestParameters>(new NavigateRequestParameters
+            {
+                Chat = _chat,
+                NavigateRequest = _navigateRequest
+            }).Wait();
         }
 
         private void Messages_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
@@ -123,7 +133,12 @@ namespace FriendNav.Core.ViewModels
 
         private void NavigateRequest_NavigationReqest(object sender, EventArgs e)
         {
-            _mvxNavigationService.Navigate<RequestViewModel, Chat>(_chat).Wait();
+            _mvxNavigationService.Navigate<RequestViewModel, NavigateRequestParameters>(
+                new NavigateRequestParameters
+                {
+                    Chat = _chat,
+                    NavigateRequest = _navigateRequest
+                }).Wait();
 
             TestNavigationHook?.NotifyOtherThreads();
         }
