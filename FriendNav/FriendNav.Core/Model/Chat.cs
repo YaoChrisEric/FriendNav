@@ -14,8 +14,6 @@ namespace FriendNav.Core.Model
 
         public User ChatUser { get; set; }
 
-        public NavigateRequest NavigateRequest { get; set; }
-
         public string FirebaseKey => GenerateChatFirebaseKey(ActiveUser, ChatUser);
 
         public ObservableCollection<Message> Messages { get; set; } = new ObservableCollection<Message>();

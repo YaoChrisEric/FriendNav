@@ -1,4 +1,5 @@
 ﻿using FriendNav.Core.Services.Interfaces;
+using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -11,10 +12,12 @@ namespace FriendNav.Core.ViewModels
     public class MainViewModel : MvxViewModel
     {
         private readonly IFirebaseAuthService _firebaseAuthService;
+        private readonly IMvxNavigationService _mvxNavigationService;
 
-        public MainViewModel(IFirebaseAuthService firebaseAuthService)
+        public MainViewModel(IFirebaseAuthService firebaseAuthService, IMvxNavigationService mvxNavigationService)
         {
             _firebaseAuthService = firebaseAuthService;
+            _mvxNavigationService = mvxNavigationService;
             LoginUserCommand = new MvxCommand(LoginUser);
             RegisterUserCommand = new MvxCommand(RegisterUser);
         }
@@ -25,7 +28,7 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null && !_firebaseAuthService.FirebaseAuth.IsExpired())
             {
-                ShowViewModel<FriendListViewModel>();
+                _mvxNavigationService.Navigate<FriendListViewModel>().Wait();
                 return;
             }
         }
@@ -36,12 +39,12 @@ namespace FriendNav.Core.ViewModels
 
         private void LoginUser()
         {
-            ShowViewModel<LoginViewModel>();
+            _mvxNavigationService.Navigate<LoginViewModel>().Wait();
         }
 
         private void RegisterUser()
         {
-            ShowViewModel<RegisterViewModel>();
+            _mvxNavigationService.Navigate<RegisterViewModel>().Wait();
         }
      }
 }

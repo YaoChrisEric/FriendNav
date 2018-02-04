@@ -4,6 +4,7 @@ using FriendNav.Core.IntegrationTests.TestModel;
 using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
+using FriendNav.Core.ViewModelParameters;
 using FriendNav.Core.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -44,39 +45,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(chat);
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             Assert.AreNotEqual(0, chatViewModel.Messages.Count);
-
-            userRepository.Dispose();
-            messageRepository.Dispose();
-            navigateRequestRepository.Dispose();
-        }
-
-        [TestMethod]
-        public void Upon_navigating_to_chat_setup_navigation_request()
-        {
-            var context = TestAppContext.ConstructTestAppContext();
-
-            var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
-            var userRepository = context.TestContainer.Resolve<IUserRepository>();
-            var chatRepository = context.TestContainer.Resolve<IChatRepository>();
-            var messageRepository = context.TestContainer.Resolve<IMessageRepository>();
-            var navigateRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
-            var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
-
-            firebaseAuthService.LoginUser("c@test.com", "theday");
-
-            var initiator = userRepository.GetUser("c@test.com");
-
-            var responder = userRepository.GetUser("c1@test.com");
-
-            var chat = chatRepository.GetChat(initiator, responder);
-
-            chatViewModel.Prepare(chat);
-
-            Assert.IsNotNull(chat.NavigateRequest?.ActiveUser);
-            Assert.AreEqual(initiator, chat.NavigateRequest.ActiveUser);
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -95,6 +66,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             var navigateRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
             var testNavigationRequestService = context.TestContainer.Resolve<TestNavigationRequestService>();
             var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
+            var receivingChatViewModel = context.TestContainer.Resolve<ChatViewModel>();
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
@@ -103,20 +75,26 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             var responder = userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
+            
+            var recievingChat = chatRepository.GetChat(responder, initiator);
 
-            chatViewModel.Prepare(chat);
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
+
+            receivingChatViewModel.Prepare(new ChatParameters { Chat = recievingChat });
 
             var testHook = new NavigateRequestHook();
 
-            chat.NavigateRequest.TestHook = testHook;
+            receivingChatViewModel.TestNavigationHook = testHook;
 
             chatViewModel.SendNavigationRequestCommand.Execute();
 
             testHook.ResetEvent.WaitOne();
 
-            Assert.AreEqual(initiator.EmailAddress, chat.NavigateRequest.InitiatorEmail);
+            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.ViewModel is RequestViewModel);
 
-            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
+            var navigateRequestParameters = (NavigateRequestParameters)navigateRequestNavigation.Parameter;
+
+            Assert.AreEqual(initiator.EmailAddress, navigateRequestParameters.NavigateRequest.InitiatorEmail);
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -135,7 +113,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             var navigateRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
             var testNavigationRequestService = context.TestContainer.Resolve<TestNavigationRequestService>();
             var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
-
+            var receivingChatViewModel = context.TestContainer.Resolve<ChatViewModel>();
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
@@ -145,7 +123,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(chat);
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             var testHook = new NavigateRequestHook();
 
@@ -155,9 +133,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
-            Assert.AreEqual(responder.EmailAddress, chat.NavigateRequest.InitiatorEmail);
+            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.ViewModel is RequestViewModel);
 
-            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
+            var navigateRequestParameters = (NavigateRequestParameters)navigateRequestNavigation.Parameter;
+
+            Assert.AreEqual(responder.EmailAddress, navigateRequestParameters.NavigateRequest.InitiatorEmail);
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -184,7 +164,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(chat);
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             var testMessage = Guid.NewGuid().ToString();
 
