@@ -123,9 +123,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(chat);
-
-            receivingChatViewModel.Prepare()
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             var testHook = new NavigateRequestHook();
 
@@ -135,9 +133,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
-            Assert.AreEqual(responder.EmailAddress, chat.NavigateRequest.InitiatorEmail);
+            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.ViewModel is RequestViewModel);
 
-            context.MockNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.IsAny<Chat>(), null));
+            var navigateRequestParameters = (NavigateRequestParameters)navigateRequestNavigation.Parameter;
+
+            Assert.AreEqual(responder.EmailAddress, navigateRequestParameters.NavigateRequest.InitiatorEmail);
 
             userRepository.Dispose();
             messageRepository.Dispose();
@@ -164,7 +164,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(chat);
+            chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             var testMessage = Guid.NewGuid().ToString();
 
