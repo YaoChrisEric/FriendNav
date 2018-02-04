@@ -30,7 +30,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
             var testNavigationService = new TestNavigationService();
 
-            builder.RegisterInstance(testNavigationService);
+            builder.RegisterInstance(testNavigationService)
+                .As<IMvxNavigationService>();
             builder.RegisterInstance(new Mock<INotificationService>().Object);
 
             builder.RegisterType<TestTask>()
