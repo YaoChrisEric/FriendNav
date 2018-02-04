@@ -44,19 +44,27 @@ namespace FriendNav.Core.IntegrationTests.Utilities
 
         public Task Navigate(IMvxViewModel viewModel, IMvxBundle presentationBundle = null)
         {
-            return Task.Run(() => _navigations.Add(new TestNavigation
+            var task = new Task(() => _navigations.Add(new TestNavigation
             {
                 ViewModel = viewModel
             }));
+
+            task.RunSynchronously();
+
+            return task;
         }
 
         public Task Navigate<TParameter>(IMvxViewModel<TParameter> viewModel, TParameter param, IMvxBundle presentationBundle = null)
         {
-            return Task.Run(() => _navigations.Add(new TestNavigation
+            var task = new Task(() => _navigations.Add(new TestNavigation
             {
                 ViewModel = viewModel,
                 Parameter = param
             }));
+
+            task.RunSynchronously();
+
+            return task;
         }
 
         public Task<TResult> Navigate<TResult>(IMvxViewModelResult<TResult> viewModel, IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default(CancellationToken))
@@ -116,10 +124,14 @@ namespace FriendNav.Core.IntegrationTests.Utilities
 
         public Task Navigate<TViewModel, TParameter>(TParameter param, IMvxBundle presentationBundle = null) where TViewModel : IMvxViewModel<TParameter>
         {
-            return Task.Run(() => _navigations.Add(new TestNavigation
+            var task = new Task(() => _navigations.Add(new TestNavigation
             {
                 Parameter = param
             }));
+
+            task.RunSynchronously();
+
+            return task;
         }
 
         public Task<TResult> Navigate<TViewModel, TResult>(IMvxBundle presentationBundle = null, CancellationToken cancellationToken = default(CancellationToken)) where TViewModel : IMvxViewModelResult<TResult>

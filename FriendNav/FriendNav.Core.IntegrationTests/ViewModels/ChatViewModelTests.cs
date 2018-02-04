@@ -26,35 +26,6 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void Upon_navigating_to_chat_load_messages()
-        {
-            var context = TestAppContext.ConstructTestAppContext();
-
-            var firebaseAuthService = context.TestContainer.Resolve<IFirebaseAuthService>();
-            var userRepository = context.TestContainer.Resolve<IUserRepository>();
-            var chatRepository = context.TestContainer.Resolve<IChatRepository>();
-            var messageRepository = context.TestContainer.Resolve<IMessageRepository>();
-            var navigateRequestRepository = context.TestContainer.Resolve<INavigateRequestRepository>();
-            var chatViewModel = context.TestContainer.Resolve<ChatViewModel>();
-
-            firebaseAuthService.LoginUser("c@test.com", "theday");
-
-            var initiator = userRepository.GetUser("c@test.com");
-
-            var responder = userRepository.GetUser("c1@test.com");
-
-            var chat = chatRepository.GetChat(initiator, responder);
-
-            chatViewModel.Prepare(new ChatParameters { Chat = chat });
-
-            Assert.AreNotEqual(0, chatViewModel.Messages.Count);
-
-            userRepository.Dispose();
-            messageRepository.Dispose();
-            navigateRequestRepository.Dispose();
-        }
-
-        [TestMethod]
         public void Send_request_for_navigation()
         {
             var context = TestAppContext.ConstructTestAppContext();
@@ -76,21 +47,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
             
-            var recievingChat = chatRepository.GetChat(responder, initiator);
-
             chatViewModel.Prepare(new ChatParameters { Chat = chat });
-
-            receivingChatViewModel.Prepare(new ChatParameters { Chat = recievingChat });
-
-            var testHook = new NavigateRequestHook();
-
-            receivingChatViewModel.TestNavigationHook = testHook;
 
             chatViewModel.SendNavigationRequestCommand.Execute();
 
-            testHook.ResetEvent.WaitOne();
-
-            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.ViewModel is RequestViewModel);
+            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.Parameter is NavigateRequestParameters);
 
             var navigateRequestParameters = (NavigateRequestParameters)navigateRequestNavigation.Parameter;
 
@@ -123,6 +84,8 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
+            testNavigationRequestService.ResetNavigationRequest(chat);
+
             chatViewModel.Prepare(new ChatParameters { Chat = chat });
 
             var testHook = new NavigateRequestHook();
@@ -133,7 +96,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             testHook.ResetEvent.WaitOne();
 
-            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.ViewModel is RequestViewModel);
+            var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.Parameter is NavigateRequestParameters);
 
             var navigateRequestParameters = (NavigateRequestParameters)navigateRequestNavigation.Parameter;
 
