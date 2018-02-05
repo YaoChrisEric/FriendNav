@@ -3,6 +3,7 @@ using AutoFixture.AutoMoq;
 using FriendNav.Core.IntegrationTests.Utilities;
 using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
+using FriendNav.Core.ViewModelParameters;
 using FriendNav.Core.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -88,7 +89,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()));
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()));
-            _navigationService.Verify(x => x.Navigate<ChatViewModel, Chat>(It.IsAny<Chat>(), null));
+            _navigationService.Verify(x => x.Navigate<ChatViewModel, ChatParameters>(It.IsAny<ChatParameters>(), null));
         }
 
         [TestMethod]
@@ -108,7 +109,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()),Times.Never());
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()),Times.Never());
-            _navigationService.Verify(x => x.Navigate<ChatViewModel, Chat>(It.IsAny<Chat>(), null),Times.Never());
+            _navigationService.Verify(x => x.Navigate<ChatViewModel, ChatParameters>(It.IsAny<ChatParameters>(), null),Times.Never());
         }
     }
 }

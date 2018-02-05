@@ -11,6 +11,7 @@ using FriendNav.Core.Model;
 using FriendNav.Core.Utilities;
 using FriendNav.Core.IntegrationTests.Utilities;
 using MvvmCross.Core.Navigation;
+using FriendNav.Core.ViewModelParameters;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -45,7 +46,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            sut.Prepare(chat);
+            sut.Prepare(new ChatParameters { Chat = chat });
 
             _messageRepository.Verify(v => v.GetMessages(It.Is<Chat>(c => c == chat)));
             _navigateRequestRepository.Verify(v => v.GetNavigationRequest(It.Is<Chat>(c => c == chat)));
@@ -68,7 +69,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 chatViewModelTestRepository.Object, 
                 null);
 
-            sut.Prepare(chat);
+            sut.Prepare(new ChatParameters { Chat = chat });
 
             var messageText = "Test";
 
@@ -102,13 +103,13 @@ namespace FriendNav.Core.Tests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            sut.Prepare(chat);
+            sut.Prepare(new ChatParameters { Chat = chat });
 
             sut.SendNavigationRequestCommand.Execute();
 
-            _navigationRequestService.Verify(v=>v.InitiatNavigationRequest(It.Is<NavigateRequest>(c=>c == chat.NavigateRequest)));
+            _navigationRequestService.Verify(v => v.InitiatNavigationRequest(It.IsAny<NavigateRequest>()));
             // TODO: figure out the parameter meaning of following line, why null?
-            _mvxNavigationService.Verify(v => v.Navigate<RequestViewModel, Chat>(It.Is<Chat>(c => c == chat),null));
+            _mvxNavigationService.Verify(v => v.Navigate<RequestViewModel, NavigateRequestParameters>(It.Is<NavigateRequestParameters>(c => c.Chat == chat),null));
         }
 
     }

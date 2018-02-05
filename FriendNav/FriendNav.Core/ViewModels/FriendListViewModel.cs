@@ -3,6 +3,7 @@ using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Utilities;
+using FriendNav.Core.ViewModelParameters;
 using MvvmCross.Core.Navigation;
 using MvvmCross.Core.ViewModels;
 using System;
@@ -132,7 +133,10 @@ namespace FriendNav.Core.ViewModels
 
             var chat = _chatRepository.GetChat(_user, chatFriend);
 
-            _mvxNavigationService.Navigate<ChatViewModel, Chat>(chat).Wait();
+            _mvxNavigationService.Navigate<ChatViewModel, ChatParameters>(new ChatParameters
+            {
+                Chat = chat
+            }).Wait();
         }
 
         private void UpdateSearchUsers(List<User> newList)

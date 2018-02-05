@@ -7,7 +7,7 @@ namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface INavigateRequestRepository : IDisposable
     {
-        void GetNavigationRequest(Chat chat);
+        NavigateRequest GetNavigationRequest(Chat chat);
 
         void UpdateNavigationRequest(NavigateRequest navigateRequest);
     }

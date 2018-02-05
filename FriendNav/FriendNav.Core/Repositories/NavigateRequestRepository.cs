@@ -20,15 +20,13 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void GetNavigationRequest(Chat chat)
+        public NavigateRequest GetNavigationRequest(Chat chat)
         {
             var navigateRequest = new NavigateRequest
             {
                 ActiveUser = chat.ActiveUser,
                 ChatFirebaseKey = chat.FirebaseKey
             };
-
-            chat.NavigateRequest = navigateRequest;
 
             var client = _firebaseClientService.CreateFirebaseClient();
 
@@ -66,6 +64,8 @@ namespace FriendNav.Core.Repositories
                 .Subscribe(navigateRequest.IncomingNavigationRequest);
 
             _disposable.Add(disposable);
+
+            return navigateRequest;
         }
 
         public void UpdateNavigationRequest(NavigateRequest navigateRequest)
