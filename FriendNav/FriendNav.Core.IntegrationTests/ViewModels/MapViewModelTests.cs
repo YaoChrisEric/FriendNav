@@ -42,7 +42,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             mapViewModel.SendNavigationFriendListRequestCommand.Execute();
 
-            context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is User));
 
             mapRepository.Dispose();
             userRepository.Dispose();

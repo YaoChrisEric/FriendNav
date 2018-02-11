@@ -16,6 +16,7 @@ using FriendNav.Core.Model;
 using Firebase.Auth;
 using User = FriendNav.Core.Model.User;
 using FriendNav.Core.Utilities;
+using System.Linq;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -41,7 +42,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             loginViewModel.LoginUserCommand.Execute();
 
-            //context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is User));
         }
     }
 }
