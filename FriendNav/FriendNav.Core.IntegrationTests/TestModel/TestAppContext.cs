@@ -80,6 +80,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
             builder.RegisterType<RequestViewModel>();
 
+            builder.RegisterType<MapViewModel>();
+
             return new TestAppContext
             {
                 TestContainer = builder.Build(),
