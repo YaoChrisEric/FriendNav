@@ -98,10 +98,10 @@ namespace FriendNav.Core.ViewModels
             }
 
 
-            NavigateToChatActivity();
+            NavigateToChat();
         }
 
-        private void NavigateToChatActivity()
+        private void NavigateToChat()
         {
             var user = _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
             _mvxNavigationService.Navigate<FriendListViewModel, User>(user).Wait();
