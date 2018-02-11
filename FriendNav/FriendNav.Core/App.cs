@@ -3,6 +3,7 @@ using FriendNav.Core.Services.Interfaces;
 using MvvmCross.Platform;
 using MvvmCross.Platform.IoC;
 using MvvmCross.Core.ViewModels;
+using FriendNav.Core.Utilities;
 
 namespace FriendNav.Core
 {
@@ -13,6 +14,8 @@ namespace FriendNav.Core
             base.Initialize();
 
             Mvx.RegisterSingleton<IFirebaseAuthProvider>(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD_zHJElZIVW3OSefLkrRY5NipPLTMsUnk")));
+
+            Mvx.RegisterSingleton<ITask>(new TaskWrapper());
 
             CreatableTypes()
                 .EndingWith("Repository")
