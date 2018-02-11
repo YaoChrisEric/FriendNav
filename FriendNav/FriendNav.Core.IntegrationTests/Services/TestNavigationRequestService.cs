@@ -19,6 +19,21 @@ namespace FriendNav.Core.IntegrationTests.Services
             _firebaseClientService = firebaseClientService;
         }
 
+        public void ResetNavigationRequest(Chat chat)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            client
+                .Child("BasicChat")
+                .Child(chat.FirebaseKey)
+                .Child("meetRequest")
+                .PutAsync(new NavigateRequestDto
+                {
+                    InitiatorEmail = "test"
+                })
+                .Wait();
+        }
+
         public void SendTestNavigationRequest(Chat chat)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
