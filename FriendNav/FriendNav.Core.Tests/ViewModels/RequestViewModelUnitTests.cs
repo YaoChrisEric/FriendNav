@@ -8,6 +8,7 @@ using FriendNav.Core.Services.Interfaces;
 using Moq;
 using MvvmCross.Core.Navigation;
 using FriendNav.Core.Model;
+using FriendNav.Core.ViewModelParameters;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -31,13 +32,14 @@ namespace FriendNav.Core.Tests.ViewModels
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
 
             var chat = _fixture.Create<Chat>();
+            var navigationRequest = _fixture.Create<NavigateRequest>();
 
             var sut = new RequestViewModel(new IntegrationTests.Utilities.TestTask(),
                 _navigationRequestService.Object,
                 _mapRepository.Object,
                 _mvxNavigationService.Object
                 );
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
             sut.AcceptRequestCommand.Execute();
 
@@ -54,17 +56,17 @@ namespace FriendNav.Core.Tests.ViewModels
 
             var chat = _fixture.Create<Chat>();
 
-
+            var navigationRequest = _fixture.Create<NavigateRequest>();
             var sut = new RequestViewModel(new IntegrationTests.Utilities.TestTask(),
                 _navigationRequestService.Object,
                 _mapRepository.Object,
                 _mvxNavigationService.Object
                 );
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
             sut.DeclineRequestCommand.Execute();
 
-            _mvxNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
+            _mvxNavigationService.Verify(v => v.Navigate<ChatViewModel, ChatParameters>(It.Is<ChatParameters>(i => i.Chat == chat), null));
 
         }
     }

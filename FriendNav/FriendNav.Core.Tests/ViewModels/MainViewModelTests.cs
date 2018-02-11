@@ -53,7 +53,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             _mvxNavigationService.Setup(x => x.Navigate<FriendListViewModel>(null))
                 .Returns(() =>
                 {
-                    return Task.Run(() => { });
+                    var task = new Task(() => { });
+                    task.RunSynchronously();
+                    return task;
                 });
 
             MainViewModel mainViewModel = new MainViewModel(

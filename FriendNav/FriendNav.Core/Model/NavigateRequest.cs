@@ -11,8 +11,6 @@ namespace FriendNav.Core.Model
     {
         private readonly object _updateLock = new object();
 
-        public IAsyncHook TestHook { get; set; }
-
         public string ChatFirebaseKey { get; set; }
 
         public User ActiveUser { get; set; }
@@ -57,8 +55,6 @@ namespace FriendNav.Core.Model
                     NavigationAccepted?.Invoke(this, new EventArgs());
                 }             
             }
-
-            TestHook?.NotifyOtherThreads();
         }
     }
 }

@@ -3,6 +3,7 @@ using FriendNav.Core.IntegrationTests.TestModel;
 using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
+using FriendNav.Core.ViewModelParameters;
 using FriendNav.Core.ViewModels;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
@@ -126,7 +127,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             friendListViewModel.NavigateToChatCommand.Execute();
 
-            context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.IsAny<Chat>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(f => f.Parameter is ChatParameters));
 
             userRepository.Dispose();
         }

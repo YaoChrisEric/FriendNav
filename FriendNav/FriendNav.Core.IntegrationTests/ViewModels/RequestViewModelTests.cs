@@ -10,6 +10,8 @@ using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.IntegrationTests.Utilities;
 using Moq;
 using FriendNav.Core.Model;
+using FriendNav.Core.ViewModelParameters;
+using System.Linq;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -44,13 +46,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            navigationRequestRepository.GetNavigationRequest(chat);
+            var navigationRequest = navigationRequestRepository.GetNavigationRequest(chat);
 
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
             sut.AcceptRequestCommand.Execute();
 
-            context.MockNavigationService.Verify(v => v.Navigate<MapViewModel, Map>(It.IsAny<Map>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is Map));
 
             userRepository.Dispose();
             navigationRequestRepository.Dispose();
@@ -81,20 +83,20 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var otherChat = chatRepository.GetChat(responder, initiator);
 
-            navigationRequestRepository.GetNavigationRequest(chat);
-            navigationRequestRepository.GetNavigationRequest(otherChat);
+            var navigationRequest = navigationRequestRepository.GetNavigationRequest(chat);
+            var otherNavigationRequest = navigationRequestRepository.GetNavigationRequest(otherChat);
 
             var testHook = new NavigateRequestHook();
 
             sut.AcceptedHook = testHook;
 
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
-            requestNavigationService.InitiatNavigationRequest(otherChat.NavigateRequest);
+            requestNavigationService.InitiatNavigationRequest(otherNavigationRequest);
 
             testHook.ResetEvent.WaitOne();
 
-            context.MockNavigationService.Verify(v => v.Navigate<MapViewModel, Map>(It.IsAny<Map>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is Map));
 
             userRepository.Dispose();
             navigationRequestRepository.Dispose();
@@ -124,22 +126,22 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var otherChat = chatRepository.GetChat(responder, initiator);
 
-            navigationRequestRepository.GetNavigationRequest(chat);
-            navigationRequestRepository.GetNavigationRequest(otherChat);
+            var navigateRequest = navigationRequestRepository.GetNavigationRequest(chat);
+            var otherNavigateRequest = navigationRequestRepository.GetNavigationRequest(otherChat);
 
             var testHook = new NavigateRequestHook();
 
             sut.TestHook = testHook;
 
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigateRequest });
 
-            requestNavigationService.DeclineNavigationRequest(otherChat.NavigateRequest);
+            requestNavigationService.DeclineNavigationRequest(otherNavigateRequest);
 
             testHook.ResetEvent.WaitOne();
 
-            context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
-            Assert.AreEqual(string.Empty, chat.NavigateRequest.InitiatorEmail);
-            Assert.AreEqual(false, chat.NavigateRequest.IsNavigationActive);
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is ChatParameters));
+            Assert.AreEqual(string.Empty, navigateRequest.InitiatorEmail);
+            Assert.AreEqual(false, navigateRequest.IsNavigationActive);
 
             userRepository.Dispose();
             navigationRequestRepository.Dispose();
@@ -166,15 +168,15 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            navigationRequestRepository.GetNavigationRequest(chat);
+            var navigateRequest = navigationRequestRepository.GetNavigationRequest(chat);
 
-            sut.Prepare(chat);
+            sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigateRequest });
 
             sut.DeclineRequestCommand.Execute();
 
-            context.MockNavigationService.Verify(v => v.Navigate<ChatViewModel, Chat>(It.Is<Chat>(i => i == chat), null));
-            Assert.AreEqual(string.Empty, chat.NavigateRequest.InitiatorEmail);
-            Assert.AreEqual(false, chat.NavigateRequest.IsNavigationActive);
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is ChatParameters));
+            Assert.AreEqual(string.Empty, navigateRequest.InitiatorEmail);
+            Assert.AreEqual(false, navigateRequest.IsNavigationActive);
 
             userRepository.Dispose();
             navigationRequestRepository.Dispose();
