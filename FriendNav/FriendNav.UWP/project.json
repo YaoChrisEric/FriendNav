@@ -1,7 +1,7 @@
 ﻿{
   "dependencies": {
-    "FirebaseDatabase.net": "3.2.2",
-    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.5",
+    "FirebaseDatabase.net": "3.3.2",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "6.0.6",
     "MvvmCross": "5.6.3"
   },
   "frameworks": {
