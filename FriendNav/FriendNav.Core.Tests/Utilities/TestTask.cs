@@ -16,7 +16,6 @@ namespace FriendNav.Core.IntegrationTests.Utilities
             task.RunSynchronously();
 
             return task;
-
         }
     }
 }
