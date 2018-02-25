@@ -189,6 +189,9 @@
     <AndroidResource Include="Resources\layout\RegisterView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\FriendListView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugTrace.cs" />
@@ -199,6 +202,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Views\BaseView.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
+    <Compile Include="Views\FriendListView.cs" />
     <Compile Include="Views\LoginView.cs" />
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\RegisterView.cs" />
