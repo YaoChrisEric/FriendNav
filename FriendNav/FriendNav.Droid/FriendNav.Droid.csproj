@@ -192,6 +192,9 @@
     <AndroidResource Include="Resources\layout\FriendListView.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\FriendItemFragment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugTrace.cs" />
