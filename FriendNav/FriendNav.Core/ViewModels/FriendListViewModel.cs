@@ -116,7 +116,7 @@ namespace FriendNav.Core.ViewModels
         {
             var friend = new Friend
             {
-                EmailAddress = SelectedNewFriend.EmailAddress
+                EmailAddress = UserSearchText
             };
 
             _userRepository.AddUserToFriendList(_user, friend);
