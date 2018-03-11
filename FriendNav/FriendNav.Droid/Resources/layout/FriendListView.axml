@@ -31,11 +31,6 @@
             android:background="@android:drawable/ic_menu_send"
             local:MvxBind="Click AddUserToFriendListCommand" />
     </LinearLayout>
-<!--<android.support.v7.widget.RecyclerView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/friend_list_view" 
-        local:MvxBind="ItemsSource FriendList"/>-->
     <Mvx.MvxListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
