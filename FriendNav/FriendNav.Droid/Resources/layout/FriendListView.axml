@@ -20,32 +20,21 @@
             android:paddingLeft="15dp"
             android:inputType="textNoSuggestions"
             android:completionThreshold="1"
-            android:paddingTop="9dp" />
+            android:paddingTop="9dp"
+            local:MvxBind="Text UserSearchText" />
         <ImageButton
             android:id="@+id/createFriendButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="15dp"
             android:onClick="searchAndAddNewFriend"
-            android:background="@android:drawable/ic_menu_send" />
+            android:background="@android:drawable/ic_menu_send"
+            local:MvxBind="Click AddUserToFriendListCommand" />
     </LinearLayout>
-    <Button
-        android:id="@+id/btn_testChat"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="19dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginStart="13dp"
-        android:background="#E3F2FD"
-        android:text="testChat"
-        android:textColor="#FFA726"
-        android:visibility="visible"
-        local:MvxBind="Click TestChatCommand" />
-    <android.support.v7.widget.RecyclerView
+    <Mvx.MvxListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/friend_list_view" />
+        android:id="@+id/friend_list_view"
+        local:MvxItemTemplate="@layout/frienditemfragment"
+        local:MvxBind="ItemsSource FriendList; SelectedItem SelectedFriend; ItemClick NavigateToChatCommand" />
 </LinearLayout>
