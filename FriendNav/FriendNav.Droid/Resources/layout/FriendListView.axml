@@ -21,15 +21,15 @@
             android:inputType="textNoSuggestions"
             android:completionThreshold="1"
             android:paddingTop="9dp"
-            local:MvxBind="Text UserSearchText"/>
+            local:MvxBind="Text UserSearchText" />
         <ImageButton
             android:id="@+id/createFriendButton"
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_marginRight="15dp"
             android:onClick="searchAndAddNewFriend"
-            android:background="@android:drawable/ic_menu_send" 
-            local:MvxBind="Click AddUserToFriendListCommand"/>
+            android:background="@android:drawable/ic_menu_send"
+            local:MvxBind="Click AddUserToFriendListCommand" />
     </LinearLayout>
     <Button
         android:id="@+id/btn_testChat"
@@ -49,6 +49,7 @@
     <Mvx.MvxListView 
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/friend_list_view" 
-        local:MvxBind="ItemsSource FriendList"/>
+        android:id="@+id/friend_list_view"
+        local:MvxItemTemplate="@layout/frienditemfragment"
+        local:MvxBind="ItemsSource FriendList; SelectedItem SelectedFriend; ItemClick NavigateToChatCommand" />
 </LinearLayout>
