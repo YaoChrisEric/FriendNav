@@ -3199,44 +3199,44 @@ namespace FriendNav.Droid
 		public partial class Color
 		{
 			
-			// aapt resource value: 0x7f0a0058
-			public const int abc_background_cache_hint_selector_material_dark = 2131361880;
-			
-			// aapt resource value: 0x7f0a0059
-			public const int abc_background_cache_hint_selector_material_light = 2131361881;
-			
-			// aapt resource value: 0x7f0a005a
-			public const int abc_btn_colored_borderless_text_material = 2131361882;
-			
-			// aapt resource value: 0x7f0a005b
-			public const int abc_btn_colored_text_material = 2131361883;
-			
 			// aapt resource value: 0x7f0a005c
-			public const int abc_color_highlight_material = 2131361884;
+			public const int abc_background_cache_hint_selector_material_dark = 2131361884;
 			
 			// aapt resource value: 0x7f0a005d
-			public const int abc_hint_foreground_material_dark = 2131361885;
+			public const int abc_background_cache_hint_selector_material_light = 2131361885;
 			
 			// aapt resource value: 0x7f0a005e
-			public const int abc_hint_foreground_material_light = 2131361886;
+			public const int abc_btn_colored_borderless_text_material = 2131361886;
+			
+			// aapt resource value: 0x7f0a005f
+			public const int abc_btn_colored_text_material = 2131361887;
+			
+			// aapt resource value: 0x7f0a0060
+			public const int abc_color_highlight_material = 2131361888;
+			
+			// aapt resource value: 0x7f0a0061
+			public const int abc_hint_foreground_material_dark = 2131361889;
+			
+			// aapt resource value: 0x7f0a0062
+			public const int abc_hint_foreground_material_light = 2131361890;
 			
 			// aapt resource value: 0x7f0a0008
 			public const int abc_input_method_navigation_guard = 2131361800;
 			
-			// aapt resource value: 0x7f0a005f
-			public const int abc_primary_text_disable_only_material_dark = 2131361887;
-			
-			// aapt resource value: 0x7f0a0060
-			public const int abc_primary_text_disable_only_material_light = 2131361888;
-			
-			// aapt resource value: 0x7f0a0061
-			public const int abc_primary_text_material_dark = 2131361889;
-			
-			// aapt resource value: 0x7f0a0062
-			public const int abc_primary_text_material_light = 2131361890;
-			
 			// aapt resource value: 0x7f0a0063
-			public const int abc_search_url_text = 2131361891;
+			public const int abc_primary_text_disable_only_material_dark = 2131361891;
+			
+			// aapt resource value: 0x7f0a0064
+			public const int abc_primary_text_disable_only_material_light = 2131361892;
+			
+			// aapt resource value: 0x7f0a0065
+			public const int abc_primary_text_material_dark = 2131361893;
+			
+			// aapt resource value: 0x7f0a0066
+			public const int abc_primary_text_material_light = 2131361894;
+			
+			// aapt resource value: 0x7f0a0067
+			public const int abc_search_url_text = 2131361895;
 			
 			// aapt resource value: 0x7f0a0009
 			public const int abc_search_url_text_normal = 2131361801;
@@ -3247,29 +3247,29 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a000b
 			public const int abc_search_url_text_selected = 2131361803;
 			
-			// aapt resource value: 0x7f0a0064
-			public const int abc_secondary_text_material_dark = 2131361892;
-			
-			// aapt resource value: 0x7f0a0065
-			public const int abc_secondary_text_material_light = 2131361893;
-			
-			// aapt resource value: 0x7f0a0066
-			public const int abc_tint_btn_checkable = 2131361894;
-			
-			// aapt resource value: 0x7f0a0067
-			public const int abc_tint_default = 2131361895;
-			
 			// aapt resource value: 0x7f0a0068
-			public const int abc_tint_edittext = 2131361896;
+			public const int abc_secondary_text_material_dark = 2131361896;
 			
 			// aapt resource value: 0x7f0a0069
-			public const int abc_tint_seek_thumb = 2131361897;
+			public const int abc_secondary_text_material_light = 2131361897;
 			
 			// aapt resource value: 0x7f0a006a
-			public const int abc_tint_spinner = 2131361898;
+			public const int abc_tint_btn_checkable = 2131361898;
 			
 			// aapt resource value: 0x7f0a006b
-			public const int abc_tint_switch_track = 2131361899;
+			public const int abc_tint_default = 2131361899;
+			
+			// aapt resource value: 0x7f0a006c
+			public const int abc_tint_edittext = 2131361900;
+			
+			// aapt resource value: 0x7f0a006d
+			public const int abc_tint_seek_thumb = 2131361901;
+			
+			// aapt resource value: 0x7f0a006e
+			public const int abc_tint_spinner = 2131361902;
+			
+			// aapt resource value: 0x7f0a006f
+			public const int abc_tint_switch_track = 2131361903;
 			
 			// aapt resource value: 0x7f0a0051
 			public const int accent = 2131361873;
@@ -3295,6 +3295,9 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a0011
 			public const int background_material_light = 2131361809;
 			
+			// aapt resource value: 0x7f0a005b
+			public const int black_overlay = 2131361883;
+			
 			// aapt resource value: 0x7f0a0012
 			public const int bright_foreground_disabled_material_dark = 2131361810;
 			
@@ -3319,8 +3322,17 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a0019
 			public const int button_material_light = 2131361817;
 			
-			// aapt resource value: 0x7f0a006c
-			public const int common_google_signin_btn_text_dark = 2131361900;
+			// aapt resource value: 0x7f0a005a
+			public const int colorAccent = 2131361882;
+			
+			// aapt resource value: 0x7f0a0058
+			public const int colorPrimary = 2131361880;
+			
+			// aapt resource value: 0x7f0a0059
+			public const int colorPrimaryDark = 2131361881;
+			
+			// aapt resource value: 0x7f0a0070
+			public const int common_google_signin_btn_text_dark = 2131361904;
 			
 			// aapt resource value: 0x7f0a0000
 			public const int common_google_signin_btn_text_dark_default = 2131361792;
@@ -3334,8 +3346,8 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a0003
 			public const int common_google_signin_btn_text_dark_pressed = 2131361795;
 			
-			// aapt resource value: 0x7f0a006d
-			public const int common_google_signin_btn_text_light = 2131361901;
+			// aapt resource value: 0x7f0a0071
+			public const int common_google_signin_btn_text_light = 2131361905;
 			
 			// aapt resource value: 0x7f0a0004
 			public const int common_google_signin_btn_text_light_default = 2131361796;
@@ -3349,14 +3361,14 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a0007
 			public const int common_google_signin_btn_text_light_pressed = 2131361799;
 			
-			// aapt resource value: 0x7f0a006e
-			public const int common_google_signin_btn_tint = 2131361902;
+			// aapt resource value: 0x7f0a0072
+			public const int common_google_signin_btn_tint = 2131361906;
 			
 			// aapt resource value: 0x7f0a0044
 			public const int design_bottom_navigation_shadow_color = 2131361860;
 			
-			// aapt resource value: 0x7f0a006f
-			public const int design_error = 2131361903;
+			// aapt resource value: 0x7f0a0073
+			public const int design_error = 2131361907;
 			
 			// aapt resource value: 0x7f0a0045
 			public const int design_fab_shadow_end_color = 2131361861;
@@ -3382,8 +3394,8 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a004c
 			public const int design_snackbar_background_color = 2131361868;
 			
-			// aapt resource value: 0x7f0a0070
-			public const int design_tint_password_toggle = 2131361904;
+			// aapt resource value: 0x7f0a0074
+			public const int design_tint_password_toggle = 2131361908;
 			
 			// aapt resource value: 0x7f0a001a
 			public const int dim_foreground_disabled_material_dark = 2131361818;
@@ -3523,11 +3535,11 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0a003e
 			public const int switch_thumb_disabled_material_light = 2131361854;
 			
-			// aapt resource value: 0x7f0a0071
-			public const int switch_thumb_material_dark = 2131361905;
+			// aapt resource value: 0x7f0a0075
+			public const int switch_thumb_material_dark = 2131361909;
 			
-			// aapt resource value: 0x7f0a0072
-			public const int switch_thumb_material_light = 2131361906;
+			// aapt resource value: 0x7f0a0076
+			public const int switch_thumb_material_light = 2131361910;
 			
 			// aapt resource value: 0x7f0a003f
 			public const int switch_thumb_normal_material_dark = 2131361855;
@@ -4495,6 +4507,9 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0c0043
 			public const int SYM = 2131492931;
 			
+			// aapt resource value: 0x7f0c00d1
+			public const int accept_button = 2131493073;
+			
 			// aapt resource value: 0x7f0c00bf
 			public const int action0 = 2131493055;
 			
@@ -4717,8 +4732,17 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0c00af
 			public const int friend_list_view = 2131493039;
 			
+			// aapt resource value: 0x7f0c00cf
+			public const int fullscreen_content = 2131493071;
+			
+			// aapt resource value: 0x7f0c00d0
+			public const int fullscreen_content_controls = 2131493072;
+			
 			// aapt resource value: 0x7f0c000a
 			public const int ghost_view = 2131492874;
+			
+			// aapt resource value: 0x7f0c00d2
+			public const int hangout_button = 2131493074;
 			
 			// aapt resource value: 0x7f0c0005
 			public const int home = 2131492869;
@@ -4789,14 +4813,14 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0c00b3
 			public const int map = 2131493043;
 			
-			// aapt resource value: 0x7f0c00d2
-			public const int masked = 2131493074;
+			// aapt resource value: 0x7f0c00d6
+			public const int masked = 2131493078;
 			
 			// aapt resource value: 0x7f0c00c2
 			public const int media_actions = 2131493058;
 			
-			// aapt resource value: 0x7f0c00d0
-			public const int message = 2131493072;
+			// aapt resource value: 0x7f0c00d4
+			public const int message = 2131493076;
 			
 			// aapt resource value: 0x7f0c00b4
 			public const int messageLine = 2131493044;
@@ -5053,8 +5077,8 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0c007a
 			public const int title_template = 2131492986;
 			
-			// aapt resource value: 0x7f0c00cf
-			public const int toolbar = 2131493071;
+			// aapt resource value: 0x7f0c00d3
+			public const int toolbar = 2131493075;
 			
 			// aapt resource value: 0x7f0c004a
 			public const int top = 2131492938;
@@ -5092,8 +5116,8 @@ namespace FriendNav.Droid
 			// aapt resource value: 0x7f0c0016
 			public const int view_offset_helper = 2131492886;
 			
-			// aapt resource value: 0x7f0c00d1
-			public const int visible = 2131493073;
+			// aapt resource value: 0x7f0c00d5
+			public const int visible = 2131493077;
 			
 			// aapt resource value: 0x7f0c0027
 			public const int wide = 2131492903;
@@ -5356,25 +5380,28 @@ namespace FriendNav.Droid
 			public const int RegisterView = 2130968638;
 			
 			// aapt resource value: 0x7f04003f
-			public const int select_dialog_item_material = 2130968639;
+			public const int RequestView = 2130968639;
 			
 			// aapt resource value: 0x7f040040
-			public const int select_dialog_multichoice_material = 2130968640;
+			public const int select_dialog_item_material = 2130968640;
 			
 			// aapt resource value: 0x7f040041
-			public const int select_dialog_singlechoice_material = 2130968641;
+			public const int select_dialog_multichoice_material = 2130968641;
 			
 			// aapt resource value: 0x7f040042
-			public const int SplashScreen = 2130968642;
+			public const int select_dialog_singlechoice_material = 2130968642;
 			
 			// aapt resource value: 0x7f040043
-			public const int support_simple_spinner_dropdown_item = 2130968643;
+			public const int SplashScreen = 2130968643;
 			
 			// aapt resource value: 0x7f040044
-			public const int toolbar = 2130968644;
+			public const int support_simple_spinner_dropdown_item = 2130968644;
 			
 			// aapt resource value: 0x7f040045
-			public const int tooltip = 2130968645;
+			public const int toolbar = 2130968645;
+			
+			// aapt resource value: 0x7f040046
+			public const int tooltip = 2130968646;
 			
 			static Layout()
 			{

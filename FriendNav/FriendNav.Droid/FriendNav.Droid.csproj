@@ -213,6 +213,9 @@
     <AndroidResource Include="Resources\layout\message_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
+    <AndroidResource Include="Resources\layout\RequestView.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DebugTrace.cs" />
@@ -229,6 +232,7 @@
     <Compile Include="Views\RegisterView.cs" />
     <Compile Include="Views\MapView.cs" />
     <Compile Include="Views\ChatView.cs" />
+    <Compile Include="Views\RequestView.cs" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\AboutAssets.txt" />
