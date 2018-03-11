@@ -54,7 +54,7 @@
         tools:text="Message"
         android:textSize="18sp"
         android:textStyle="normal|bold"
-        local:MvxBind="Text SenderEmail"/>
+        local:MvxBind="Text Text"/>
     <TextView
         android:id="@+id/senderTextView"
         android:layout_width="wrap_content"
