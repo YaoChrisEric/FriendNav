@@ -36,9 +36,6 @@ namespace FriendNav.Core.ViewModels
             SearchForUserCommand = new MvxCommand(SearchForUserAsync);
             AddUserToFriendListCommand = new MvxCommand(AddUserToFriendListAsync);
             NavigateToChatCommand = new MvxCommand(NavigateToSelectedFriendChatAsync);
-            // Yao debug start
-            TestChatCommand = new MvxCommand(TestNavigateToSelectedFriendChatAsync);
-            // Yao debug end
         }
 
         public override void Prepare(User parameter)
@@ -54,10 +51,6 @@ namespace FriendNav.Core.ViewModels
         public MvxCommand AddUserToFriendListCommand { get; }
 
         public MvxCommand NavigateToChatCommand { get; }
-
-        // Yao debug start
-        public MvxCommand TestChatCommand { get; }
-        // Yao debug end
 
         public MvxObservableCollection<UserViewModel> SearchedUsers { get; set; } = new MvxObservableCollection<UserViewModel>();
 
@@ -128,16 +121,6 @@ namespace FriendNav.Core.ViewModels
         {
             _task.Run(NavigateToSelectedFriendChat);
         }
-
-        // Yao Debug Start
-        private void TestNavigateToSelectedFriendChatAsync()
-        {
-            Friend newFriend = new Friend();
-            newFriend.EmailAddress = "test7test7@test.com";
-            SelectedFriend = new FriendViewModel(newFriend);
-            _task.Run(NavigateToSelectedFriendChat);
-        }
-        // Yao Debug End
 
         private void NavigateToSelectedFriendChat()
         {
