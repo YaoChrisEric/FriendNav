@@ -33,7 +33,8 @@
                 android:textColor="#33b5e5"
                 android:textSize="20sp"
                 android:layout_weight="0"
-                android:text="@string/accept_button" />
+                android:text="@string/accept_button" 
+                local:MvxBind="Click AcceptRequestCommand"/>
             <Button
                 android:id="@+id/hangout_button"
                 android:layout_width="match_parent"
@@ -42,7 +43,8 @@
                 android:textColor="#33b5e5"
                 android:textSize="20sp"
                 android:layout_weight="1"
-                android:text="@string/hangout_button" />
+                android:text="@string/hangout_button"
+                local:MvxBind="Click DeclineRequestCommand"/>
         </LinearLayout>
     </FrameLayout>
 </FrameLayout>
