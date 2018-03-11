@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    >
   <RelativeLayout
       android:id="@+id/content_main"
       android:layout_width="368dp"
@@ -13,12 +13,8 @@
       android:paddingBottom="@dimen/activity_vertical_margin"
       android:paddingLeft="@dimen/activity_horizontal_margin"
       android:paddingRight="@dimen/activity_horizontal_margin"
-      android:paddingTop="@dimen/activity_vertical_margin"
-      app:layout_behavior="@string/appbar_scrolling_view_behavior"
-      tools:showIn="@layout/activity_main"
-      tools:layout_editor_absoluteY="8dp"
-      tools:layout_editor_absoluteX="8dp">
-    <ListView
+      android:paddingTop="@dimen/activity_vertical_margin">
+    <Mvx.MvxListView
         android:id="@+id/messageListView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -26,16 +22,26 @@
         android:layout_above="@+id/linearLayout"
         android:divider="@android:color/transparent"
         android:transcriptMode="alwaysScroll"
-        tools:listitem="@layout/message_item" />
+        local:MvxItemTemplate="@layout/message_item"
+        local:MvxBind="ItemsSource Messages"/>
+    <TextView
+          android:id="@+id/testMessageTextView"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:maxWidth="200dp"
+          tools:text="Message1"
+          android:textSize="18sp"
+          android:textStyle="normal|bold"
+          local:MvxBind="Text ActiveMessage"/>
     <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:orientation="horizontal">
+          android:id="@+id/linearLayout"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="15dp"
+          android:layout_alignParentBottom="true"
+          android:layout_alignParentLeft="true"
+          android:layout_alignParentStart="true"
+          android:orientation="horizontal">
       <ImageButton
           android:id="@+id/recordVoiceButton"
           android:layout_width="36dp"
@@ -51,14 +57,15 @@
           android:layout_width="36dp"
           android:layout_height="36dp"
           android:background="@android:drawable/ic_menu_mapmode"
-          android:onClick="proposeNavigation"
+          local:MvxBind="Click SendNavigationRequestCommand"
           android:contentDescription="@string/nav_context" />
       <EditText
           android:id="@+id/messageToSend"
           android:layout_width="0dp"
           android:layout_height="wrap_content"
           android:layout_gravity="center_vertical"
-          android:layout_weight="1" />
+          android:layout_weight="1"
+          local:MvxBind="Text ActiveMessage, Mode=TwoWay"/>
       <ImageButton
           android:layout_width="36dp"
           android:layout_height="36dp"
@@ -68,5 +75,6 @@
           android:background="@android:drawable/ic_menu_send"
           local:MvxBind="Click AddNewMessageCommand"/>
     </LinearLayout>
+
   </RelativeLayout>
 </RelativeLayout>
