@@ -27,18 +27,22 @@ namespace FriendNav.Core.Model
 
         public bool IsNavigationActive { get; set; }
 
+        public bool IsRequestedAccepted { get; set; }
+
         public void IncomingNavigationRequest(FirebaseEvent<NavigateRequestDto> observer)
         {
             lock (_updateLock)
             {
                 if(IsNavigationActive == observer.Object.CallActive &&
-                InitiatorEmail == observer.Object.InitiatorEmail)
+                    InitiatorEmail == observer.Object.InitiatorEmail &&
+                    IsRequestedAccepted == observer.Object.IsRequestedAccepted)
                 {
                     return;
                 }
 
                 IsNavigationActive = observer.Object.CallActive;
                 InitiatorEmail = observer.Object.InitiatorEmail;
+                IsRequestedAccepted = observer.Object.IsRequestedAccepted;
 
                 if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && IsNavigationActive)
                 {
@@ -52,7 +56,10 @@ namespace FriendNav.Core.Model
 
                 if (IsInitiator && IsNavigationActive)
                 {
-                    NavigationAccepted?.Invoke(this, new EventArgs());
+                    if (true == IsRequestedAccepted)
+                    {
+                        NavigationAccepted?.Invoke(this, new EventArgs());
+                    }
                 }             
             }
         }

@@ -9,5 +9,6 @@ namespace FriendNav.Core.Services.Interfaces
     {
         void InitiatNavigationRequest(NavigateRequest navigateRequest);
         void DeclineNavigationRequest(NavigateRequest navigateRequest);
+        void AcceptNavigationRequest(NavigateRequest navigateRequest);
     }
 }

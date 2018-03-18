@@ -12,5 +12,8 @@ namespace FriendNav.Core.DataTransfer
 
         [JsonProperty("CallActive")]
         public bool CallActive { get; set; }
+
+        [JsonProperty("IsRequestedAccepted")]
+        public bool IsRequestedAccepted { get; set; }
     }
 }

@@ -86,6 +86,7 @@ namespace FriendNav.Core.ViewModels
                 ResponderLatitude = "500",
                 ResponderLongitude = "500"
             };
+            _navigationRequestService.AcceptNavigationRequest(_navigateRequest);
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
         }
@@ -106,10 +107,10 @@ namespace FriendNav.Core.ViewModels
 
         private void NavigateRequest_NavigationAccepted(object sender, EventArgs e)
         {
-            if (_navigateRequest.IsInitiator)
+            /*if (_navigateRequest.IsInitiator)
             {
                 return;
-            }
+            }*/
 
             //var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
             var map = new Map
