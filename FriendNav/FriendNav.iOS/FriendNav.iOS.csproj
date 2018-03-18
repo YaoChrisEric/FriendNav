@@ -90,6 +90,15 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Views\FriendListView.cs" />
+    <Compile Include="Views\FriendListView.designer.cs">
+      <DependentUpon>FriendListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.cs" />
+    <Compile Include="Views\LoginView.designer.cs">
+      <DependentUpon>LoginView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\MainView.designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
@@ -99,6 +108,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
     <InterfaceDefinition Include="Views\MainView.storyboard" />
+    <InterfaceDefinition Include="Views\LoginView.storyboard" />
+    <InterfaceDefinition Include="Views\FriendListView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Setup.cs" />
