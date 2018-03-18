@@ -77,9 +77,15 @@ namespace FriendNav.Core.ViewModels
 
         private void AcceptRequest()
         {
-            _navigationRequestService.InitiatNavigationRequest(_navigateRequest);
-
-            var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
+            //var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
+            var map = new Map
+            {
+                ChatFirebaseKey = _navigateRequest.ChatFirebaseKey,
+                InitiatorLatitude = "500",
+                InitiatorLongitude = "500",
+                ResponderLatitude = "500",
+                ResponderLongitude = "500"
+            };
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
         }
@@ -105,7 +111,15 @@ namespace FriendNav.Core.ViewModels
                 return;
             }
 
-            var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
+            //var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
+            var map = new Map
+            {
+                ChatFirebaseKey = _navigateRequest.ChatFirebaseKey,
+                InitiatorLatitude = "500",
+                InitiatorLongitude = "500",
+                ResponderLatitude = "500",
+                ResponderLongitude = "500"
+            };
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
 

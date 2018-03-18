@@ -40,7 +40,7 @@ namespace FriendNav.Core.Model
                 IsNavigationActive = observer.Object.CallActive;
                 InitiatorEmail = observer.Object.InitiatorEmail;
 
-                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
+                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && IsNavigationActive)
                 {
                     NavigationReqest?.Invoke(this, new EventArgs());
                 }
@@ -50,7 +50,7 @@ namespace FriendNav.Core.Model
                     NavigationDeclined?.Invoke(this, new EventArgs());
                 }
 
-                if (!IsInitiator && IsNavigationActive)
+                if (IsInitiator && IsNavigationActive)
                 {
                     NavigationAccepted?.Invoke(this, new EventArgs());
                 }             
