@@ -15,16 +15,26 @@ namespace FriendNav.Core.Services.Interfaces
             _navigationRequestRepository = navigationRequestRepository;
         }
 
+        public void AcceptNavigationRequest(NavigateRequest navigateRequest)
+        {
+            navigateRequest.IsRequestedAccepted = true;
+
+            _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
+        }
+
         public void DeclineNavigationRequest(NavigateRequest navigateRequest)
         {
             navigateRequest.InitiatorEmail = string.Empty;
             navigateRequest.IsNavigationActive = false;
+            //redundant; but just in case
+            navigateRequest.IsRequestedAccepted = false;
 
             _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
         }
 
         public void InitiatNavigationRequest(NavigateRequest navigateRequest)
         {
+            navigateRequest.IsRequestedAccepted = false;
             navigateRequest.InitiatorEmail = navigateRequest.ActiveUser.EmailAddress;
             navigateRequest.IsNavigationActive = true;
 

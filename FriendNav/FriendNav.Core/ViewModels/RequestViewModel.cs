@@ -77,9 +77,9 @@ namespace FriendNav.Core.ViewModels
 
         private void AcceptRequest()
         {
-            _navigationRequestService.InitiatNavigationRequest(_navigateRequest);
-
             var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
+
+            _navigationRequestService.AcceptNavigationRequest(_navigateRequest);
 
             _mvxNavigationService.Navigate<MapViewModel, Map>(map);
         }
@@ -100,10 +100,10 @@ namespace FriendNav.Core.ViewModels
 
         private void NavigateRequest_NavigationAccepted(object sender, EventArgs e)
         {
-            if (_navigateRequest.IsInitiator)
+            /*if (_navigateRequest.IsInitiator)
             {
                 return;
-            }
+            }*/
 
             var map = _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
 

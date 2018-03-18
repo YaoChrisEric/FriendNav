@@ -79,7 +79,8 @@ namespace FriendNav.Core.Repositories
                 .PutAsync(new NavigateRequestDto
                 {
                     InitiatorEmail = navigateRequest.InitiatorEmail,
-                    CallActive = navigateRequest.IsNavigationActive
+                    CallActive = navigateRequest.IsNavigationActive,
+                    IsRequestedAccepted = navigateRequest.IsRequestedAccepted
                 })
                 .Wait();
         }
