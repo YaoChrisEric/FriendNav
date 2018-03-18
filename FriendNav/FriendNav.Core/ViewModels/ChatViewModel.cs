@@ -57,7 +57,7 @@ namespace FriendNav.Core.ViewModels
 
         public string ActiveMessage { get; set; }
 
-        public MvxObservableCollection<MessageViewModel> Messages = new MvxObservableCollection<MessageViewModel>();
+        public MvxObservableCollection<MessageViewModel> Messages { get; set; } = new MvxObservableCollection<MessageViewModel>();
 
         private void SetupModelAsync()
         {
