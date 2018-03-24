@@ -29,6 +29,39 @@ namespace FriendNav.Core.Repositories
                 .Child("MeetLocation")
                 .OnceSingleAsync<MapDto>()
                 .Result;
+            /*if (navigateRequestDto == null)
+            {
+                navigateRequestDto = new NavigateRequestDto
+                {
+                    InitiatorEmail = string.Empty,
+                    CallActive = false
+                };
+
+                client
+                .Child("BasicChat")
+                .Child(chat.FirebaseKey)
+                .Child("meetRequest")
+                .PutAsync(navigateRequestDto)
+                .Wait();
+            }*/
+
+            if (null == mapDto)
+            {
+                mapDto = new MapDto
+                {
+                    InitiatorLatitude = "500",
+                    InitiatorLongitude = "500",
+                    ResponderLatitude = "500",
+                    ResponderLongitude = "500"
+                };
+
+                client
+                .Child("BasicChat")
+                .Child(chatFirebaseKey)
+                .Child("MeetLocation")
+                .PutAsync(mapDto)
+                .Wait();
+            }
 
             var map = new Map
             {
