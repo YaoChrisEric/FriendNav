@@ -76,6 +76,8 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
             builder.RegisterType<LoginViewModel>();
 
+            builder.RegisterType<RegisterViewModel>();
+
             builder.RegisterType<FriendListViewModel>();
 
             builder.RegisterType<ChatViewModel>();
