@@ -90,6 +90,15 @@
     <Compile Include="LinkerPleaseInclude.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Services\NotificationService.cs" />
+    <Compile Include="Views\FriendListView.cs" />
+    <Compile Include="Views\FriendListView.designer.cs">
+      <DependentUpon>FriendListView.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.cs" />
+    <Compile Include="Views\LoginView.designer.cs">
+      <DependentUpon>LoginView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\MainView.cs" />
     <Compile Include="Views\MainView.designer.cs">
       <DependentUpon>MainView.cs</DependentUpon>
@@ -99,6 +108,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <None Include="packages.config" />
     <InterfaceDefinition Include="Views\MainView.storyboard" />
+    <InterfaceDefinition Include="Views\LoginView.storyboard" />
+    <InterfaceDefinition Include="Views\FriendListView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Setup.cs" />
@@ -107,6 +118,9 @@
   <ItemGroup>
     <Reference Include="Firebase, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\FirebaseDatabase.net.3.3.2\lib\netstandard1.1\Firebase.dll</HintPath>
+    </Reference>
+    <Reference Include="Firebase.Auth, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FirebaseAuthentication.net.3.0.6\lib\netstandard1.1\Firebase.Auth.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="MvvmCross.Binding, Version=5.6.3.0, Culture=neutral, processorArchitecture=MSIL">

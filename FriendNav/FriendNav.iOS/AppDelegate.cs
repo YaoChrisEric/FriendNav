@@ -3,6 +3,7 @@ using MvvmCross.iOS.Platform;
 using MvvmCross.Platform;
 using Foundation;
 using UIKit;
+using System;
 
 namespace FriendNav.iOS
 {

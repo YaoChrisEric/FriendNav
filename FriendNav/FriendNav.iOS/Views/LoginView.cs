@@ -1,5 +1,7 @@
-﻿using System;
+﻿
+using System;
 using System.Drawing;
+
 using Foundation;
 using FriendNav.Core.ViewModels;
 using MvvmCross.Binding.BindingContext;
@@ -9,9 +11,9 @@ using UIKit;
 namespace FriendNav.iOS.Views
 {
     [MvxFromStoryboard]
-    public partial class MainView : MvxViewController
+    public partial class LoginView : MvxViewController
     {
-        public MainView(IntPtr handle) : base(handle)
+        public LoginView(IntPtr handle) : base(handle)
         {
         }
 
@@ -19,11 +21,13 @@ namespace FriendNav.iOS.Views
         {
             base.ViewDidLoad();
 
-            var set = this.CreateBindingSet<MainView, MainViewModel>();
-            set.Bind(LoginButton)
+            var set = this.CreateBindingSet<LoginView, LoginViewModel>();
+            set.Bind(LoginUserButton)
                 .To(t => t.LoginUserCommand);
-            set.Bind(RegisterButton)
-                .To(t => t.RegisterUserCommand);
+            set.Bind(EmailAddressTextField)
+                .To(t => t.EmailAddress);
+            set.Bind(PasswordTextField)
+                .To(t => t.UserPassword);
             set.Apply();
         }
     }

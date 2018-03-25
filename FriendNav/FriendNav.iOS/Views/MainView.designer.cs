@@ -17,11 +17,20 @@ namespace FriendNav.iOS.Views
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UIButton LoginButton { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton RegisterButton { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (LoginButton != null) {
                 LoginButton.Dispose ();
                 LoginButton = null;
+            }
+
+            if (RegisterButton != null) {
+                RegisterButton.Dispose ();
+                RegisterButton = null;
             }
         }
     }
