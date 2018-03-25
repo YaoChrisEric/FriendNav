@@ -30,6 +30,24 @@ namespace FriendNav.Core.Repositories
                 .OnceSingleAsync<MapDto>()
                 .Result;
 
+            if (null == mapDto)
+            {
+                mapDto = new MapDto
+                {
+                    InitiatorLatitude = "500",
+                    InitiatorLongitude = "500",
+                    ResponderLatitude = "500",
+                    ResponderLongitude = "500"
+                };
+
+                client
+                .Child("BasicChat")
+                .Child(chatFirebaseKey)
+                .Child("MeetLocation")
+                .PutAsync(mapDto)
+                .Wait();
+            }
+
             var map = new Map
             {
                 ChatFirebaseKey = chatFirebaseKey,
