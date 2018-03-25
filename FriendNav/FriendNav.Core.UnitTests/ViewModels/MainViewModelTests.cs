@@ -47,7 +47,11 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         {
             var _firebaseAuthService = new Mock<IFirebaseAuthService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
-            var firebaseAuth = _fixture.Create<FirebaseAuth>();
+            var firebaseAuth = new FirebaseAuth
+            {
+                Created = DateTime.Now,
+                ExpiresIn = 10000
+            };
 
             _firebaseAuthService.SetupGet(x => x.FirebaseAuth).Returns(firebaseAuth);
             _mvxNavigationService.Setup(x => x.Navigate<FriendListViewModel>(null))
@@ -63,7 +67,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            mainViewModel.Initialize();
+            mainViewModel.Initialize().Wait();
 
             _mvxNavigationService.Verify(x => x.Navigate<FriendListViewModel>(null));
         }
