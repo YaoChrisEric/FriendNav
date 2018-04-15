@@ -25,7 +25,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Search_for_user_command_success()
+        public async Task Search_for_user_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
@@ -42,9 +42,9 @@ namespace FriendNav.Core.Tests.ViewModels
             userList.Add(new User());
             userList.Add(new User());
 
-            _userRepository.Setup(x => x.FindUsers(It.IsAny<string>())).Returns(userList);
+            _userRepository.Setup(x => x.FindUsers(It.IsAny<string>())).Returns(Task.Run(() => userList));
 
-            friendListViewModel.SearchForUserCommand.Execute();
+            await friendListViewModel.SearchForUser();
 
             _userRepository.Verify(x => x.FindUsers(It.IsAny<string>()));
         }
@@ -71,7 +71,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Navigate_to_chat_command_success()
+        public async Task Navigate_to_chat_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
@@ -85,7 +85,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             friendListViewModel.SelectedFriend = new FriendViewModel(new Friend());
 
-            friendListViewModel.NavigateToChatCommand.Execute();
+            await friendListViewModel.NavigateToSelectedFriendChat();
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()));
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()));
@@ -93,7 +93,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Navigate_to_chat_command_null_selected_friend()
+        public async Task Navigate_to_chat_command_null_selected_friend()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
@@ -105,7 +105,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 _navigationService.Object
                 );
 
-            friendListViewModel.NavigateToChatCommand.Execute();
+            await friendListViewModel.NavigateToSelectedFriendChat();
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()),Times.Never());
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()),Times.Never());

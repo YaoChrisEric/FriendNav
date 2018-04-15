@@ -50,7 +50,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void On_location_change()
+        public async void On_location_change()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -65,7 +65,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var map = mapRepository.GetMap("c@test,comc1@test,com");
+            var map = await mapRepository.GetMap("c@test,comc1@test,com");
 
             mapViewModel.Prepare(map);
 

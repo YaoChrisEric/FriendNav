@@ -12,6 +12,7 @@ using FriendNav.Core.Utilities;
 using FriendNav.Core.IntegrationTests.Utilities;
 using MvvmCross.Core.Navigation;
 using FriendNav.Core.ViewModelParameters;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -28,16 +29,16 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-
-        public void Upon_navigating_to_chat_load_messages_unit_test()
+        public async Task Upon_navigating_to_chat_load_messages_unit_test()
         {
             var _navigateRequestRepository = new Mock<INavigateRequestRepository>();
             var _navigationRequestService = new Mock<INavigationRequestService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _messageRepository = new Mock<IMessageRepository>();
 
-            var chat = _fixture.Create<Chat>();
+            _navigateRequestRepository.Setup(s => s.GetNavigationRequest(It.IsAny<Chat>())).Returns(Task.Run(() => new Mock<NavigateRequest>().Object));
 
+            var chat = _fixture.Create<Chat>();
 
             var sut = new ChatViewModel(new TestTask(),
                 _navigateRequestRepository.Object,
@@ -46,22 +47,27 @@ namespace FriendNav.Core.Tests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            sut.Prepare(new ChatParameters { Chat = chat });
+            await sut.PrepareAsync(new ChatParameters { Chat = chat });
 
             _messageRepository.Verify(v => v.GetMessages(It.Is<Chat>(c => c == chat)));
             _navigateRequestRepository.Verify(v => v.GetNavigationRequest(It.Is<Chat>(c => c == chat)));
         }
 
         [TestMethod]
-        public void Adding_new_message_to_chat_test()
+        public async Task Adding_new_message_to_chat_test()
         {
             var chatViewModelTestRepository = new Mock<IMessageRepository>();
             var chat = _fixture.Create<Chat>();
+            var navigateRequest = _fixture.Create<NavigateRequest>();
             Message message = null;
 
             // here the callback is taking the same parameter from CreateMessage
             chatViewModelTestRepository.Setup(s => s.CreateMessage(It.IsAny<Message>()))
-                .Callback<Message>(c => message = c);
+                .Callback<Message>(c => message = c)
+                .Returns(() =>
+                {
+                    return Task.Run(() => { });
+                });
 
             var sut = new ChatViewModel(new TestTask(), 
                 new Mock<INavigateRequestRepository>().Object, 
@@ -69,13 +75,13 @@ namespace FriendNav.Core.Tests.ViewModels
                 chatViewModelTestRepository.Object, 
                 null);
 
-            sut.Prepare(new ChatParameters { Chat = chat });
+            await sut.PrepareAsync(new ChatParameters { Chat = chat, NavigateRequest = navigateRequest });
 
             var messageText = "Test";
 
             sut.ActiveMessage = messageText;
-        
-            sut.AddNewMessageCommand.Execute();
+
+            await sut.CreateNewMessage();
 
             chatViewModelTestRepository.Verify(v => v.CreateMessage(It.Is<Message>(i => i == message)));
             Assert.AreEqual(chat.FirebaseKey, message.ChatFirebaseKey);
@@ -86,15 +92,14 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Send_request_for_navigation_unit_test()
+        public async Task Send_request_for_navigation_unit_test()
         {
             var _navigateRequestRepository = new Mock<INavigateRequestRepository>();
             var _navigationRequestService = new Mock<INavigationRequestService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _messageRepository = new Mock<IMessageRepository>();
 
-            var chat = _fixture.Create<Chat>();
-
+            var chatParematers = _fixture.Create<ChatParameters>();
 
             var sut = new ChatViewModel(new TestTask(),
                 _navigateRequestRepository.Object,
@@ -103,13 +108,13 @@ namespace FriendNav.Core.Tests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            sut.Prepare(new ChatParameters { Chat = chat });
+            await sut.PrepareAsync(chatParematers);
 
-            sut.SendNavigationRequestCommand.Execute();
+            await sut.SendNavigationRequest();
 
             _navigationRequestService.Verify(v => v.InitiatNavigationRequest(It.IsAny<NavigateRequest>()));
             // TODO: figure out the parameter meaning of following line, why null?
-            _mvxNavigationService.Verify(v => v.Navigate<RequestViewModel, NavigateRequestParameters>(It.Is<NavigateRequestParameters>(c => c.Chat == chat),null));
+            _mvxNavigationService.Verify(v => v.Navigate<RequestViewModel, NavigateRequestParameters>(It.Is<NavigateRequestParameters>(c => c.Chat == chatParematers.Chat),null));
         }
 
     }

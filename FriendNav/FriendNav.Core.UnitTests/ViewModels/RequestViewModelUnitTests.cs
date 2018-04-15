@@ -9,6 +9,7 @@ using Moq;
 using MvvmCross.Core.Navigation;
 using FriendNav.Core.Model;
 using FriendNav.Core.ViewModelParameters;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Tests.ViewModels
 {
@@ -24,7 +25,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Customize(new AutoConfiguredMoqCustomization());
         }
         [TestMethod]
-        public void User_Accepting_Nav_Request_Unit_Test()
+        public async Task User_Accepting_Nav_Request_Unit_Test()
         {
             var _navigationRequestService = new Mock<INavigationRequestService>();
             var _mapRepository = new Mock<IMapRepository>();
@@ -41,7 +42,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 );
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
-            sut.AcceptRequestCommand.Execute();
+            await sut.AcceptRequest();
 
             _mvxNavigationService.Verify(v => v.Navigate<MapViewModel, Map>(It.IsAny<Map>(), null));
         }

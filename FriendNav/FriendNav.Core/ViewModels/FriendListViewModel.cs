@@ -38,10 +38,15 @@ namespace FriendNav.Core.ViewModels
             NavigateToChatCommand = new MvxCommand(NavigateToSelectedFriendChatAsync);
         }
 
-        public override void Prepare(User parameter)
+        public async override void Prepare(User parameter)
+        {
+            await PrepareAsync(parameter);
+        }
+
+        public async Task PrepareAsync(User parameter)
         {
             _user = parameter;
-            LoadUserFriendsAsync();
+            await LoadUserFriends();
         }
 
         public IAsyncHook TestHook { get; set; }
@@ -73,15 +78,10 @@ namespace FriendNav.Core.ViewModels
 
         public FriendViewModel SelectedFriend { get; set; }
 
-        private void LoadUserFriendsAsync()
-        {
-            _task.Run(LoadUserFriends);
-        }
-
-        private void LoadUserFriends()
+        private async Task LoadUserFriends()
         {
             SetupFriendList();
-            _userRepository.GetFriendList(_user);
+            await _userRepository.GetFriendList(_user);
         }
 
         private void SetupFriendList()
@@ -91,52 +91,52 @@ namespace FriendNav.Core.ViewModels
        
         private void SearchForUserAsync()
         {
-            _task.Run(SearchForUser);
+            _task.Run(async () => await SearchForUser());
         }
 
-        private void SearchForUser()
+        public async Task SearchForUser()
         {
-            var users = _userRepository.FindUsers(UserSearchText);
+            var users = await _userRepository.FindUsers(UserSearchText);
             UpdateSearchUsers(users);
         }
 
         private void AddUserToFriendListAsync()
         {
-            _task.Run(AddUserToFriendList);
+            _task.Run( async () => await AddUserToFriendList());
         }
 
-        private void AddUserToFriendList()
+        public async Task AddUserToFriendList()
         {
             var friend = new Friend
             {
-                EmailAddress = UserSearchText
+                EmailAddress = SelectedNewFriend.EmailAddress
             };
 
-            _userRepository.AddUserToFriendList(_user, friend);
+            await _userRepository.AddUserToFriendList(_user, friend);
 
             SelectedNewFriend = null;
         }
 
         private void NavigateToSelectedFriendChatAsync()
         {
-            _task.Run(NavigateToSelectedFriendChat);
+            _task.Run(async () => await NavigateToSelectedFriendChat());
         }
 
-        private void NavigateToSelectedFriendChat()
+        public async Task NavigateToSelectedFriendChat()
         {
             if (SelectedFriend == null)
             {
                 return;
             }
 
-            var chatFriend = _userRepository.GetUser(SelectedFriend.EmailAddress);
+            var chatFriend = await _userRepository.GetUser(SelectedFriend.EmailAddress);
 
             var chat = _chatRepository.GetChat(_user, chatFriend);
 
-            _mvxNavigationService.Navigate<ChatViewModel, ChatParameters>(new ChatParameters
+            await _mvxNavigationService.Navigate<ChatViewModel, ChatParameters>(new ChatParameters
             {
                 Chat = chat
-            }).Wait();
+            });
         }
 
         private void UpdateSearchUsers(List<User> newList)

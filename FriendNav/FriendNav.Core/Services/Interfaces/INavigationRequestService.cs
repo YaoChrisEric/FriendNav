@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Services.Interfaces
 {
     public interface INavigationRequestService
     {
-        void InitiatNavigationRequest(NavigateRequest navigateRequest);
-        void DeclineNavigationRequest(NavigateRequest navigateRequest);
-        void AcceptNavigationRequest(NavigateRequest navigateRequest);
+        Task InitiatNavigationRequest(NavigateRequest navigateRequest);
+        Task DeclineNavigationRequest(NavigateRequest navigateRequest);
+        Task AcceptNavigationRequest(NavigateRequest navigateRequest);
     }
 }

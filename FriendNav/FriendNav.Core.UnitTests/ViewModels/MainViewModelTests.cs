@@ -27,7 +27,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void MainView_Initialize_fail()
+        public async Task MainView_Initialize_fail()
         {
             var _firebaseAuthService = new Mock<IFirebaseAuthService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
@@ -37,13 +37,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            mainViewModel.Initialize();
+            await mainViewModel.Initialize();
 
             _mvxNavigationService.Verify(x => x.Navigate<FriendListViewModel>(null), Times.Never());
         }
 
         [TestMethod]
-        public void MainView_Initialize_success()
+        public async Task MainView_Initialize_success()
         {
             var _firebaseAuthService = new Mock<IFirebaseAuthService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
@@ -67,13 +67,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            mainViewModel.Initialize().Wait();
+            await mainViewModel.Initialize();
 
             _mvxNavigationService.Verify(x => x.Navigate<FriendListViewModel>(null));
         }
 
         [TestMethod]
-        public void Login_user_command()
+        public async Task Login_user_command()
         {
             var _firebaseAuthService = new Mock<IFirebaseAuthService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
@@ -84,18 +84,18 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
                     return Task.Run(() => { });
                 });
 
-            MainViewModel mainViewModel = new MainViewModel(
+            var mainViewModel = new MainViewModel(
                 _firebaseAuthService.Object,
                 _mvxNavigationService.Object
                 );
 
-            mainViewModel.LoginUserCommand.Execute();
+            await mainViewModel.LoginUser();
 
             _mvxNavigationService.Verify(x => x.Navigate<LoginViewModel>(null));
         }
 
         [TestMethod]
-        public void Register_user_command()
+        public async Task Register_user_command()
         {
             var _firebaseAuthService = new Mock<IFirebaseAuthService>();
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
@@ -111,7 +111,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
                 _mvxNavigationService.Object
                 );
 
-            mainViewModel.RegisterUserCommand.Execute();
+            await mainViewModel.RegisterUser();
 
             _mvxNavigationService.Verify(x => x.Navigate<RegisterViewModel>(null));
         }

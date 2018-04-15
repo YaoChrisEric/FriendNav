@@ -55,11 +55,10 @@ namespace FriendNav.Core.ViewModels
         {
             _map = parameter;
         }
-
         
-        private void OnMapReady(Map map)
+        private async void OnMapReady(Map map)
         {
-            _map = _mapRepository.GetMap(_map.ChatFirebaseKey);
+            _map = await _mapRepository.GetMap(_map.ChatFirebaseKey);
         }
 
         private void OnLocationChangedAsync()
@@ -68,11 +67,11 @@ namespace FriendNav.Core.ViewModels
         }
 
         // map argument is from google location
-        private void OnLocationChanged()
+        private async void OnLocationChanged()
         {
             if (!_endNavigation)
             {
-                _map = _mapRepository.GetMap(_map.ChatFirebaseKey);
+                _map = await _mapRepository.GetMap(_map.ChatFirebaseKey);
 
                 TestLocationChangeHook?.NotifyOtherThreads();
             }
@@ -101,10 +100,10 @@ namespace FriendNav.Core.ViewModels
             NavigateToChat();
         }
 
-        private void NavigateToChat()
+        private async void NavigateToChat()
         {
-            var user = _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
-            _mvxNavigationService.Navigate<FriendListViewModel, User>(user).Wait();
+            var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
+            await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);
 
             TestNavigationHook?.NotifyOtherThreads();
         }

@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface IMessageRepository : IDisposable
     {
-        void GetMessages(Chat chat);
-        void CreateMessage(Message message);
-        void DeleteMessage(Message message);
+        Task GetMessages(Chat chat);
+        Task CreateMessage(Message message);
+        Task DeleteMessage(Message message);
     }
 }

@@ -12,6 +12,7 @@ using Moq;
 using FriendNav.Core.Model;
 using FriendNav.Core.ViewModelParameters;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -25,7 +26,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void Accept_navigation_request()
+        public async Task Accept_navigation_request()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -40,13 +41,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            var navigationRequest = navigationRequestRepository.GetNavigationRequest(chat);
+            var navigationRequest = await navigationRequestRepository.GetNavigationRequest(chat);
 
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
@@ -60,7 +61,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void Accept_incoming_navigation_request()
+        public async Task Accept_incoming_navigation_request()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -75,16 +76,16 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
             var otherChat = chatRepository.GetChat(responder, initiator);
 
-            var navigationRequest = navigationRequestRepository.GetNavigationRequest(chat);
-            var otherNavigationRequest = navigationRequestRepository.GetNavigationRequest(otherChat);
+            var navigationRequest = await navigationRequestRepository.GetNavigationRequest(chat);
+            var otherNavigationRequest = await navigationRequestRepository.GetNavigationRequest(otherChat);
 
             var testHook = new NavigateRequestHook();
 
@@ -92,7 +93,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
-            requestNavigationService.InitiatNavigationRequest(otherNavigationRequest);
+            await requestNavigationService.InitiatNavigationRequest(otherNavigationRequest);
 
             testHook.ResetEvent.WaitOne();
 
@@ -104,7 +105,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void Incoming_decline_of_request()
+        public async Task Incoming_decline_of_request()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -118,16 +119,16 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
             var otherChat = chatRepository.GetChat(responder, initiator);
 
-            var navigateRequest = navigationRequestRepository.GetNavigationRequest(chat);
-            var otherNavigateRequest = navigationRequestRepository.GetNavigationRequest(otherChat);
+            var navigateRequest = await navigationRequestRepository.GetNavigationRequest(chat);
+            var otherNavigateRequest = await navigationRequestRepository.GetNavigationRequest(otherChat);
 
             var testHook = new NavigateRequestHook();
 
@@ -135,7 +136,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigateRequest });
 
-            requestNavigationService.DeclineNavigationRequest(otherNavigateRequest);
+            await requestNavigationService.DeclineNavigationRequest(otherNavigateRequest);
 
             testHook.ResetEvent.WaitOne();
 
@@ -148,7 +149,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void User_decline_request()
+        public async Task User_decline_request()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -162,13 +163,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            var navigateRequest = navigationRequestRepository.GetNavigationRequest(chat);
+            var navigateRequest = await navigationRequestRepository.GetNavigationRequest(chat);
 
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigateRequest });
 

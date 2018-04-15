@@ -6,6 +6,7 @@ using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.ViewModels
 {
@@ -26,7 +27,7 @@ namespace FriendNav.Core.ViewModels
             _firebaseAuthService = firebaseAuthService;
             _notificationService = notificationService;
             _userRepository = userRepository;
-            RegisterUserCommand = new MvxCommand(RegisterUser);
+            RegisterUserCommand = new MvxCommand(async () => await RegisterUser());
         }
 
         public MvxCommand RegisterUserCommand { get; }
@@ -35,7 +36,7 @@ namespace FriendNav.Core.ViewModels
 
         public string UserPassword { get; set; }
 
-        private async void RegisterUser()
+        public async Task RegisterUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -51,7 +52,7 @@ namespace FriendNav.Core.ViewModels
                     EmailAddress = EmailAddress
                 };
 
-                _userRepository.CreateUser(newUser);
+                await _userRepository.CreateUser(newUser);
 
                 await _mvxNavigationService.Navigate<FriendListViewModel, User>(newUser);
 

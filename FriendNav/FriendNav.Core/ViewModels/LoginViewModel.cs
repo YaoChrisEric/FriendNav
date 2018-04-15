@@ -7,6 +7,7 @@ using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.ViewModels
 {
@@ -42,10 +43,10 @@ namespace FriendNav.Core.ViewModels
 
         private void LoginUserAsync()
         {
-            _task.Run(LoginUser);
+            _task.Run(async () => await LoginUser());
         }
 
-        private void LoginUser()
+        public async Task LoginUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -56,9 +57,9 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null)
             {
-                var user = _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
+                var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
 
-                _mvxNavigationService.Navigate<FriendListViewModel, User>(user).Wait();
+                await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);
                 return;
             }
 
