@@ -46,7 +46,7 @@ namespace FriendNav.Core.ViewModels
             _mvxNavigationService = mvxNavigationService;
             _firebaseAuthService = firebaseAuthService;
 
-            SendNavigationFriendListRequestCommand = new MvxCommand(SendEndNavigationAndMarkAsEnded);
+            SendNavigationFriendListRequestCommand = new MvxCommand(SendEndNavigationAndMarkAsEndedAsync);
             OnLocationChangeCommand = new MvxCommand(OnLocationChangedAsync);
         }
 
@@ -66,7 +66,7 @@ namespace FriendNav.Core.ViewModels
         }
 
         // map argument is from google location
-        private async Task OnLocationChanged()
+        public async Task OnLocationChanged()
         {
             if (!_endNavigation)
             {
@@ -79,10 +79,10 @@ namespace FriendNav.Core.ViewModels
 
         private void SendEndNavigationAndMarkAsEndedAsync()
         {
-            Task.Run(() => SendEndNavigationAndMarkAsEnded());
+            Task.Run(SendEndNavigationAndMarkAsEnded);
         }
 
-        private void SendEndNavigationAndMarkAsEnded()
+        public async Task SendEndNavigationAndMarkAsEnded()
         {
             if (_isCallingActivityInitiator)
             {
@@ -96,10 +96,10 @@ namespace FriendNav.Core.ViewModels
             }
 
 
-            NavigateToChat();
+            await NavigateToChat();
         }
 
-        private async void NavigateToChat()
+        private async Task NavigateToChat()
         {
             var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
             await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);

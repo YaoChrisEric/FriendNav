@@ -23,7 +23,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void Navigate_to_friend_list_view_model()
+        public async Task Navigate_to_friend_list_view_model()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -38,9 +38,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            mapViewModel.Prepare(new Model.Map());
+            mapViewModel.Prepare(new Map());
 
-            mapViewModel.SendNavigationFriendListRequestCommand.Execute();
+            await mapViewModel.SendEndNavigationAndMarkAsEnded();
 
             Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is User));
 
@@ -50,7 +50,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public async void On_location_change()
+        public async Task On_location_change()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -80,9 +80,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             mapViewModel.TestLocationChangeHook = testHook;
 
-            mapViewModel.OnLocationChangeCommand.Execute();
+            await mapViewModel.OnLocationChanged();
 
-            // testHook.ResetEvent.WaitOne();
+            testHook.ResetEvent.WaitOne();
 
             Assert.AreEqual("498", testHook.Map.InitiatorLatitude);
             Assert.AreEqual("498", testHook.Map.InitiatorLongitude);

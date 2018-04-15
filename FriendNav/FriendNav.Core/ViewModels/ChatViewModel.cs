@@ -130,14 +130,14 @@ namespace FriendNav.Core.ViewModels
             TestChatMessageHook?.NotifyOtherThreads();
         }
 
-        private void NavigateRequest_NavigationReqest(object sender, EventArgs e)
+        private async void NavigateRequest_NavigationReqest(object sender, EventArgs e)
         {
-            _mvxNavigationService.Navigate<RequestViewModel, NavigateRequestParameters>(
+            await _mvxNavigationService.Navigate<RequestViewModel, NavigateRequestParameters>(
                 new NavigateRequestParameters
                 {
                     Chat = _chat,
                     NavigateRequest = _navigateRequest
-                }).Wait();
+                });
 
             TestNavigationHook?.NotifyOtherThreads();
         }

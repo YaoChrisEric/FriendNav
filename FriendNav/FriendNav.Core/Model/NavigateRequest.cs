@@ -33,18 +33,11 @@ namespace FriendNav.Core.Model
         {
             lock (_updateLock)
             {
-                if(IsNavigationActive == observer.Object.CallActive &&
-                    InitiatorEmail == observer.Object.InitiatorEmail &&
-                    IsRequestedAccepted == observer.Object.IsRequestedAccepted)
-                {
-                    return;
-                }
-
                 IsNavigationActive = observer.Object.CallActive;
                 InitiatorEmail = observer.Object.InitiatorEmail;
                 IsRequestedAccepted = observer.Object.IsRequestedAccepted;
 
-                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && IsNavigationActive)
+                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
                 {
                     NavigationReqest?.Invoke(this, new EventArgs());
                 }
@@ -54,12 +47,9 @@ namespace FriendNav.Core.Model
                     NavigationDeclined?.Invoke(this, new EventArgs());
                 }
 
-                if (IsInitiator && IsNavigationActive)
+                if (IsInitiator && !IsNavigationActive && IsRequestedAccepted)
                 {
-                    if (true == IsRequestedAccepted)
-                    {
-                        NavigationAccepted?.Invoke(this, new EventArgs());
-                    }
+                    NavigationAccepted?.Invoke(this, new EventArgs());
                 }             
             }
         }
