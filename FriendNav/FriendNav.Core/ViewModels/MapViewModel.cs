@@ -8,13 +8,13 @@ using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.ViewModels
 {
     public class MapViewModel : MvxViewModel<Map>
     {
         private Map _map;
-        private readonly ITask _task;
         private readonly IMapRepository _mapRepository;
         private readonly IUserRepository _userRepository;
         private readonly INavigateRequestRepository _navigateRequestRepository;
@@ -30,7 +30,7 @@ namespace FriendNav.Core.ViewModels
         public IAsyncHook TestNavigationHook { get; set; }
         public IAsyncHook TestLocationChangeHook { get; set; }
 
-        public MapViewModel(ITask task,
+        public MapViewModel(
             IMapRepository mapRepository,
             IUserRepository userRepository,
             INavigateRequestRepository navigateRequestRepository,
@@ -39,7 +39,6 @@ namespace FriendNav.Core.ViewModels
             IFirebaseAuthService firebaseAuthService
             )
         {
-            _task = task;
             _mapRepository = mapRepository;
             _userRepository = userRepository;
             _navigateRequestRepository = navigateRequestRepository;
@@ -63,11 +62,11 @@ namespace FriendNav.Core.ViewModels
 
         private void OnLocationChangedAsync()
         {
-            _task.Run(OnLocationChanged);
+            Task.Run(async () => await OnLocationChanged());
         }
 
         // map argument is from google location
-        private async void OnLocationChanged()
+        private async Task OnLocationChanged()
         {
             if (!_endNavigation)
             {
@@ -80,7 +79,7 @@ namespace FriendNav.Core.ViewModels
 
         private void SendEndNavigationAndMarkAsEndedAsync()
         {
-            _task.Run(SendEndNavigationAndMarkAsEnded);
+            Task.Run(() => SendEndNavigationAndMarkAsEnded());
         }
 
         private void SendEndNavigationAndMarkAsEnded()

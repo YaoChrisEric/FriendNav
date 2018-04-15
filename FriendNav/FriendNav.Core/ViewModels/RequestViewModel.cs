@@ -14,7 +14,6 @@ namespace FriendNav.Core.ViewModels
 {
     public class RequestViewModel : MvxViewModel<NavigateRequestParameters>
     {
-        private readonly ITask _task;
         private readonly INavigationRequestService _navigationRequestService;
         private readonly IMvxNavigationService _mvxNavigationService;
         private readonly IMapRepository _mapRepository;
@@ -22,13 +21,12 @@ namespace FriendNav.Core.ViewModels
         private Chat _chat;
         private NavigateRequest _navigateRequest;
 
-        public RequestViewModel(ITask task,
+        public RequestViewModel(
             INavigationRequestService navigationRequestService,
             IMapRepository mapRepository,
             IMvxNavigationService mvxNavigationService
             )
         {
-            _task = task;
             _navigationRequestService = navigationRequestService;
             _mvxNavigationService = mvxNavigationService;
             _mapRepository = mapRepository;
@@ -54,10 +52,10 @@ namespace FriendNav.Core.ViewModels
 
         private void DeclineRequestAsync()
         {
-            _task.Run(DeclineRequest);
+            Task.Run(async () => await DeclineRequest());
         }
 
-        private async void DeclineRequest()
+        public async Task DeclineRequest()
         {
             _navigateRequest.NavigationDeclined -= NavigateRequest_NavigationDeclined;
             _navigateRequest.NavigationAccepted -= NavigateRequest_NavigationAccepted;
@@ -73,7 +71,7 @@ namespace FriendNav.Core.ViewModels
 
         private void AcceptRequestAsync()
         {
-            _task.Run(async () => await AcceptRequest());
+            Task.Run(async () => await AcceptRequest());
         }
 
         public async Task AcceptRequest()

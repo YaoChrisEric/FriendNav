@@ -34,9 +34,6 @@ namespace FriendNav.Core.IntegrationTests.TestModel
                 .As<IMvxNavigationService>();
             builder.RegisterInstance(new Mock<INotificationService>().Object);
 
-            builder.RegisterType<TestTask>()
-                .As<ITask>();
-
             builder.RegisterInstance(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD_zHJElZIVW3OSefLkrRY5NipPLTMsUnk")))
                 .As<IFirebaseAuthProvider>();
 

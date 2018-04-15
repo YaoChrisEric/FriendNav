@@ -17,20 +17,18 @@ namespace FriendNav.Core.ViewModels
 {
     public class FriendListViewModel : MvxViewModel<User>
     {
-        private readonly ITask _task;
         private readonly IUserRepository _userRepository;
         private readonly IChatRepository _chatRepository;
         private User _user;
         private readonly IMvxNavigationService _mvxNavigationService;
 
-        public FriendListViewModel(ITask task,
+        public FriendListViewModel(
             IUserRepository userRepository,
             IChatRepository chatRepository,
             IMvxNavigationService navagtionService
             )
         {
             _mvxNavigationService = navagtionService;
-            _task = task;
             _userRepository = userRepository;
             _chatRepository = chatRepository;
             SearchForUserCommand = new MvxCommand(SearchForUserAsync);
@@ -91,7 +89,7 @@ namespace FriendNav.Core.ViewModels
        
         private void SearchForUserAsync()
         {
-            _task.Run(async () => await SearchForUser());
+            Task.Run(async () => await SearchForUser());
         }
 
         public async Task SearchForUser()
@@ -102,7 +100,7 @@ namespace FriendNav.Core.ViewModels
 
         private void AddUserToFriendListAsync()
         {
-            _task.Run( async () => await AddUserToFriendList());
+            Task.Run( async () => await AddUserToFriendList());
         }
 
         public async Task AddUserToFriendList()
@@ -119,7 +117,7 @@ namespace FriendNav.Core.ViewModels
 
         private void NavigateToSelectedFriendChatAsync()
         {
-            _task.Run(async () => await NavigateToSelectedFriendChat());
+            Task.Run(async () => await NavigateToSelectedFriendChat());
         }
 
         public async Task NavigateToSelectedFriendChat()

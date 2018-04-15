@@ -18,20 +18,18 @@ namespace FriendNav.Core.ViewModels
         private Chat _chat;
         private NavigateRequest _navigateRequest;
 
-        private readonly ITask _task;
         private readonly IMessageRepository _messageRepository;
         private readonly INavigateRequestRepository _navigateRequestRepository;
         private readonly INavigationRequestService _navigationRequestService;
         private readonly IMvxNavigationService _mvxNavigationService;
 
-        public ChatViewModel(ITask task,
+        public ChatViewModel(
             INavigateRequestRepository navigateRequestRepository,
             INavigationRequestService navigationRequestService,
             IMessageRepository messageRepository,
             IMvxNavigationService mvxNavigationService
             )
         {
-            _task = task;
             _navigateRequestRepository = navigateRequestRepository;
             _navigationRequestService = navigationRequestService;
             _messageRepository = messageRepository;
@@ -80,7 +78,7 @@ namespace FriendNav.Core.ViewModels
 
         private void CreateNewMessageAsync()
         {
-            _task.Run(async () => await CreateNewMessage());
+            Task.Run(async () => await CreateNewMessage());
         }
 
         public async Task CreateNewMessage()
@@ -92,7 +90,7 @@ namespace FriendNav.Core.ViewModels
 
         private void SendNavigationRequestAsync()
         {
-            _task.Run(async () => await SendNavigationRequest());
+            Task.Run(async () => await SendNavigationRequest());
         }
 
         public async Task SendNavigationRequest()

@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using FriendNav.Core.IntegrationTests.Utilities;
 using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.ViewModelParameters;
@@ -31,7 +30,6 @@ namespace FriendNav.Core.Tests.ViewModels
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object
@@ -50,22 +48,21 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Add_user_to_friend_list_command_success()
+        public async Task Add_user_to_friend_list_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
-            User _user = new User();
+            User user = new User();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 null,
                 null 
                 );
 
-            friendListViewModel.Prepare(_user);
-            friendListViewModel.SelectedNewFriend = new UserViewModel(_user);
+            await friendListViewModel.PrepareAsync(user);
+            friendListViewModel.SelectedNewFriend = new UserViewModel(user);
             friendListViewModel.SelectedNewFriend.EmailAddress = "test@test.com";;
 
-            friendListViewModel.AddUserToFriendListCommand.Execute();
+            await friendListViewModel.AddUserToFriendList();
 
             _userRepository.Verify(x => x.AddUserToFriendList(It.IsAny<User>(), It.IsAny<Friend>()));
         }
@@ -77,7 +74,6 @@ namespace FriendNav.Core.Tests.ViewModels
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object
@@ -99,7 +95,6 @@ namespace FriendNav.Core.Tests.ViewModels
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object

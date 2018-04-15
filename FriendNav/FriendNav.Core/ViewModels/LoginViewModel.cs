@@ -13,7 +13,6 @@ namespace FriendNav.Core.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        private readonly ITask _task;
         private readonly IMvxNavigationService _mvxNavigationService;
         private readonly INotificationService _notificationService;
         private readonly IFirebaseAuthService _firebaseAuthService;
@@ -21,13 +20,11 @@ namespace FriendNav.Core.ViewModels
 
 
         public LoginViewModel(
-            ITask task,
             IMvxNavigationService mvxNavigationService,
             IUserRepository userRepository,
             INotificationService notificationService,           
             IFirebaseAuthService firebaseAuthService)
         {
-            _task = task;
             _mvxNavigationService = mvxNavigationService;
             _userRepository = userRepository;
             _firebaseAuthService = firebaseAuthService;
@@ -43,7 +40,7 @@ namespace FriendNav.Core.ViewModels
 
         private void LoginUserAsync()
         {
-            _task.Run(async () => await LoginUser());
+            Task.Run(async () => await LoginUser());
         }
 
         public async Task LoginUser()

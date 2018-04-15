@@ -17,4 +17,8 @@
     <ProjectReference Include="..\FriendNav.Core\FriendNav.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Utilities\" />
+  </ItemGroup>
+
 </Project>

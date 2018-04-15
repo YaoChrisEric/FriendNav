@@ -35,7 +35,7 @@ namespace FriendNav.Core.Tests.ViewModels
             var chat = _fixture.Create<Chat>();
             var navigationRequest = _fixture.Create<NavigateRequest>();
 
-            var sut = new RequestViewModel(new IntegrationTests.Utilities.TestTask(),
+            var sut = new RequestViewModel(
                 _navigationRequestService.Object,
                 _mapRepository.Object,
                 _mvxNavigationService.Object
@@ -48,7 +48,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_Decline_NavRequest_Unit_Test()
+        public async Task User_Decline_NavRequest_Unit_Test()
         {
             var _navigationRequestService = new Mock<INavigationRequestService>();
             var _mapRepository = new Mock<IMapRepository>();
@@ -58,14 +58,14 @@ namespace FriendNav.Core.Tests.ViewModels
             var chat = _fixture.Create<Chat>();
 
             var navigationRequest = _fixture.Create<NavigateRequest>();
-            var sut = new RequestViewModel(new IntegrationTests.Utilities.TestTask(),
+            var sut = new RequestViewModel(
                 _navigationRequestService.Object,
                 _mapRepository.Object,
                 _mvxNavigationService.Object
                 );
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
-            sut.DeclineRequestCommand.Execute();
+            await sut.DeclineRequest();
 
             _mvxNavigationService.Verify(v => v.Navigate<ChatViewModel, ChatParameters>(It.Is<ChatParameters>(i => i.Chat == chat), null));
 

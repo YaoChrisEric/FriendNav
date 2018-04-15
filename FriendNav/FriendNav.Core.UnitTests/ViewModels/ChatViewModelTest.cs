@@ -8,8 +8,6 @@ using Moq;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using FriendNav.Core.Model;
-using FriendNav.Core.Utilities;
-using FriendNav.Core.IntegrationTests.Utilities;
 using MvvmCross.Core.Navigation;
 using FriendNav.Core.ViewModelParameters;
 using System.Threading.Tasks;
@@ -40,7 +38,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             var chat = _fixture.Create<Chat>();
 
-            var sut = new ChatViewModel(new TestTask(),
+            var sut = new ChatViewModel(
                 _navigateRequestRepository.Object,
                 _navigationRequestService.Object,
                 _messageRepository.Object,
@@ -69,7 +67,7 @@ namespace FriendNav.Core.Tests.ViewModels
                     return Task.Run(() => { });
                 });
 
-            var sut = new ChatViewModel(new TestTask(), 
+            var sut = new ChatViewModel(
                 new Mock<INavigateRequestRepository>().Object, 
                 null, 
                 chatViewModelTestRepository.Object, 
@@ -101,7 +99,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             var chatParematers = _fixture.Create<ChatParameters>();
 
-            var sut = new ChatViewModel(new TestTask(),
+            var sut = new ChatViewModel(
                 _navigateRequestRepository.Object,
                 _navigationRequestService.Object,
                 _messageRepository.Object,

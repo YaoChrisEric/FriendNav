@@ -10,7 +10,6 @@ using Firebase.Auth;
 using MvvmCross.Core.Navigation;
 using FriendNav.Core.Model;
 using FriendNav.Core.Utilities;
-using FriendNav.Core.IntegrationTests.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
 

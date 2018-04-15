@@ -7,7 +7,6 @@ using MvvmCross.Core.Navigation;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Model;
-using FriendNav.Core.IntegrationTests.Utilities;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Firebase.Auth;
@@ -52,7 +51,6 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(Task.Run(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 _notificationService.Object,
@@ -89,7 +87,6 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -126,7 +123,6 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -163,7 +159,6 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -203,7 +198,6 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 _notificationService.Object,
