@@ -7,21 +7,22 @@
 using Foundation;
 using System;
 using System.CodeDom.Compiler;
+using UIKit;
 
-namespace FriendNav.iOS.Views
+namespace FriendNav.iOS
 {
-    [Register ("FriendListView")]
-    partial class FriendListView
+    [Register ("FriendListCell")]
+    partial class FriendListCell
     {
         [Outlet]
         [GeneratedCode ("iOS Designer", "1.0")]
-        UIKit.UITableView FriendListTable { get; set; }
+        UIKit.UILabel FriendLabel { get; set; }
 
         void ReleaseDesignerOutlets ()
         {
-            if (FriendListTable != null) {
-                FriendListTable.Dispose ();
-                FriendListTable = null;
+            if (FriendLabel != null) {
+                FriendLabel.Dispose ();
+                FriendLabel = null;
             }
         }
     }
