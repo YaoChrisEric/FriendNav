@@ -27,7 +27,7 @@ namespace FriendNav.Core.ViewModels
             _firebaseAuthService = firebaseAuthService;
             _notificationService = notificationService;
             _userRepository = userRepository;
-            RegisterUserCommand = new MvxCommand(async () => await RegisterUser());
+            RegisterUserCommand = new MvxCommand(RegisterUserAsync);
         }
 
         public MvxCommand RegisterUserCommand { get; }
@@ -35,6 +35,11 @@ namespace FriendNav.Core.ViewModels
         public string EmailAddress { get; set; }
 
         public string UserPassword { get; set; }
+
+        private void RegisterUserAsync()
+        {
+            Task.Run(RegisterUser);
+        }
 
         public async Task RegisterUser()
         {

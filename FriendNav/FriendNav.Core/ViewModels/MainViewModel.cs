@@ -18,8 +18,8 @@ namespace FriendNav.Core.ViewModels
         {
             _firebaseAuthService = firebaseAuthService;
             _mvxNavigationService = mvxNavigationService;
-            LoginUserCommand = new MvxCommand(async () => await LoginUser());
-            RegisterUserCommand = new MvxCommand(async () => await RegisterUser());
+            LoginUserCommand = new MvxCommand(LoginUserAsync);
+            RegisterUserCommand = new MvxCommand(RegisterUserAsync);
         }
 
         public async override Task Initialize()
@@ -35,6 +35,16 @@ namespace FriendNav.Core.ViewModels
         public MvxCommand LoginUserCommand { get; }
 
         public MvxCommand RegisterUserCommand { get; }
+
+        public void LoginUserAsync()
+        {
+            Task.Run(LoginUser);
+        }
+
+        public void RegisterUserAsync()
+        {
+            Task.Run(RegisterUser);
+        }
 
         public async Task LoginUser()
         {

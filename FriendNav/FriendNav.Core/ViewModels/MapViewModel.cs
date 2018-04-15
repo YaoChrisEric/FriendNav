@@ -62,7 +62,7 @@ namespace FriendNav.Core.ViewModels
 
         private void OnLocationChangedAsync()
         {
-            Task.Run(async () => await OnLocationChanged());
+            Task.Run(OnLocationChanged);
         }
 
         // map argument is from google location
