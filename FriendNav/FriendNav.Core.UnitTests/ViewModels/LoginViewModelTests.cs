@@ -7,7 +7,6 @@ using MvvmCross.Core.Navigation;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services.Interfaces;
 using FriendNav.Core.Model;
-using FriendNav.Core.IntegrationTests.Utilities;
 using AutoFixture;
 using AutoFixture.AutoMoq;
 using Firebase.Auth;
@@ -29,7 +28,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_login_and_navigate_to_FriendList()
+        public async Task User_login_and_navigate_to_FriendList()
         {
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _userRepository = new Mock<IUserRepository>();
@@ -49,10 +48,9 @@ namespace FriendNav.Core.Tests.ViewModels
                 });
 
             _userRepository.Setup(s => s.GetUser(It.IsAny<string>()))
-                .Returns(user);
+                .Returns(Task.Run(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 _notificationService.Object,
@@ -63,7 +61,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 UserPassword = "theday"
             };
 
-            sut.LoginUserCommand.Execute();
+            await sut.LoginUser();
 
             _firebaseAuthService.Verify(v => v.LoginUser(It.Is<string>(i => i == sut.EmailAddress), It.Is<string>(i => i == sut.UserPassword)));
             _userRepository.Verify(v => v.GetUser(It.Is<string>(i => i == firebaseAuth.User.Email)));
@@ -72,7 +70,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_null_email()
+        public async Task User_null_email()
         {
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _userRepository = new Mock<IUserRepository>();
@@ -86,10 +84,9 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(firebaseAuth);
 
             _userRepository.Setup(s => s.GetUser(It.IsAny<string>()))
-                .Returns(user);
+                .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -100,7 +97,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 UserPassword = "theday"
             };
 
-            sut.LoginUserCommand.Execute();
+            await sut.LoginUser();
 
             _firebaseAuthService.Verify(v => v.LoginUser(It.Is<string>(i => i == sut.EmailAddress), It.Is<string>(i => i == sut.UserPassword)),Times.Never());
             _userRepository.Verify(v => v.GetUser(It.Is<string>(i => i == firebaseAuth.User.Email)),Times.Never());
@@ -109,7 +106,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_null_password()
+        public async Task User_null_password()
         {
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _userRepository = new Mock<IUserRepository>();
@@ -123,10 +120,9 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(firebaseAuth);
 
             _userRepository.Setup(s => s.GetUser(It.IsAny<string>()))
-                .Returns(user);
+                .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -137,7 +133,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 UserPassword = null
             };
 
-            sut.LoginUserCommand.Execute();
+            await sut.LoginUser();
 
             _firebaseAuthService.Verify(v => v.LoginUser(It.Is<string>(i => i == sut.EmailAddress), It.Is<string>(i => i == sut.UserPassword)),Times.Never());
             _userRepository.Verify(v => v.GetUser(It.Is<string>(i => i == firebaseAuth.User.Email)),Times.Never());
@@ -146,7 +142,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_null_email_and_password()
+        public async Task User_null_email_and_password()
         {
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _userRepository = new Mock<IUserRepository>();
@@ -160,10 +156,9 @@ namespace FriendNav.Core.Tests.ViewModels
                 .Returns(firebaseAuth);
 
             _userRepository.Setup(s => s.GetUser(It.IsAny<string>()))
-                .Returns(user);
+                .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 null,
@@ -174,7 +169,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 UserPassword = null
             };
 
-            sut.LoginUserCommand.Execute();
+            await sut.LoginUser();
 
             _firebaseAuthService.Verify(v => v.LoginUser(It.Is<string>(i => i == sut.EmailAddress), It.Is<string>(i => i == sut.UserPassword)),Times.Never());
             _userRepository.Verify(v => v.GetUser(It.Is<string>(i => i == firebaseAuth.User.Email)),Times.Never());
@@ -183,7 +178,7 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void User_bad_auth_send_notification()
+        public async Task User_bad_auth_send_notification()
         {
             var _mvxNavigationService = new Mock<IMvxNavigationService>();
             var _userRepository = new Mock<IUserRepository>();
@@ -200,10 +195,9 @@ namespace FriendNav.Core.Tests.ViewModels
                 });
 
             _userRepository.Setup(s => s.GetUser(It.IsAny<string>()))
-                .Returns(user);
+                .Returns(new Task<FriendNavUser>(() => user));
 
             var sut = new LoginViewModel(
-                new TestTask(),
                 _mvxNavigationService.Object,
                 _userRepository.Object,
                 _notificationService.Object,
@@ -214,7 +208,7 @@ namespace FriendNav.Core.Tests.ViewModels
                 UserPassword = "theday"
             };
 
-            sut.LoginUserCommand.Execute();
+            await sut.LoginUser();
 
             _firebaseAuthService.Verify(v => v.LoginUser(It.Is<string>(i => i == sut.EmailAddress), It.Is<string>(i => i == sut.UserPassword)));
             _userRepository.Verify(v => v.GetUser(It.Is<string>(i => i == "some@string.com")),Times.Never());

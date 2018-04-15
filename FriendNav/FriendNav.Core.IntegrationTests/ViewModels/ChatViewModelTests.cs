@@ -26,7 +26,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void Send_request_for_navigation()
+        public async Task Send_request_for_navigation()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -41,15 +41,15 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
             
-            chatViewModel.Prepare(new ChatParameters { Chat = chat });
+            await chatViewModel.PrepareAsync(new ChatParameters { Chat = chat });
 
-            chatViewModel.SendNavigationRequestCommand.Execute();
+            await chatViewModel.SendNavigationRequest();
 
             var navigateRequestNavigation = context.TestNavigationService.TestNavigations.First(f => f.Parameter is NavigateRequestParameters);
 
@@ -63,7 +63,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void Recieve_incoming_navigation_request()
+        public async Task Recieve_incoming_navigation_request()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -78,21 +78,21 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            testNavigationRequestService.ResetNavigationRequest(chat);
+            await testNavigationRequestService.ResetNavigationRequest(chat);
 
-            chatViewModel.Prepare(new ChatParameters { Chat = chat });
+            await chatViewModel.PrepareAsync(new ChatParameters { Chat = chat });
 
             var testHook = new NavigateRequestHook();
 
             chatViewModel.TestNavigationHook = testHook;
 
-            testNavigationRequestService.SendTestNavigationRequest(chat);
+            await testNavigationRequestService.SendTestNavigationRequest(chat);
 
             testHook.ResetEvent.WaitOne();
 
@@ -108,7 +108,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         }
 
         [TestMethod]
-        public void Add_new_chat_message_to_chat()
+        public async Task Add_new_chat_message_to_chat()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -121,13 +121,13 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             firebaseAuthService.LoginUser("c@test.com", "theday");
 
-            var initiator = userRepository.GetUser("c@test.com");
+            var initiator = await userRepository.GetUser("c@test.com");
 
-            var responder = userRepository.GetUser("c1@test.com");
+            var responder = await userRepository.GetUser("c1@test.com");
 
             var chat = chatRepository.GetChat(initiator, responder);
 
-            chatViewModel.Prepare(new ChatParameters { Chat = chat });
+            await chatViewModel.PrepareAsync(new ChatParameters { Chat = chat });
 
             var testMessage = Guid.NewGuid().ToString();
 
@@ -148,7 +148,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
             Assert.IsNotNull(testHook.CapturedTestMessage);
             Assert.AreEqual(testHook.ActiveTestUser.EmailAddress, testHook.CapturedTestMessage.SenderEmail);
 
-            messageRepository.DeleteMessage( 
+            await messageRepository.DeleteMessage( 
                 chat.Messages.First(f => f.FirebaseKey == testHook
                     .CapturedTestMessage
                     .FirebaseKey));

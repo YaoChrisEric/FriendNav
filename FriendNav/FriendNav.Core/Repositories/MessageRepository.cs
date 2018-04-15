@@ -5,6 +5,7 @@ using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories
 {
@@ -19,41 +20,38 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void CreateMessage(Message message)
+        public async Task CreateMessage(Message message)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("BasicChat")
                 .Child(message.ChatFirebaseKey)
                 .Child("MessageIds")
-                .PostAsync(message)
-                .Wait();
+                .PostAsync(message);
         }
 
-        public void DeleteMessage(Message message)
+        public async Task DeleteMessage(Message message)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("BasicChat")
                 .Child(message.ChatFirebaseKey)
                 .Child("MessageIds")
                 .Child(message.FirebaseKey)
-                .DeleteAsync()
-                .Wait();
+                .DeleteAsync();
         }
 
-        public void GetMessages(Chat chat)
+        public async Task GetMessages(Chat chat)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var messages = client
+            var messages = await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("MessageIds")
-                .OnceAsync<Message>()
-                .Result;
+                .OnceAsync<Message>();
 
             foreach (var message in messages)
             {

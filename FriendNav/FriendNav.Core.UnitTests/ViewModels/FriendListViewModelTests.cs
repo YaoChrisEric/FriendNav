@@ -1,6 +1,5 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
-using FriendNav.Core.IntegrationTests.Utilities;
 using FriendNav.Core.Model;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.ViewModelParameters;
@@ -25,13 +24,12 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Search_for_user_command_success()
+        public async Task Search_for_user_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object
@@ -42,42 +40,40 @@ namespace FriendNav.Core.Tests.ViewModels
             userList.Add(new User());
             userList.Add(new User());
 
-            _userRepository.Setup(x => x.FindUsers(It.IsAny<string>())).Returns(userList);
+            _userRepository.Setup(x => x.FindUsers(It.IsAny<string>())).Returns(Task.Run(() => userList));
 
-            friendListViewModel.SearchForUserCommand.Execute();
+            await friendListViewModel.SearchForUser();
 
             _userRepository.Verify(x => x.FindUsers(It.IsAny<string>()));
         }
 
         [TestMethod]
-        public void Add_user_to_friend_list_command_success()
+        public async Task Add_user_to_friend_list_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
-            User _user = new User();
+            User user = new User();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 null,
                 null 
                 );
 
-            friendListViewModel.Prepare(_user);
-            friendListViewModel.SelectedNewFriend = new UserViewModel(_user);
+            await friendListViewModel.PrepareAsync(user);
+            friendListViewModel.SelectedNewFriend = new UserViewModel(user);
             friendListViewModel.SelectedNewFriend.EmailAddress = "test@test.com";;
 
-            friendListViewModel.AddUserToFriendListCommand.Execute();
+            await friendListViewModel.AddUserToFriendList();
 
             _userRepository.Verify(x => x.AddUserToFriendList(It.IsAny<User>(), It.IsAny<Friend>()));
         }
 
         [TestMethod]
-        public void Navigate_to_chat_command_success()
+        public async Task Navigate_to_chat_command_success()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object
@@ -85,7 +81,7 @@ namespace FriendNav.Core.Tests.ViewModels
 
             friendListViewModel.SelectedFriend = new FriendViewModel(new Friend());
 
-            friendListViewModel.NavigateToChatCommand.Execute();
+            await friendListViewModel.NavigateToSelectedFriendChat();
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()));
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()));
@@ -93,19 +89,18 @@ namespace FriendNav.Core.Tests.ViewModels
         }
 
         [TestMethod]
-        public void Navigate_to_chat_command_null_selected_friend()
+        public async Task Navigate_to_chat_command_null_selected_friend()
         {
             var _userRepository = new Mock<IUserRepository>();
             var _chatRepository = new Mock<IChatRepository>();
             var _navigationService = new Mock<IMvxNavigationService>();
             var friendListViewModel = new FriendListViewModel(
-                new TestTask(),
                 _userRepository.Object,
                 _chatRepository.Object,
                 _navigationService.Object
                 );
 
-            friendListViewModel.NavigateToChatCommand.Execute();
+            await friendListViewModel.NavigateToSelectedFriendChat();
 
             _userRepository.Verify(x => x.GetUser(It.IsAny<string>()),Times.Never());
             _chatRepository.Verify(x => x.GetChat(It.IsAny<User>(), It.IsAny<User>()),Times.Never());

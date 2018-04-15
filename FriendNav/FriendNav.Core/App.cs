@@ -15,8 +15,6 @@ namespace FriendNav.Core
 
             Mvx.RegisterSingleton<IFirebaseAuthProvider>(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD_zHJElZIVW3OSefLkrRY5NipPLTMsUnk")));
 
-            Mvx.RegisterSingleton<ITask>(new TaskWrapper());
-
             CreatableTypes()
                 .EndingWith("Repository")
                 .AsInterfaces()

@@ -6,6 +6,7 @@ using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories
 {
@@ -20,7 +21,7 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public NavigateRequest GetNavigationRequest(Chat chat)
+        public async Task<NavigateRequest> GetNavigationRequest(Chat chat)
         {
             var navigateRequest = new NavigateRequest
             {
@@ -30,12 +31,11 @@ namespace FriendNav.Core.Repositories
 
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var navigateRequestDto = client
+            var navigateRequestDto = await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
-                .OnceSingleAsync<NavigateRequestDto>()
-                .Result;
+                .OnceSingleAsync<NavigateRequestDto>();
 
             if (navigateRequestDto == null)
             {
@@ -45,12 +45,11 @@ namespace FriendNav.Core.Repositories
                     CallActive = false
                 };
 
-                client
+                await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
-                .PutAsync(navigateRequestDto)
-                .Wait();
+                .PutAsync(navigateRequestDto);
             }
 
             navigateRequest.InitiatorEmail = navigateRequestDto.InitiatorEmail;
@@ -68,11 +67,11 @@ namespace FriendNav.Core.Repositories
             return navigateRequest;
         }
 
-        public void UpdateNavigationRequest(NavigateRequest navigateRequest)
+        public async Task UpdateNavigationRequest(NavigateRequest navigateRequest)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("BasicChat")
                 .Child(navigateRequest.ChatFirebaseKey)
                 .Child("meetRequest")
@@ -81,8 +80,7 @@ namespace FriendNav.Core.Repositories
                     InitiatorEmail = navigateRequest.InitiatorEmail,
                     CallActive = navigateRequest.IsNavigationActive,
                     IsRequestedAccepted = navigateRequest.IsRequestedAccepted
-                })
-                .Wait();
+                });
         }
 
         public void Dispose()
