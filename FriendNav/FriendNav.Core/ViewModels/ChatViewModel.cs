@@ -78,7 +78,7 @@ namespace FriendNav.Core.ViewModels
 
         private void CreateNewMessageAsync()
         {
-            Task.Run(async () => await CreateNewMessage());
+            Task.Run(CreateNewMessage);
         }
 
         public async Task CreateNewMessage()
@@ -90,7 +90,7 @@ namespace FriendNav.Core.ViewModels
 
         private void SendNavigationRequestAsync()
         {
-            Task.Run(async () => await SendNavigationRequest());
+            Task.Run(SendNavigationRequest);
         }
 
         public async Task SendNavigationRequest()

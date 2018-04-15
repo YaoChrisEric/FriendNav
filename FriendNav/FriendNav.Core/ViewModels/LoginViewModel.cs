@@ -40,7 +40,7 @@ namespace FriendNav.Core.ViewModels
 
         private void LoginUserAsync()
         {
-            Task.Run(async () => await LoginUser());
+            Task.Run(LoginUser);
         }
 
         public async Task LoginUser()

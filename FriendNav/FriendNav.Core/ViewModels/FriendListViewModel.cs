@@ -89,7 +89,7 @@ namespace FriendNav.Core.ViewModels
        
         private void SearchForUserAsync()
         {
-            Task.Run(async () => await SearchForUser());
+            Task.Run(SearchForUser);
         }
 
         public async Task SearchForUser()
@@ -100,7 +100,7 @@ namespace FriendNav.Core.ViewModels
 
         private void AddUserToFriendListAsync()
         {
-            Task.Run( async () => await AddUserToFriendList());
+            Task.Run(AddUserToFriendList);
         }
 
         public async Task AddUserToFriendList()

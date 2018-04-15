@@ -52,7 +52,7 @@ namespace FriendNav.Core.ViewModels
 
         private void DeclineRequestAsync()
         {
-            Task.Run(async () => await DeclineRequest());
+            Task.Run(DeclineRequest);
         }
 
         public async Task DeclineRequest()
@@ -71,7 +71,7 @@ namespace FriendNav.Core.ViewModels
 
         private void AcceptRequestAsync()
         {
-            Task.Run(async () => await AcceptRequest());
+            Task.Run(AcceptRequest);
         }
 
         public async Task AcceptRequest()
