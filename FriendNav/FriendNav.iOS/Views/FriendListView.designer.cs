@@ -17,11 +17,29 @@ namespace FriendNav.iOS.Views
         [GeneratedCode ("iOS Designer", "1.0")]
         UIKit.UITableView FriendListTable { get; set; }
 
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UITextField FriendSearchBar { get; set; }
+
+        [Outlet]
+        [GeneratedCode ("iOS Designer", "1.0")]
+        UIKit.UIButton FriendSearchButton { get; set; }
+
         void ReleaseDesignerOutlets ()
         {
             if (FriendListTable != null) {
                 FriendListTable.Dispose ();
                 FriendListTable = null;
+            }
+
+            if (FriendSearchBar != null) {
+                FriendSearchBar.Dispose ();
+                FriendSearchBar = null;
+            }
+
+            if (FriendSearchButton != null) {
+                FriendSearchButton.Dispose ();
+                FriendSearchButton = null;
             }
         }
     }
