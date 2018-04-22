@@ -95,7 +95,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\NotificationService.cs" />
-    <Compile Include="Tables\FriendListTable.cs" />
     <Compile Include="TableViewSource\FriendListTableViewSource.cs" />
     <Compile Include="Views\FriendListView.cs" />
     <Compile Include="Views\FriendListView.designer.cs">

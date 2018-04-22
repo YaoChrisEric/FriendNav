@@ -4,9 +4,9 @@ using System.Drawing;
 
 using Foundation;
 using FriendNav.Core.ViewModels;
-using FriendNav.iOS.Tables;
 using FriendNav.iOS.TableViewSource;
 using MvvmCross.Binding.BindingContext;
+using MvvmCross.Binding.iOS.Views;
 using MvvmCross.iOS.Views;
 using UIKit;
 

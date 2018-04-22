@@ -11,6 +11,7 @@ namespace FriendNav.iOS.TableViewSource
 {
     class FriendListTableViewSource : MvxTableViewSource
     {
+
         public FriendListTableViewSource(UITableView tableView) : base(tableView)
         {
         }
