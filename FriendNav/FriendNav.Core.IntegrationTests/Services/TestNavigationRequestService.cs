@@ -43,7 +43,8 @@ namespace FriendNav.Core.IntegrationTests.Services
                 .Child("meetRequest")
                 .PutAsync(new NavigateRequestDto
                 {
-                    InitiatorEmail = chat.ChatUser.EmailAddress
+                    InitiatorEmail = chat.ChatUser.EmailAddress,
+                    CallActive = true
                 });
         }
     }
