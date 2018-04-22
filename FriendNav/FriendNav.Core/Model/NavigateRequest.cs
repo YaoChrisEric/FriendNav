@@ -37,7 +37,9 @@ namespace FriendNav.Core.Model
                 InitiatorEmail = observer.Object.InitiatorEmail;
                 IsRequestedAccepted = observer.Object.IsRequestedAccepted;
 
-                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
+                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress
+                    && observer.Object.InitiatorEmail != string.Empty
+                    && IsNavigationActive)
                 {
                     NavigationReqest?.Invoke(this, new EventArgs());
                 }
@@ -47,7 +49,7 @@ namespace FriendNav.Core.Model
                     NavigationDeclined?.Invoke(this, new EventArgs());
                 }
 
-                if (IsInitiator && !IsNavigationActive && IsRequestedAccepted)
+                if (IsInitiator && IsNavigationActive && IsRequestedAccepted)
                 {
                     NavigationAccepted?.Invoke(this, new EventArgs());
                 }             
