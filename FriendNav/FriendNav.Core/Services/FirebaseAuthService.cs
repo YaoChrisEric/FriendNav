@@ -18,9 +18,9 @@ namespace FriendNav.Core.Services
 
         public FirebaseAuth FirebaseAuth { get; private set; }
 
-        public bool CreateNewUser(string email, string password)
+        public async Task<bool> CreateNewUser(string email, string password)
         {
-            FirebaseAuth = _firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(email, password).Result;
+            FirebaseAuth = await _firebaseAuthProvider.CreateUserWithEmailAndPasswordAsync(email, password);
 
             return true;
         }
