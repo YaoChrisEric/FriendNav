@@ -9,6 +9,8 @@ namespace FriendNav.Core.Model
     public class Map
     {
         public string ChatFirebaseKey { get; set; }
+		
+		public bool IsInitiator { get; set; }
 
         public string InitiatorLatitude { get; set; }
 
@@ -17,29 +19,46 @@ namespace FriendNav.Core.Model
         public string ResponderLatitude { get; set; }
 
         public string ResponderLongitude { get; set; }
-
-        public EventHandler InitiatorCordinatesUpdated;
-
-        public EventHandler ResponderCordinatesUpdated;
-
-        public void UpdateCordinates(FirebaseEvent<MapDto> observer)
+		
+		public void UpdateActiveUserCords(string latitude, string longitude)
         {
-            if (InitiatorLatitude != observer.Object.InitiatorLatitude ||
-                InitiatorLongitude != observer.Object.InitiatorLongitude)
+            if (IsInitiator)
             {
-                InitiatorLatitude = observer.Object.InitiatorLatitude;
-                InitiatorLongitude = observer.Object.InitiatorLongitude;
-
-                InitiatorCordinatesUpdated?.Invoke(this, new EventArgs());
+                InitiatorLatitude = latitude;
+                InitiatorLongitude = longitude;
             }
-
-            if (ResponderLatitude != observer.Object.ResponderLatitude ||
-                ResponderLongitude != observer.Object.ResponderLongitude)
+            else
             {
-                ResponderLatitude = observer.Object.ResponderLatitude;
-                ResponderLongitude = observer.Object.ResponderLongitude;
+                ResponderLatitude = latitude;
+                ResponderLongitude = longitude;
+            }
+        }
 
-                ResponderCordinatesUpdated?.Invoke(this, new EventArgs());
+		public EventHandler OtherUserCordinatesUpdated;
+		
+		public void UpdateCordinates(FirebaseEvent<MapDto> observer)
+        {
+            if (IsInitiator)
+            {
+                if (InitiatorLatitude != observer.Object.InitiatorLatitude ||
+                InitiatorLongitude != observer.Object.InitiatorLongitude)
+                {
+                    InitiatorLatitude = observer.Object.InitiatorLatitude;
+                    InitiatorLongitude = observer.Object.InitiatorLongitude;
+
+                    OtherUserCordinatesUpdated?.Invoke(this, new EventArgs());
+                }
+            }
+            else
+            {
+                if (ResponderLatitude != observer.Object.ResponderLatitude ||
+                    ResponderLongitude != observer.Object.ResponderLongitude)
+                {
+                    ResponderLatitude = observer.Object.ResponderLatitude;
+                    ResponderLongitude = observer.Object.ResponderLongitude;
+
+                    OtherUserCordinatesUpdated?.Invoke(this, new EventArgs());
+                }
             }
         }
     }

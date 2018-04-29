@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using Firebase.Auth;
 using FriendNav.Core.IntegrationTests.Services;
+using FriendNav.Core.IntegrationTests.Utilities;
 using FriendNav.Core.Repositories;
 using FriendNav.Core.Repositories.Interfaces;
 using FriendNav.Core.Services;
@@ -21,19 +22,17 @@ namespace FriendNav.Core.IntegrationTests.TestModel
     {
         public IContainer TestContainer { get; set; }
 
-        public Mock<IMvxNavigationService> MockNavigationService { get; set; }
+        public TestNavigationService TestNavigationService { get; set; }
 
         public static TestAppContext ConstructTestAppContext()
         {
             var builder = new ContainerBuilder();
 
-            var mockNavigationService = new Mock<IMvxNavigationService>();
+            var testNavigationService = new TestNavigationService();
 
-            builder.RegisterInstance(mockNavigationService.Object);
+            builder.RegisterInstance(testNavigationService)
+                .As<IMvxNavigationService>();
             builder.RegisterInstance(new Mock<INotificationService>().Object);
-
-            builder.RegisterType<Utilities.TestTask>()
-                .As<ITask>();
 
             builder.RegisterInstance(new FirebaseAuthProvider(new FirebaseConfig("AIzaSyD_zHJElZIVW3OSefLkrRY5NipPLTMsUnk")))
                 .As<IFirebaseAuthProvider>();
@@ -74,16 +73,20 @@ namespace FriendNav.Core.IntegrationTests.TestModel
 
             builder.RegisterType<LoginViewModel>();
 
+            builder.RegisterType<RegisterViewModel>();
+
             builder.RegisterType<FriendListViewModel>();
 
             builder.RegisterType<ChatViewModel>();
 
             builder.RegisterType<RequestViewModel>();
 
+            builder.RegisterType<MapViewModel>();
+
             return new TestAppContext
             {
                 TestContainer = builder.Build(),
-                MockNavigationService = mockNavigationService
+                TestNavigationService = testNavigationService
             };
         }
     }

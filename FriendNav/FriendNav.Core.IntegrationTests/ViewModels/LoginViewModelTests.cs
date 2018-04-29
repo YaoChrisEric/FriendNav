@@ -16,6 +16,8 @@ using FriendNav.Core.Model;
 using Firebase.Auth;
 using User = FriendNav.Core.Model.User;
 using FriendNav.Core.Utilities;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
@@ -29,7 +31,7 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void User_login_and_navigate_to_FriendList()
+        public async Task User_login_and_navigate_to_FriendList()
         {
             var context = TestAppContext.ConstructTestAppContext();
 
@@ -39,9 +41,9 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             loginViewModel.UserPassword = "theday";
 
-            loginViewModel.LoginUserCommand.Execute();
+            await loginViewModel.LoginUser();
 
-            context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
+            Assert.IsTrue(context.TestNavigationService.TestNavigations.Any(a => a.Parameter is User));
         }
     }
 }

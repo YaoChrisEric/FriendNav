@@ -3,6 +3,7 @@ using FriendNav.Core.Services.Interfaces;
 using MvvmCross.Platform;
 using MvvmCross.Platform.IoC;
 using MvvmCross.Core.ViewModels;
+using FriendNav.Core.Utilities;
 
 namespace FriendNav.Core
 {

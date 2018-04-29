@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:background="#0099cc"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/fullscreen_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:keepScreenOn="true"
+        android:text="@string/starting_nav"
+        android:textColor="#33b5e5"
+        android:textSize="50sp"
+        android:textStyle="bold" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true">
+        <LinearLayout
+            android:id="@+id/fullscreen_content_controls"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:background="@color/black_overlay"
+            android:orientation="vertical">
+            <Button
+                android:id="@+id/accept_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#00E676"
+                android:textColor="#33b5e5"
+                android:textSize="20sp"
+                android:layout_weight="0"
+                android:text="@string/accept_button" 
+                local:MvxBind="Click AcceptRequestCommand"/>
+            <Button
+                android:id="@+id/hangout_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#EF5350"
+                android:textColor="#33b5e5"
+                android:textSize="20sp"
+                android:layout_weight="1"
+                android:text="@string/hangout_button"
+                local:MvxBind="Click DeclineRequestCommand"/>
+        </LinearLayout>
+    </FrameLayout>
+</FrameLayout>

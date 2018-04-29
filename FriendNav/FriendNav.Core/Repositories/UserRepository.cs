@@ -22,36 +22,33 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUser(User user)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
             user.IsReceivingMapRequest = false;
             user.CurrentChatFriend = string.Empty;
 
-            client.Child("Users")
+            await client.Child("Users")
                 .Child(user.FirebaseKey)
-                .PostAsync(user)
-                .RunSynchronously();
+                .PostAsync(user);
         }
 
-        public User GetUser(string emailAddress)
+        public async Task<User> GetUser(string emailAddress)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-           return client.Child("Users")
-                .Child(User.CreateFirebaseKey(emailAddress))
-                .OnceSingleAsync<User>()
-                .Result;
+            return await client.Child("Users")
+                 .Child(User.CreateFirebaseKey(emailAddress))
+                 .OnceSingleAsync<User>();
         }
 
-        public List<User> FindUsers(string emailPart)
+        public async Task<List<User>> FindUsers(string emailPart)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var searchUsers = client.Child("Users")                
-                .OnceAsync<User>()
-                .Result;
+            var searchUsers = await client.Child("Users")
+                .OnceAsync<User>();
 
             var users = new List<User>();
 
@@ -68,15 +65,14 @@ namespace FriendNav.Core.Repositories
             return users;
         }
 
-        public void GetFriendList(User user)
+        public async Task GetFriendList(User user)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var friends = client.Child("FriendMap")
+            var friends = await client.Child("FriendMap")
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
-                .OnceAsync<Friend>()
-                .Result;
+                .OnceAsync<Friend>();
 
             foreach (var friend in friends)
             {
@@ -93,29 +89,27 @@ namespace FriendNav.Core.Repositories
             _disposable.Add(disposable);
         }
 
-        public void AddUserToFriendList(User user, Friend newFriend)
+        public async Task AddUserToFriendList(User user, Friend newFriend)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("FriendMap")
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
-                .PostAsync(newFriend)
-                .Wait();
+                .PostAsync(newFriend);
         }
 
-        public void RemoveUserFromFriendList(User user, Friend removeFriend)
+        public async Task RemoveUserFromFriendList(User user, Friend removeFriend)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("FriendMap")
                 .Child(user.FirebaseKey)
                 .Child("FriendList")
                 .Child(removeFriend.FirebaseKey)
-                .DeleteAsync()
-                .Wait();
+                .DeleteAsync();
         }
 
         public void Dispose()

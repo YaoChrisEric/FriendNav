@@ -4,30 +4,30 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-  <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="40dp"
-                android:text="Email Address" />
-  <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="40dp"
-                local:MvxBind="Text EmailAddress" />
-  <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="40dp"
-                android:text="Password" />
-  <EditText
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textSize="40dp"
-                local:MvxBind="Text UserPassword" />
-  <Button
-    android:text="Login"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:textSize="40dp"
-    local:MvxBind="Click LoginUserCommand" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="Email Address" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        local:MvxBind="Text EmailAddress" />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        android:text="Password" />
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        local:MvxBind="Text UserPassword" />
+    <Button
+        android:text="Register"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="40dp"
+        local:MvxBind="Click RegisterUserCommand" />
 </LinearLayout>

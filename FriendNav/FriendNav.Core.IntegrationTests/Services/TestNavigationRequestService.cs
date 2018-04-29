@@ -19,19 +19,33 @@ namespace FriendNav.Core.IntegrationTests.Services
             _firebaseClientService = firebaseClientService;
         }
 
-        public void SendTestNavigationRequest(Chat chat)
+        public async Task ResetNavigationRequest(Chat chat)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
                 .PutAsync(new NavigateRequestDto
                 {
-                    InitiatorEmail = chat.ChatUser.EmailAddress
-                })
-                .Wait();
+                    InitiatorEmail = "test"
+                });
+        }
+
+        public async Task SendTestNavigationRequest(Chat chat)
+        {
+            var client = _firebaseClientService.CreateFirebaseClient();
+
+            await client
+                .Child("BasicChat")
+                .Child(chat.FirebaseKey)
+                .Child("meetRequest")
+                .PutAsync(new NavigateRequestDto
+                {
+                    InitiatorEmail = chat.ChatUser.EmailAddress,
+                    CallActive = true
+                });
         }
     }
 }

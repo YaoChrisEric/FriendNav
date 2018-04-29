@@ -18,8 +18,8 @@ namespace FriendNav.Core.ViewModels
         {
             _firebaseAuthService = firebaseAuthService;
             _mvxNavigationService = mvxNavigationService;
-            LoginUserCommand = new MvxCommand(LoginUser);
-            RegisterUserCommand = new MvxCommand(RegisterUser);
+            LoginUserCommand = new MvxCommand(LoginUserAsync);
+            RegisterUserCommand = new MvxCommand(RegisterUserAsync);
         }
 
         public async override Task Initialize()
@@ -28,8 +28,7 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null && !_firebaseAuthService.FirebaseAuth.IsExpired())
             {
-                _mvxNavigationService.Navigate<FriendListViewModel>().Wait();
-                return;
+                await _mvxNavigationService.Navigate<FriendListViewModel>();
             }
         }
 
@@ -37,14 +36,24 @@ namespace FriendNav.Core.ViewModels
 
         public MvxCommand RegisterUserCommand { get; }
 
-        private void LoginUser()
+        public void LoginUserAsync()
         {
-            _mvxNavigationService.Navigate<LoginViewModel>().Wait();
+            Task.Run(LoginUser);
         }
 
-        private void RegisterUser()
+        public void RegisterUserAsync()
         {
-            _mvxNavigationService.Navigate<RegisterViewModel>().Wait();
+            Task.Run(RegisterUser);
+        }
+
+        public async Task LoginUser()
+        {
+            await _mvxNavigationService.Navigate<LoginViewModel>();
+        }
+
+        public async Task RegisterUser()
+        {
+            await _mvxNavigationService.Navigate<RegisterViewModel>();
         }
      }
 }

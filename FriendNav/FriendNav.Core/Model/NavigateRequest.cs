@@ -11,8 +11,6 @@ namespace FriendNav.Core.Model
     {
         private readonly object _updateLock = new object();
 
-        public IAsyncHook TestHook { get; set; }
-
         public string ChatFirebaseKey { get; set; }
 
         public User ActiveUser { get; set; }
@@ -29,36 +27,36 @@ namespace FriendNav.Core.Model
 
         public bool IsNavigationActive { get; set; }
 
+        public bool IsRequestAccepted { get; set; }
+
+        public bool IsRequestDeclined { get; set; }
+
         public void IncomingNavigationRequest(FirebaseEvent<NavigateRequestDto> observer)
         {
             lock (_updateLock)
             {
-                if(IsNavigationActive == observer.Object.CallActive &&
-                InitiatorEmail == observer.Object.InitiatorEmail)
-                {
-                    return;
-                }
-
                 IsNavigationActive = observer.Object.CallActive;
                 InitiatorEmail = observer.Object.InitiatorEmail;
+                IsRequestAccepted = observer.Object.IsRequestedAccepted;
+                IsRequestDeclined = observer.Object.IsRequestDeclined;
 
-                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress && !IsNavigationActive)
+                if (observer.Object.InitiatorEmail != ActiveUser.EmailAddress
+                    && observer.Object.InitiatorEmail != string.Empty
+                    && IsNavigationActive)
                 {
                     NavigationReqest?.Invoke(this, new EventArgs());
                 }
 
-                if (observer.Object.InitiatorEmail == string.Empty)
+                if (IsRequestDeclined)
                 {
                     NavigationDeclined?.Invoke(this, new EventArgs());
                 }
 
-                if (!IsInitiator && IsNavigationActive)
+                if (IsInitiator && IsNavigationActive && IsRequestAccepted)
                 {
                     NavigationAccepted?.Invoke(this, new EventArgs());
                 }             
             }
-
-            TestHook?.NotifyOtherThreads();
         }
     }
 }

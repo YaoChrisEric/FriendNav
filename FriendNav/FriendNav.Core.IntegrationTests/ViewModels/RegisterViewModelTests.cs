@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace FriendNav.Core.IntegrationTests.ViewModels
 {
+    [TestClass]
     public class RegisterViewModelTests
     {
         public RegisterViewModelTests()
@@ -21,19 +22,19 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
         public TestContext TestContext { get; set; }
 
         [TestMethod]
-        public void User_login_and_navigate_to_FriendList()
+        public void User_register_and_navigate_to_FriendList()
         {
-            //var context = TestAppContext.ConstructTestAppContext();
+            var context = TestAppContext.ConstructTestAppContext();
 
-            //var loginViewModel = context.TestContainer.Resolve<RegisterViewModel>();
+            var loginViewModel = context.TestContainer.Resolve<RegisterViewModel>();
 
-            //loginViewModel.EmailAddress = "c@test.com";
+            loginViewModel.EmailAddress = "c2353453646@test.com";
 
-            //loginViewModel.UserPassword = "theday";
+            loginViewModel.UserPassword = "theday";
 
-            //loginViewModel.RegisterUserCommand.Execute();
+            loginViewModel.RegisterUserCommand.Execute();
 
-            //context.MockNavigationService.Verify(v => v.Navigate<FriendListViewModel, User>(It.IsAny<User>(), null));
+
 
 
         }

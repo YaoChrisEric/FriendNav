@@ -6,6 +6,7 @@ using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories
 {
@@ -20,7 +21,7 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public void GetNavigationRequest(Chat chat)
+        public async Task<NavigateRequest> GetNavigationRequest(Chat chat)
         {
             var navigateRequest = new NavigateRequest
             {
@@ -28,35 +29,32 @@ namespace FriendNav.Core.Repositories
                 ChatFirebaseKey = chat.FirebaseKey
             };
 
-            chat.NavigateRequest = navigateRequest;
-
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var navigateRequestDto = client
+            var navigateRequestDto = await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
-                .OnceSingleAsync<NavigateRequestDto>()
-                .Result;
+                .OnceSingleAsync<NavigateRequestDto>();
 
             if (navigateRequestDto == null)
             {
                 navigateRequestDto = new NavigateRequestDto
                 {
                     InitiatorEmail = string.Empty,
-                    CallActive = false
                 };
 
-                client
+                await client
                 .Child("BasicChat")
                 .Child(chat.FirebaseKey)
                 .Child("meetRequest")
-                .PutAsync(navigateRequestDto)
-                .Wait();
+                .PutAsync(navigateRequestDto);
             }
 
             navigateRequest.InitiatorEmail = navigateRequestDto.InitiatorEmail;
             navigateRequest.IsNavigationActive = navigateRequestDto.CallActive;
+            navigateRequest.IsRequestAccepted = navigateRequestDto.IsRequestedAccepted;
+            navigateRequest.IsRequestDeclined = navigateRequestDto.IsRequestDeclined;
 
             var disposable = client
                 .Child("BasicChat")
@@ -66,22 +64,25 @@ namespace FriendNav.Core.Repositories
                 .Subscribe(navigateRequest.IncomingNavigationRequest);
 
             _disposable.Add(disposable);
+
+            return navigateRequest;
         }
 
-        public void UpdateNavigationRequest(NavigateRequest navigateRequest)
+        public async Task UpdateNavigationRequest(NavigateRequest navigateRequest)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            client
+            await client
                 .Child("BasicChat")
                 .Child(navigateRequest.ChatFirebaseKey)
                 .Child("meetRequest")
                 .PutAsync(new NavigateRequestDto
                 {
                     InitiatorEmail = navigateRequest.InitiatorEmail,
-                    CallActive = navigateRequest.IsNavigationActive
-                })
-                .Wait();
+                    CallActive = navigateRequest.IsNavigationActive,
+                    IsRequestedAccepted = navigateRequest.IsRequestAccepted,
+                    IsRequestDeclined = navigateRequest.IsRequestDeclined
+                });
         }
 
         public void Dispose()

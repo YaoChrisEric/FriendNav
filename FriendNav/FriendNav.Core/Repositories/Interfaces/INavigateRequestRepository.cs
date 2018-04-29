@@ -2,13 +2,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories.Interfaces
 {
     public interface INavigateRequestRepository : IDisposable
     {
-        void GetNavigationRequest(Chat chat);
+        Task<NavigateRequest> GetNavigationRequest(Chat chat);
 
-        void UpdateNavigationRequest(NavigateRequest navigateRequest);
+        Task UpdateNavigationRequest(NavigateRequest navigateRequest);
     }
 }

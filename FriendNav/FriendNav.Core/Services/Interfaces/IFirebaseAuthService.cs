@@ -9,7 +9,7 @@ namespace FriendNav.Core.Services.Interfaces
     public interface IFirebaseAuthService
     {
         void LoginUser(string email, string password);
-        bool CreateNewUser(string email, string password);
+        Task<bool> CreateNewUser(string email, string password);
         FirebaseAuth FirebaseAuth { get; }
     }
 }

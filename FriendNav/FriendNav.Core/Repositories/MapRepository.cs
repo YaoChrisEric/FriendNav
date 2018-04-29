@@ -6,6 +6,7 @@ using FriendNav.Core.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.Repositories
 {
@@ -19,16 +20,32 @@ namespace FriendNav.Core.Repositories
             _firebaseClientService = firebaseClientService;
         }
 
-        public Map GetMap(string chatFirebaseKey)
+        public async Task<Map> GetMap(string chatFirebaseKey)
         {
             var client = _firebaseClientService.CreateFirebaseClient();
 
-            var mapDto = client
+            var mapDto = await client
                 .Child("BasicChat")
                 .Child(chatFirebaseKey)
                 .Child("MeetLocation")
-                .OnceSingleAsync<MapDto>()
-                .Result;
+                .OnceSingleAsync<MapDto>();
+
+            if (null == mapDto)
+            {
+                mapDto = new MapDto
+                {
+                    InitiatorLatitude = "500",
+                    InitiatorLongitude = "500",
+                    ResponderLatitude = "500",
+                    ResponderLongitude = "500"
+                };
+
+                await client
+                .Child("BasicChat")
+                .Child(chatFirebaseKey)
+                .Child("MeetLocation")
+                .PutAsync(mapDto);
+            }
 
             var map = new Map
             {
@@ -49,6 +66,11 @@ namespace FriendNav.Core.Repositories
             _disposable.Add(disposable);
 
             return map;
+        }
+
+        public void UpdateMap(Map map)
+        {
+
         }
 
         public void Dispose()

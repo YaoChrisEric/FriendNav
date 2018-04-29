@@ -7,12 +7,12 @@ using MvvmCross.Core.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace FriendNav.Core.ViewModels
 {
     public class LoginViewModel : MvxViewModel
     {
-        private readonly ITask _task;
         private readonly IMvxNavigationService _mvxNavigationService;
         private readonly INotificationService _notificationService;
         private readonly IFirebaseAuthService _firebaseAuthService;
@@ -20,13 +20,11 @@ namespace FriendNav.Core.ViewModels
 
 
         public LoginViewModel(
-            ITask task,
             IMvxNavigationService mvxNavigationService,
             IUserRepository userRepository,
             INotificationService notificationService,           
             IFirebaseAuthService firebaseAuthService)
         {
-            _task = task;
             _mvxNavigationService = mvxNavigationService;
             _userRepository = userRepository;
             _firebaseAuthService = firebaseAuthService;
@@ -42,10 +40,10 @@ namespace FriendNav.Core.ViewModels
 
         private void LoginUserAsync()
         {
-            _task.Run(LoginUser);
+            Task.Run(LoginUser);
         }
 
-        private void LoginUser()
+        public async Task LoginUser()
         {
             if (string.IsNullOrWhiteSpace(EmailAddress) || string.IsNullOrWhiteSpace(UserPassword))
             {
@@ -56,9 +54,9 @@ namespace FriendNav.Core.ViewModels
 
             if (_firebaseAuthService.FirebaseAuth != null)
             {
-                var user = _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
+                var user = await _userRepository.GetUser(_firebaseAuthService.FirebaseAuth.User.Email);
 
-                _mvxNavigationService.Navigate<FriendListViewModel, User>(user).Wait();
+                await _mvxNavigationService.Navigate<FriendListViewModel, User>(user);
                 return;
             }
 
