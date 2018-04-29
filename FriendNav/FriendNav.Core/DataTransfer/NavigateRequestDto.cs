@@ -15,5 +15,8 @@ namespace FriendNav.Core.DataTransfer
 
         [JsonProperty("IsRequestedAccepted")]
         public bool IsRequestedAccepted { get; set; }
+
+        [JsonProperty("IsRequestDeclined")]
+        public bool IsRequestDeclined { get; set; }
     }
 }

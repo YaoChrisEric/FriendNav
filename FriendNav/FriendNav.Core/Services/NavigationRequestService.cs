@@ -18,7 +18,8 @@ namespace FriendNav.Core.Services.Interfaces
 
         public async Task AcceptNavigationRequest(NavigateRequest navigateRequest)
         {
-            navigateRequest.IsRequestedAccepted = true;
+            navigateRequest.IsRequestAccepted = true;
+            navigateRequest.IsRequestDeclined = false;
 
             await _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
         }
@@ -27,17 +28,18 @@ namespace FriendNav.Core.Services.Interfaces
         {
             navigateRequest.InitiatorEmail = string.Empty;
             navigateRequest.IsNavigationActive = false;
-            //redundant; but just in case
-            navigateRequest.IsRequestedAccepted = false;
+            navigateRequest.IsRequestAccepted = false;
+            navigateRequest.IsRequestDeclined = true;
 
             await _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
         }
 
         public async Task InitiatNavigationRequest(NavigateRequest navigateRequest)
         {
-            navigateRequest.IsRequestedAccepted = false;
             navigateRequest.InitiatorEmail = navigateRequest.ActiveUser.EmailAddress;
             navigateRequest.IsNavigationActive = true;
+            navigateRequest.IsRequestAccepted = false;
+            navigateRequest.IsRequestDeclined = false;
 
             await _navigationRequestRepository.UpdateNavigationRequest(navigateRequest);
         }
