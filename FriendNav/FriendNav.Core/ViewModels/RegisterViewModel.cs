@@ -48,7 +48,7 @@ namespace FriendNav.Core.ViewModels
                 return;
             }
 
-            _firebaseAuthService.CreateNewUser(EmailAddress, UserPassword);
+            await _firebaseAuthService.CreateNewUser(EmailAddress, UserPassword);
 
             if (_firebaseAuthService.FirebaseAuth != null)
             {
