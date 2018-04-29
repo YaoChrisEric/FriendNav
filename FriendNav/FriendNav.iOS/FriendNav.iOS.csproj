@@ -96,6 +96,10 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Services\NotificationService.cs" />
     <Compile Include="TableViewSource\FriendListTableViewSource.cs" />
+    <Compile Include="Views\ChatView.cs" />
+    <Compile Include="Views\ChatView.designer.cs">
+      <DependentUpon>ChatView.cs</DependentUpon>
+    </Compile>
     <Compile Include="Views\FriendListView.cs" />
     <Compile Include="Views\FriendListView.designer.cs">
       <DependentUpon>FriendListView.cs</DependentUpon>
@@ -115,6 +119,7 @@
     <InterfaceDefinition Include="Views\MainView.storyboard" />
     <InterfaceDefinition Include="Views\LoginView.storyboard" />
     <InterfaceDefinition Include="Views\FriendListView.storyboard" />
+    <InterfaceDefinition Include="Views\ChatView.storyboard" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Setup.cs" />
