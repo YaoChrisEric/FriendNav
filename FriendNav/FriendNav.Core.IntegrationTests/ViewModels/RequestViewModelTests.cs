@@ -93,7 +93,8 @@ namespace FriendNav.Core.IntegrationTests.ViewModels
 
             sut.Prepare(new NavigateRequestParameters { Chat = chat, NavigateRequest = navigationRequest });
 
-            await requestNavigationService.InitiatNavigationRequest(otherNavigationRequest);
+            await requestNavigationService.InitiatNavigationRequest(navigationRequest);
+            await requestNavigationService.AcceptNavigationRequest(otherNavigationRequest);
 
             testHook.ResetEvent.WaitOne();
 

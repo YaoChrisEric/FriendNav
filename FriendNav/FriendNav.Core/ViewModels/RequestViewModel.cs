@@ -99,11 +99,6 @@ namespace FriendNav.Core.ViewModels
 
         private async void NavigateRequest_NavigationAccepted(object sender, EventArgs e)
         {
-            /*if (_navigateRequest.IsInitiator)
-            {
-                return;
-            }*/
-
             var map = await _mapRepository.GetMap(_navigateRequest.ChatFirebaseKey);
 
             await _mvxNavigationService.Navigate<MapViewModel, Map>(map);

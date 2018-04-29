@@ -42,7 +42,6 @@ namespace FriendNav.Core.Repositories
                 navigateRequestDto = new NavigateRequestDto
                 {
                     InitiatorEmail = string.Empty,
-                    CallActive = false
                 };
 
                 await client
@@ -54,6 +53,8 @@ namespace FriendNav.Core.Repositories
 
             navigateRequest.InitiatorEmail = navigateRequestDto.InitiatorEmail;
             navigateRequest.IsNavigationActive = navigateRequestDto.CallActive;
+            navigateRequest.IsRequestAccepted = navigateRequestDto.IsRequestedAccepted;
+            navigateRequest.IsRequestDeclined = navigateRequestDto.IsRequestDeclined;
 
             var disposable = client
                 .Child("BasicChat")
@@ -79,7 +80,8 @@ namespace FriendNav.Core.Repositories
                 {
                     InitiatorEmail = navigateRequest.InitiatorEmail,
                     CallActive = navigateRequest.IsNavigationActive,
-                    IsRequestedAccepted = navigateRequest.IsRequestedAccepted
+                    IsRequestedAccepted = navigateRequest.IsRequestAccepted,
+                    IsRequestDeclined = navigateRequest.IsRequestDeclined
                 });
         }
 
